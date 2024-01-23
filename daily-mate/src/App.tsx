@@ -1,8 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import MainPage from "./components/main/MainPage";
-import SignInPage from "./components/auth/SignInPage";
+import { MainPage, SignInPage } from "./components/index";
 
 function App() {
   return (
