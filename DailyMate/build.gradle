@@ -27,14 +27,14 @@ dependencies {
     // json
     implementation 'org.glassfish:javax.json:1.0.4'
 
-    // 데이터엑세스와 DB 통합(JPA)
+    // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // h2 database
     runtimeOnly 'com.h2database:h2'
 
     // swagger
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
 
     // config class 자동 생성
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
