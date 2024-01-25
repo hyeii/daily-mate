@@ -8,6 +8,16 @@ const UpdatePasswordPage = () => {
     newPasswordCheck: "",
   });
 
+  const isEqual =
+    updatePassword.newPassword !== "" &&
+    updatePassword.newPasswordCheck !== "" &&
+    updatePassword.newPassword === updatePassword.newPasswordCheck;
+
+  const beforeEnter =
+    updatePassword.existPassword === "" ||
+    updatePassword.newPassword === "" ||
+    updatePassword.newPasswordCheck === "";
+
   const existPasswordHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setUpdatePassword({
       ...updatePassword,
@@ -31,6 +41,12 @@ const UpdatePasswordPage = () => {
 
   const updatePasswordHandler = () => {
     // console.log(updatePassword);
+    if (isEqual && !beforeEnter) {
+      // 비밀번호 변경 가능
+    } else {
+      alert("올바르게 입력해주세요.");
+      return;
+    }
   };
 
   return (
@@ -43,6 +59,11 @@ const UpdatePasswordPage = () => {
         <input onChange={newPasswordHandler} />
         <div>새 비밀번호 확인</div>
         <input onChange={newPasswordCheckHandler} />
+        {isEqual ? (
+          <div>비밀번호가 일치합니다</div>
+        ) : !beforeEnter ? (
+          <div>비밀번호가 일치하지 않습니다</div>
+        ) : null}
       </div>
       <button onClick={updatePasswordHandler}>확인</button>
     </div>
