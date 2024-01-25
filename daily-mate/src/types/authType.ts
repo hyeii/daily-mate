@@ -11,3 +11,9 @@ export interface updatePasswordInput {
   newPassword: String;
   newPasswordCheck: String;
 }
+
+export interface friendsInfo {
+  fromId: number;
+  requestDate: Date;
+  approvalDate: Date;
+}
