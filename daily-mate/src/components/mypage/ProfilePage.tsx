@@ -7,11 +7,11 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const userInfo = useRecoilValue(userInfoState);
 
-  const updateInfoHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+  const updateInfoHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     navigate("/mypage/update");
   };
 
-  const updatePasswordHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+  const updatePasswordHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     navigate("/mypage/password");
   };
 

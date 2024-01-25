@@ -5,3 +5,9 @@ export interface userInfo {
   loginType: String;
   friendsCount: number;
 }
+
+export interface updatePasswordInput {
+  existPassword: String;
+  newPassword: String;
+  newPasswordCheck: String;
+}
