@@ -1,5 +1,9 @@
+import { useRecoilValue } from "recoil";
+import { userImageURLState } from "../../atoms/authAtom";
+
 const ProfileImage = () => {
-  return <div>프로필이미지</div>;
+  const imageURL = useRecoilValue(userImageURLState);
+  return <div>{imageURL}</div>;
 };
 
 export default ProfileImage;
