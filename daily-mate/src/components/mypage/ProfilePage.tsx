@@ -1,19 +1,10 @@
+import { userFriendsCountState, userNicknameState } from "../../atoms/authAtom";
 import ProfileImage from "./ProfileImage";
-import { atom, useRecoilState } from "recoil";
-
-const nicknameState = atom({
-  key: "nickname",
-  default: "감자",
-});
-
-const friendsCountState = atom({
-  key: "friendsCount",
-  default: 0,
-});
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const ProfilePage = () => {
-  const [nickname, setNickname] = useRecoilState(nicknameState);
-  const [friendsCount, setFriendsCount] = useRecoilState(friendsCountState);
+  const nickname = useRecoilValue(userNicknameState);
+  const friendsCount = useRecoilValue(userFriendsCountState);
 
   return (
     <div>
