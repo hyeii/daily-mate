@@ -5,6 +5,7 @@ import {
   FriendsListPage,
   MainPage,
   ProfilePage,
+  SearchPage,
   SignInPage,
   SignUpPage,
   UpdateInfoPage,
@@ -23,6 +24,7 @@ function App() {
         <Route path="/mypage/update" element={<UpdateInfoPage />} />
         <Route path="/mypage/password" element={<UpdatePasswordPage />} />
         <Route path="/friends/list" element={<FriendsListPage />} />
+        <Route path="/friends/search" element={<SearchPage />} />
       </Routes>
     </div>
   );
