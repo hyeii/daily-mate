@@ -1,21 +1,21 @@
 export interface userInfo {
-  nickname: String;
-  email: String;
-  profileMessage: String;
-  loginType: String;
+  nickname: string;
+  email: string;
+  profileMessage: string;
+  loginType: string;
   friendsCount: number;
 }
 
 export interface updatePasswordInput {
-  existPassword: String;
-  newPassword: String;
-  newPasswordCheck: String;
+  existPassword: string;
+  newPassword: string;
+  newPasswordCheck: string;
 }
 
 export interface getFriends {
   fromId: number;
-  requestDate: Date;
-  approvalDate: Date;
+  requestDate: string;
+  approvalDate: string;
 }
 
 export enum diaryOpenType {
@@ -25,9 +25,9 @@ export enum diaryOpenType {
 }
 
 export interface friendInfo {
-  nickname: String;
-  profileMessage: String;
-  imageURL: String;
+  nickname: string;
+  profileMessage: string;
+  imageURL: string;
   openType: diaryOpenType;
   isFriend: boolean;
 }
