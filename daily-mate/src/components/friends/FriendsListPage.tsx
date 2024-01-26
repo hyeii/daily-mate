@@ -3,12 +3,21 @@ import FriendsList from "./FriendsList";
 import WaitingList from "./WaitingList";
 
 const FriendsListPage = () => {
+  const [isList, setIsList] = useState(true);
+
+  const moveToListHandler = () => {
+    setIsList(true);
+  };
+
+  const moveToWaitingHandler = () => {
+    setIsList(false);
+  };
+
   return (
     <div>
-      <h3>친구목록</h3>
-      <h3>대기중</h3>
-      <FriendsList />
-      <WaitingList />
+      <span onClick={moveToListHandler}>친구목록</span>
+      <span onClick={moveToWaitingHandler}>대기중</span>
+      {isList ? <FriendsList /> : <WaitingList />}
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { friendsInfo } from "../../types/authType";
+import { getFriends } from "../../types/authType";
 
 const FriendsList = () => {
-  const [friendsList, setFriendsList] = useState<friendsInfo[]>([]);
+  const [friendsList, setFriendsList] = useState<getFriends[]>([]);
   useEffect(() => {
     // 렌더링 시 해당 유저의 친구 목록 가져오기
   });
