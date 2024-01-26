@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIAYYSGWEUVUWBIPXRJ
+      secret-key: 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
+    s3:
+      bucket: dailymate

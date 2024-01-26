@@ -1,4 +1,5 @@
 spring:
   profiles:
-    active: h2
-#    active: mariaDb
+    include:
+      - h2
+      - s3
