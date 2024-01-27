@@ -2,23 +2,20 @@ package com.dailymate.domain.account.domain;
 
 import com.dailymate.domain.account.constant.AccountType;
 import com.dailymate.domain.account.constant.Category;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sun.istack.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.dailymate.global.common.BaseTime;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Account {
+@Builder
+@AllArgsConstructor
+public class Account extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +29,9 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountType type;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDate date;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @NotNull
+    private String date;
 
     @NotNull
     private Integer amount;
@@ -41,26 +39,18 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    /**
+     * 가계부 수정
+     */
+    public void updateAccount(String content, String date, Integer amount, Category category) {
+        this.content = content == null ? this.content : content;
+        this.date = date == null ? this.date : date;
+        this.category = category == null ? this.category : category;
 
-    private LocalDateTime updatedAt;
-
-    private LocalDateTime deletedAt;
-
-    @PrePersist
-    public void createTime() {
-        this.createdAt = LocalDateTime.now();
+        if(amount != null) {
+            this.amount = amount;
+            this.type = AccountType.getType(amount);
+        }
     }
-
-    @Builder
-    public Account(String content, LocalDate date, Integer amount, Category category, AccountType type) {
-        this.content = content;
-        this.date = date;
-        this.amount = amount;
-        this.category = category;
-        this.type = type;
-    }
-
 
 }

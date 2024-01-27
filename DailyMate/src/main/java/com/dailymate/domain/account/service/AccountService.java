@@ -9,7 +9,10 @@ public interface AccountService {
 
 //    List<AccountResDto> findAccountList(String token, String date);
 
-    AccountResDto addAccount(AccountReqDto accountReqDto);
+    void addAccount(AccountReqDto accountReqDto); // void로 변경해야함
 
+    AccountResDto updateAccount(Long accountId, AccountReqDto accountReqDto);
+
+    void deleteAccount(Long accountId);
 
 }
