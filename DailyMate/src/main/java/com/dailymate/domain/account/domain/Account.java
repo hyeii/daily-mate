@@ -29,7 +29,6 @@ public class Account extends BaseTime {
     @Enumerated(EnumType.STRING)
     private AccountType type;
 
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @NotNull
     private String date;
 
