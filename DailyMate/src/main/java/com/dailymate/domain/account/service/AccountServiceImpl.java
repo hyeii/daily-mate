@@ -130,13 +130,13 @@ public class AccountServiceImpl implements AccountService {
         // 2. 유저인지 체크
 
         log.info("[날짜별 거래 내역 조회] 반환 완료.");
-        return accountRepository.findByUserIdAndDate(9539L, date).stream()
+        return accountRepository.findByUserIdAndDateAndDeletedAtIsNull(9539L, date).stream()
                 .map(account -> AccountResDto.entityToDto(account))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public MonthlyAmountDto findAmountByMonth(String month) {
+    public MonthlyAmountDto findAmountByMonth(String date) {
 
 
         return null;

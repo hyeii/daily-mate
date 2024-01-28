@@ -12,11 +12,11 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    List<Account> findByUserIdAndDate(Long userId, String date);
+    List<Account> findByUserIdAndDateAndDeletedAtIsNull(Long userId, String date);
 
     @Query("SELECT NEW com.dailymate.domain.account.dto.MonthlyOutputByCategoryDto(a.category, SUM(a.amount)) " +
             "FROM Account a " +
-            "WHERE a.type = '지출' AND a.userId = :userId AND a.date LIKE CONCAT(:date, '%') " +
+            "WHERE a.deletedAt is null AND a.type = '지출' AND a.userId = :userId AND a.date LIKE CONCAT(:date, '%') " +
             "GROUP BY a.category")
     List<MonthlyOutputByCategoryDto> findOutputByCategory(@Param("userId") Long userId, @Param("date") String date);
 
