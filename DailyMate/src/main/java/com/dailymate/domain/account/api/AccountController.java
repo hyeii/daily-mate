@@ -2,6 +2,7 @@ package com.dailymate.domain.account.api;
 
 import com.dailymate.domain.account.dto.AccountReqDto;
 import com.dailymate.domain.account.dto.AccountResDto;
+import com.dailymate.domain.account.dto.MonthlyAmountDto;
 import com.dailymate.domain.account.dto.MonthlyOutputByCategoryDto;
 import com.dailymate.domain.account.service.AccountService;
 import com.dailymate.global.dto.MessageDto;
@@ -61,6 +62,15 @@ public class AccountController {
     @GetMapping
     public ResponseEntity<List<AccountResDto>> findAccountList(@RequestParam String date) {
         return ResponseEntity.ok(accountService.findAccountList(date));
+    }
+
+    @Operation(
+            summary = "월별 거래 금액 조회",
+            description = "로그인 사용자의 월별 거래 금액을 조회합니다."
+    )
+    @GetMapping("/month")
+    public ResponseEntity<MonthlyAmountDto> findAmountByMonth(@RequestParam String date) {
+        return ResponseEntity.ok(accountService.findAmountByMonth(date));
     }
 
     @Operation(

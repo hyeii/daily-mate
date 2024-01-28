@@ -1,6 +1,7 @@
 package com.dailymate.domain.account.dao;
 
 import com.dailymate.domain.account.domain.Account;
+import com.dailymate.domain.account.dto.DailyAmountByType;
 import com.dailymate.domain.account.dto.MonthlyOutputByCategoryDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +21,15 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "GROUP BY a.category")
     List<MonthlyOutputByCategoryDto> findOutputByCategory(@Param("userId") Long userId, @Param("date") String date);
 
-
+    @Query(
+            "SELECT NEW com.dailymate.domain.account.dto.DailyAmountByType(a.date, a.type, SUM(a.amount)) "
+            + "FROM Account a "
+            + "WHERE a.deletedAt IS NULL "
+            + "AND a.date LIKE CONCAT(:date, '%') "
+            + "AND a.userId = :userId "
+            + "GROUP BY a.date, a.type "
+            + "ORDER BY a.date, a.type "
+    )
+    List<DailyAmountByType> findDailyAmountByType(@Param("userId") Long userId, @Param("date") String date);
 
 }

@@ -4,10 +4,7 @@ import com.dailymate.domain.account.constant.AccountType;
 import com.dailymate.domain.account.constant.Category;
 import com.dailymate.domain.account.dao.AccountRepository;
 import com.dailymate.domain.account.domain.Account;
-import com.dailymate.domain.account.dto.AccountReqDto;
-import com.dailymate.domain.account.dto.AccountResDto;
-import com.dailymate.domain.account.dto.MonthlyAmountDto;
-import com.dailymate.domain.account.dto.MonthlyOutputByCategoryDto;
+import com.dailymate.domain.account.dto.*;
 import com.dailymate.domain.account.exception.AccountBadRequestException;
 import com.dailymate.domain.account.exception.AccountExceptionMessage;
 import com.dailymate.domain.account.exception.AccountNotFountException;
@@ -137,13 +134,23 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public MonthlyAmountDto findAmountByMonth(String date) {
+        // 파라미터 date 패턴 : yyyy-MM
+        log.info("[월별 거래 금액 조회] 월별 거래 금액 조회 요청. 날짜 : {}", date);
+        List<DailyAmountByType> dailyList = accountRepository.findDailyAmountByType(9539L, date);
 
+        MonthlyAmountDto monthlyDto = MonthlyAmountDto.dailyDtoToMonthlyDto(dailyList);
+//        for(DailyAmountByTypeDto dto : dailyList) {
+//            log.info(dto.getDate());
+//            log.info(dto.getType().getValue());
+//            log.info(dto.getAmountSum().toString());
+//        }
 
-        return null;
+        return monthlyDto;
     }
 
     @Override
     public List<MonthlyOutputByCategoryDto> findOutputByCategory(String date) {
+        // 파라미터 date 패턴 : yyyy-MM
         log.info("[카테고리별 월별 지출 금액 조회] 월별 지출 카테고리별 금액 조회 요청. 연월 : {}", date);
 
         // 1. 로그인 했는지 체크
@@ -153,8 +160,8 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findOutputByCategory(9539L, date);
     }
 
-    @Override
     // 만약 카테고리별 리스트로 받는게 싫다면 아래의 메서드
+    @Override
     public Map<String, Long> findOutputByCategoryAsMap(String date) {
         return accountRepository.findOutputByCategory(9539L, date).stream()
                 .collect(Collectors.toMap(dto -> dto.getCategory().toString(), MonthlyOutputByCategoryDto::getAmountSum));
