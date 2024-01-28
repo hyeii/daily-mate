@@ -6,12 +6,19 @@ import com.dailymate.domain.account.dao.AccountRepository;
 import com.dailymate.domain.account.domain.Account;
 import com.dailymate.domain.account.dto.AccountReqDto;
 import com.dailymate.domain.account.dto.AccountResDto;
+import com.dailymate.domain.account.dto.MonthlyAmountDto;
+import com.dailymate.domain.account.dto.MonthlyOutputByCategoryDto;
+import com.dailymate.domain.account.exception.AccountBadRequestException;
 import com.dailymate.domain.account.exception.AccountExceptionMessage;
 import com.dailymate.domain.account.exception.AccountNotFountException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,6 +36,13 @@ public class AccountServiceImpl implements AccountService {
         log.info("[가계부 등록] 가계부 등록 요청");
 
         int amount = dto.getAmount();
+
+        // 수입이든 지출이든 0이면 에러 발생
+        if(amount == 0) {
+            log.error("[가계부 등록] 금액이 0원일 순 없습니다. 다시 입력하세요.");
+            throw new AccountBadRequestException(AccountExceptionMessage.ACCOUNT_BAD_REQUEST.getMsg());
+        }
+
         String category = dto.getCategory();
 
         // UserId 추가해야함
@@ -37,7 +51,6 @@ public class AccountServiceImpl implements AccountService {
                 .type(AccountType.getType(amount))
                 .amount(amount)
                 .category(Category.getCategory(category))
-//                .date(LocalDate.parse(dto.getDate(), DateTimeFormatter.ISO_DATE))
                 .date(dto.getDate())
                 .build();
 
@@ -48,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public AccountResDto updateAccount(Long accountId, AccountReqDto dto) {
+    public void updateAccount(Long accountId, AccountReqDto dto) {
         log.info("[가계부 수정] 가계부 수정 요청. accountId : {}", accountId);
 
         // 1. 존재하는 가계부인지 체크
@@ -66,27 +79,18 @@ public class AccountServiceImpl implements AccountService {
 
         // 3. 로그인 사용자의 가계부인지 체크(추후 추가)
 
-
+        // 4. 금액이 0원인지 체크
+        if(account.getAmount() == 0) {
+            log.error("[가계부 수정] 금액이 0원일 순 없습니다. 다시 입력하세요.");
+            throw new AccountBadRequestException(AccountExceptionMessage.ACCOUNT_BAD_REQUEST.getMsg());
+        }
 
         log.info("[가계부 수정] 가계부 찾기 완료.");
-//        account.updateAccount(dto.getContent(), dto.getDate() == null ? null : LocalDate.parse(dto.getDate(), DateTimeFormatter.ISO_DATE), dto.getAmount(), Category.getCategory(dto.getCategory()));
         account.updateAccount(dto.getContent(), dto.getDate(), dto.getAmount(), Category.getCategory(dto.getCategory()));
-
-//        log.info("accountId : {}", account.getAccountId());
-//        log.info("userId : {}", account.getUserId());
-//        log.info("content : {}", account.getContent());
-//        log.info("type : {}", account.getType());
-//        log.info("date : {}", account.getDate());
-//        log.info("amount : {}", account.getAmount());
-//        log.info("category : {}", account.getCategory());
-//        log.info("createdAt : {}", account.getCreatedAt());
-//        log.info("updatedAt : {}", account.getUpdatedAt());
-//        log.info("deletedAt : {}", account.getDeletedAt());
 
 //        accountRepository.save(account); // 얘 필요없는지 체크 -> 없어도 되는듯
 
         log.info("[가계부 수정] 가계부 수정 완료.");
-        return AccountResDto.entityToDto(account);
     }
 
     @Transactional
@@ -116,6 +120,44 @@ public class AccountServiceImpl implements AccountService {
         log.info("[가계부 삭제] 가계부 삭제 완료.");
     }
 
+    @Override
+    public List<AccountResDto> findAccountList(String date) {
+        // 파라미터 date 패턴 : yyyy-MM-dd
+        log.info("[날짜별 거래 내역 조회] 날짜별 거래 내역 조회 요청. 날짜 : {}", date);
 
+        // 1. 로그인을 했는지 체크
+
+        // 2. 유저인지 체크
+
+        log.info("[날짜별 거래 내역 조회] 반환 완료.");
+        return accountRepository.findByUserIdAndDate(9539L, date).stream()
+                .map(account -> AccountResDto.entityToDto(account))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public MonthlyAmountDto findAmountByMonth(String month) {
+
+
+        return null;
+    }
+
+    @Override
+    public List<MonthlyOutputByCategoryDto> findOutputByCategory(String date) {
+        log.info("[카테고리별 월별 지출 금액 조회] 월별 지출 카테고리별 금액 조회 요청. 연월 : {}", date);
+
+        // 1. 로그인 했는지 체크
+
+        // 2. 유저인지 체크
+
+        return accountRepository.findOutputByCategory(9539L, date);
+    }
+
+    @Override
+    // 만약 카테고리별 리스트로 받는게 싫다면 아래의 메서드
+    public Map<String, Long> findOutputByCategoryAsMap(String date) {
+        return accountRepository.findOutputByCategory(9539L, date).stream()
+                .collect(Collectors.toMap(dto -> dto.getCategory().toString(), MonthlyOutputByCategoryDto::getAmountSum));
+    }
 
 }
