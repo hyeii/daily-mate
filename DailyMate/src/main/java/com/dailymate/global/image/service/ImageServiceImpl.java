@@ -8,11 +8,11 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.dailymate.global.image.exception.ImageBadRequestException;
 import com.dailymate.global.image.exception.ImageExceptionMessage;
-import com.dailymate.global.image.exception.ImageNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class ImageServiceImpl implements ImageService{
     public String uploadImage(MultipartFile image) {
 
         if(image.isEmpty()){
-            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.IMAGE_BAD_REQUEST);
+            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.IMAGE_BAD_REQUEST.getMsg());
         }
 
         // 업로드하는 파일 경로 만들기
@@ -71,21 +71,45 @@ public class ImageServiceImpl implements ImageService{
 
         } catch (IOException e) {
             // 파일 읽어오기 에러
-            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.IMAGE_FILE_IO_ERROR);
+            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.IMAGE_FILE_IO_ERROR.getMsg());
         } catch (AmazonS3Exception e) {
             // AWS S3 서비스에서 반환한 예외 처리
-            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.AMAZON_S3_SERVICE_UPLOAD_ERROR);
+            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.AMAZON_S3_SERVICE_UPLOAD_ERROR.getMsg());
         } catch (AmazonClientException e) {
             // AWS S3 클라이언트에서 반환한 예외 처리
-            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.AMAZON_S3_CLIENT_UPLOAD_ERROR);
+            throw new ImageBadRequestException("[uploadImage]" + ImageExceptionMessage.AMAZON_S3_CLIENT_UPLOAD_ERROR.getMsg());
         }
 
         return keyName;
     }
 
+    /**
+     * S3에 업로드된 파일 삭제
+     * @param imageUrl String
+     */
     @Override
     public void deleteImage(String imageUrl) {
 
+        if(!StringUtils.hasText(imageUrl)) {
+            throw new ImageBadRequestException("[deleteImage]" + ImageExceptionMessage.IMAGE_URL_BAD_REQUEST.getMsg());
+        }
+
+        try {
+            // S3 버킷에 해당 파일 경로에 파일이 있는지 확인
+            boolean isObjectExist = amazonS3Client.doesObjectExist(bucketName, imageUrl);
+
+            if(isObjectExist){
+                amazonS3Client.deleteObject(bucketName, imageUrl);
+            } else {
+                log.info("S3에 해당 이미지가 존재하지 않습니다. imageUrl = " + imageUrl);
+            }
+        } catch (AmazonS3Exception e) {
+            // Amazon S3 서비스에서 반환한 예외 처리
+            throw new ImageBadRequestException("[deleteImage]" + ImageExceptionMessage.AMAZON_S3_SERVICE_UPLOAD_ERROR.getMsg());
+        } catch (AmazonClientException e) {
+            // Amazon S3 클라이언트에서 반환한 예외 처리
+            throw new ImageBadRequestException("[deleteImage]" + ImageExceptionMessage.AMAZON_S3_CLIENT_UPLOAD_ERROR.getMsg());
+        }
     }
 
     /**
