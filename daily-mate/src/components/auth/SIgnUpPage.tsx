@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const [inputNickname, setInputNickname] = useState<string>("");
@@ -11,6 +12,8 @@ const SignUpPage = () => {
   const [validateEmail, setValidateEmail] = useState<boolean>(false);
   const [validatePassword, setValidatePassword] = useState<boolean>(false);
   const [passwordMessage, setPasswordMessage] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const handleNickname = (event: ChangeEvent<HTMLInputElement>) => {
     setValidateNickname(false);
@@ -105,7 +108,17 @@ const SignUpPage = () => {
     }
   }, [inputPassword, inputPasswordCheck]);
 
-  const submitSignUp = () => {
+  const submitSignUp = async () => {
+    if (inputNickname === "") {
+      alert("닉네임을 입력해주세요");
+      return;
+    }
+
+    if (inputEmail === "") {
+      alert("이메일을 입력해주세요");
+      return;
+    }
+
     if (!validateNickname) {
       alert("닉네임 중복확인이 필요합니다");
       return;
@@ -120,7 +133,26 @@ const SignUpPage = () => {
       alert("비밀번호 확인이 필요합니다");
       return;
     }
+
     // 회원가입 api 호출
+    try {
+      const res: AxiosResponse<{ message: string }> = await axios.post(
+        "/api/user/sign-up",
+        {
+          email: inputEmail,
+          password: inputPassword,
+          nickname: inputNickname,
+        }
+      );
+      const result = res.data.message;
+
+      console.log(result);
+      alert("회원가입이 완료되었습니다. 로그인 후 이용해주세요");
+      navigate("/signin");
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+      alert("오류가 발생했습니다.");
+    }
   };
 
   return (
