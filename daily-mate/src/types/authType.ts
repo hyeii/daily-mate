@@ -6,6 +6,17 @@ export interface userInfo {
   friendsCount: number;
 }
 
+// 로그인 ResponseData
+export interface userResponse {
+  accessToken: string;
+  refreshToken: string;
+  email: string;
+  nickName: string;
+  image: string;
+  profile: string;
+  type: string;
+}
+
 export interface updatePasswordInput {
   existPassword: string;
   newPassword: string;

@@ -1,12 +1,16 @@
 import axios, { AxiosResponse } from "axios";
 import { ChangeEvent, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { isLoginState } from "../../atoms/authAtom";
+import { useNavigate } from "react-router-dom";
+import { userResponse } from "../../types/authType";
 
 const SignInPage = () => {
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
-  const [isLogged, setIsLogged] = useRecoilState(isLoginState);
+  const setIsLogged = useSetRecoilState(isLoginState);
+
+  const navigate = useNavigate();
 
   const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
     setInputEmail(event.target.value);
@@ -27,17 +31,19 @@ const SignInPage = () => {
     }
 
     try {
-      const res: AxiosResponse<{ message: string }> = await axios.post(
+      const res: AxiosResponse<userResponse> = await axios.post(
         "/api/user/login",
         {
           email: inputEmail,
           password: inputPassword,
         }
       );
-      const result = res.data.message;
-
+      const result = res.data;
       console.log(result);
-      // TODO : post요청 성공 시 accesstoken 받아서 내 정보 조회 재요청 => atom에 저장, isLogin true처리
+      // TODO : post요청 성공 시 accessToken 및 유저 정보 저장
+
+      setIsLogged(true);
+      navigate("/");
     } catch (error) {
       console.error("로그인 오류:", error);
       alert("입력 정보를 확인해주세요");
