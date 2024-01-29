@@ -18,7 +18,9 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+application.yml
 application-s3.yml
+application-mariaDb.yml
 
 .idea
 *.iws
