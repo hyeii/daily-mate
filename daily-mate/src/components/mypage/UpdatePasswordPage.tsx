@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { updatePasswordInput } from "../../types/authType";
+import axios, { AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePasswordPage = () => {
   const [updatePassword, setUpdatePassword] = useState<updatePasswordInput>({
@@ -7,6 +9,7 @@ const UpdatePasswordPage = () => {
     newPassword: "",
     newPasswordCheck: "",
   });
+  const navigate = useNavigate();
 
   const isEqual =
     updatePassword.newPassword !== "" &&
@@ -39,10 +42,27 @@ const UpdatePasswordPage = () => {
     });
   };
 
-  const updatePasswordHandler = () => {
+  const updatePasswordHandler = async () => {
     // console.log(updatePassword);
     if (isEqual && !beforeEnter) {
-      // 비밀번호 변경 가능
+      // 비밀번호 변경
+      try {
+        const res: AxiosResponse<{ message: string }> = await axios.patch(
+          "/api/user/password",
+          {
+            password: updatePassword.existPassword,
+            newPassword: updatePassword.newPassword,
+            newPasswordCheck: updatePassword.newPasswordCheck,
+          }
+        );
+        const result = res.data;
+        console.log(result);
+        alert("비밀번호가 변경되었습니다");
+        navigate("/mypage/profile");
+      } catch (error) {
+        console.error("비밀번호 변경 오류 : ", error);
+        alert("비밀번호를 다시 확인해주세요");
+      }
     } else {
       alert("올바르게 입력해주세요.");
       return;
@@ -54,11 +74,11 @@ const UpdatePasswordPage = () => {
       <h2>비밀번호 변경</h2>
       <div>
         <div>기존 비밀번호</div>
-        <input onChange={existPasswordHandler} />
+        <input type="password" onChange={existPasswordHandler} />
         <div>새 비밀번호</div>
-        <input onChange={newPasswordHandler} />
+        <input type="password" onChange={newPasswordHandler} />
         <div>새 비밀번호 확인</div>
-        <input onChange={newPasswordCheckHandler} />
+        <input type="password" onChange={newPasswordCheckHandler} />
         {isEqual ? (
           <div>비밀번호가 일치합니다</div>
         ) : !beforeEnter ? (

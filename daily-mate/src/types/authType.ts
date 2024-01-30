@@ -17,6 +17,14 @@ export interface userResponse {
   type: string;
 }
 
+// 내 정보 조회 ResponseData
+export interface myInfoResponse {
+  email: string;
+  nickname: string;
+  image: string;
+  profile: string;
+}
+
 export interface updatePasswordInput {
   existPassword: string;
   newPassword: string;
