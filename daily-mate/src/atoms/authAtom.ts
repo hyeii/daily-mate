@@ -30,6 +30,11 @@ export const userImageURLState = atom({
   default: "url",
 });
 
+export const refreshTokenState = atom({
+  key: "refreshToken",
+  default: "",
+});
+
 // export const userNicknameState = atom({
 //   key: "nickname",
 //   default: "감자",

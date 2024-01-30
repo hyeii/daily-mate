@@ -1,14 +1,24 @@
 import axios, { AxiosResponse } from "axios";
 import { ChangeEvent, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { isLoginState } from "../../atoms/authAtom";
+import {
+  isLoginState,
+  refreshTokenState,
+  userImageURLState,
+  userInfoState,
+} from "../../atoms/authAtom";
 import { useNavigate } from "react-router-dom";
-import { userResponse } from "../../types/authType";
+import { userInfo, userResponse } from "../../types/authType";
 
 const SignInPage = () => {
+  // TODO : api 요청 분리
+
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const setIsLogged = useSetRecoilState(isLoginState);
+  const setUserInfo = useSetRecoilState(userInfoState);
+  const setUserImage = useSetRecoilState(userImageURLState);
+  const setRefreshToken = useSetRecoilState(refreshTokenState);
 
   const navigate = useNavigate();
 
@@ -40,7 +50,28 @@ const SignInPage = () => {
       );
       const result = res.data;
       console.log(result);
-      // TODO : post요청 성공 시 accessToken 및 유저 정보 저장
+
+      axios.interceptors.request.use(
+        (config) => {
+          config.headers.Authorization = `Bearer ${result.accessToken}`;
+          return config;
+        },
+        (error) => {
+          // TODO :  토큰 만료 가능성
+        }
+      );
+
+      const logInUserInfo: userInfo = {
+        nickname: result.nickName,
+        email: result.email,
+        profileMessage: result.profile,
+        loginType: result.type,
+        friendsCount: 0,
+      };
+
+      setUserInfo(logInUserInfo);
+      setUserImage(result.image);
+      setRefreshToken(result.refreshToken);
 
       setIsLogged(true);
       navigate("/");
