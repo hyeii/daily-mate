@@ -11,6 +11,7 @@ import UpdatePasswordPage from "./mypage/UpdatePasswordPage";
 import NotificationPage from "./notifications/NotificationPage";
 import TodoPage from "./todo/TodoPage";
 import SideBar from "./sidebar/SideBar";
+import AccountPage from "./account/AccountPage";
 export {
   SignInPage,
   SignUpPage,
@@ -18,6 +19,7 @@ export {
   DiaryWritePage,
   FriendsListPage,
   SearchPage,
+  AccountPage,
   MainPage,
   ProfilePage,
   UpdateInfoPage,

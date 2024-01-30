@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import {
+  AccountPage,
   FriendsListPage,
   MainPage,
   ProfilePage,
@@ -25,6 +26,7 @@ function App() {
         <Route path="/mypage/password" element={<UpdatePasswordPage />} />
         <Route path="/friends/list" element={<FriendsListPage />} />
         <Route path="/friends/search" element={<SearchPage />} />
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
     </div>
   );
