@@ -9,7 +9,7 @@ public class AccountReqDto {
 
     private String content;
     private String date;
-    private int amount;
+    private Integer amount;
     private String category;
 
 }
