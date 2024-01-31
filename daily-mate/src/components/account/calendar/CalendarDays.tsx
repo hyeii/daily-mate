@@ -1,5 +1,22 @@
+import styled from "styled-components";
+
 const CalendarDays = () => {
-  return <div>요일</div>;
+  const date = ["일", "월", "화", "수", "목", "금", "토"];
+  return (
+    <DayTextDiv>
+      {date.map((day: string) => (
+        <div key={day}>
+          <div>{day}</div>
+        </div>
+      ))}
+    </DayTextDiv>
+  );
 };
 
 export default CalendarDays;
+
+const DayTextDiv = styled.div`
+  width: 70%;
+  display: flex;
+  justify-content: space-around;
+`;

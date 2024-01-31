@@ -1,10 +1,12 @@
-import { useState } from "react";
 import AccountCalendar from "./AccountCalendar";
 import AccountMonthly from "./AccountMonthly";
 import AccountDaily from "./AccountDaily";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 
 const AccountPage = () => {
-  const [accountTab, setAccountTab] = useState<string>("calendar");
+  const [accountTab, setAccountTab] = useRecoilState(accountTabState);
+  const selectedDateNow = useRecoilValue(selectedDateState);
 
   const handleCalendar = () => {
     setAccountTab("calendar");
@@ -30,7 +32,7 @@ const AccountPage = () => {
         ) : accountTab === "monthly" ? (
           <AccountMonthly />
         ) : (
-          <AccountDaily />
+          <AccountDaily currentDay={selectedDateNow} />
         )}
       </div>
     </div>

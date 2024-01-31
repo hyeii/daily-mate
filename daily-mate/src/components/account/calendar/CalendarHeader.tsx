@@ -1,17 +1,27 @@
-type props = {
+import { format } from "date-fns";
+
+interface props {
   currentMonth: Date;
   prevMonth: () => void;
   nextMonth: () => void;
-  goToday: () => void;
-};
+  setToday: () => void;
+}
 
 const CalendarHeader = ({
   currentMonth,
   prevMonth,
   nextMonth,
-  goToday,
+  setToday,
 }: props) => {
-  return <div>헤더</div>;
+  return (
+    <div>
+      <div>{format(currentMonth, "yyyy")}</div>
+      <button onClick={prevMonth}>이전</button>
+      <span>{format(currentMonth, "M")}월</span>
+      <button onClick={nextMonth}>다음</button>
+      <button onClick={setToday}>오늘</button>
+    </div>
+  );
 };
 
 export default CalendarHeader;
