@@ -4,12 +4,13 @@ import CalendarDays from "./CalendarDays";
 import CalendarHeader from "./CalendarHeader";
 import { addMonths, format, subMonths } from "date-fns";
 import { accountByMonthResponse } from "../../../types/accountType";
+import InOutMonthly from "../InOutMonthly";
 
 const Calendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [accountByMonth, setAccountByMonth] = useState<accountByMonthResponse>({
-    totalInput: 0,
-    totalOutput: 0,
+    totalInput: 100,
+    totalOutput: 300,
     inputs: [],
     outputs: [],
   });
@@ -38,6 +39,10 @@ const Calendar = () => {
         prevMonth={prevMonth}
         nextMonth={nextMonth}
         setToday={setToday}
+      />
+      <InOutMonthly
+        totalInput={accountByMonth.totalInput}
+        totalOutput={accountByMonth.totalOutput}
       />
       <CalendarDays />
       <CalendarCells
