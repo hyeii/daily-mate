@@ -20,3 +20,13 @@ export const accountCategories: string[] = [
   "교통",
   "기타",
 ];
+
+export interface accountByDateResponse {
+  accountId: number;
+  userId: number;
+  content: string;
+  type: string;
+  date: string;
+  amount: number;
+  category: string;
+}
