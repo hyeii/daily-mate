@@ -5,6 +5,7 @@ interface props {
   prevMonth: () => void;
   nextMonth: () => void;
   setToday: () => void;
+  isMini: string;
 }
 
 const CalendarHeader = ({
@@ -12,6 +13,7 @@ const CalendarHeader = ({
   prevMonth,
   nextMonth,
   setToday,
+  isMini,
 }: props) => {
   return (
     <div>

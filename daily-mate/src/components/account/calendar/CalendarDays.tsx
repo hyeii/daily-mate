@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const CalendarDays = () => {
+interface props {
+  isMini: string;
+}
+
+const CalendarDays = ({ isMini }: props) => {
   const date = ["일", "월", "화", "수", "목", "금", "토"];
   return (
     <DayTextDiv>

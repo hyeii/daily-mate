@@ -8,22 +8,25 @@ import {
 } from "date-fns";
 import styled from "styled-components";
 import { accountByMonthResponse } from "../../../types/accountType";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { accountTabState, selectedDateState } from "../../../atoms/accountAtom";
 
 interface props {
   currentMonth: Date;
   accountByMonth: accountByMonthResponse;
+  isMini: string;
 }
 
 interface dayDivProps {
   isthismonth: string;
   istoday: string;
+  isselected: string;
+  ismini: string;
 }
 
-const CalendarCells = ({ currentMonth, accountByMonth }: props) => {
+const CalendarCells = ({ currentMonth, accountByMonth, isMini }: props) => {
   const setAccountTab = useSetRecoilState(accountTabState);
-  const setSelectedDate = useSetRecoilState(selectedDateState);
+  const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
 
   const monthStart = startOfMonth(currentMonth); // 이번달(currentMonth)기준으로 이번달의 시작일
   const monthEnd = endOfMonth(currentMonth); // 이번달(currentMonth)기준으로 이번달 마지막일
@@ -41,6 +44,7 @@ const CalendarCells = ({ currentMonth, accountByMonth }: props) => {
     setSelectedDate(format(day, "yyyy-MM-dd"));
     console.log(format(day, "yyyy-MM-dd"));
   };
+
   let days = [];
   let day = startDate;
   let index = 0; // 달력 시작지점부터 카운트, key 지정할거 말고는 필요가 있나...?
@@ -57,14 +61,25 @@ const CalendarCells = ({ currentMonth, accountByMonth }: props) => {
         format(today, "yyyy-MM-dd") === format(day, "yyyy-MM-dd")
           ? "today"
           : "notToday";
+
+      const isSelected: string =
+        format(day, "yyyy-MM-dd") === selectedDate ? "selected" : "others";
+
       days.push(
         <DayCover
           isthismonth={isThisMonth}
           istoday={isToday}
+          ismini={isMini}
+          isselected={isSelected}
           key={index}
           onClick={() => handleSelectDate(curDay, isThisMonth)} // curDay 쓰는 이유 : 클로저
         >
-          <DayInside isthismonth={isThisMonth} istoday={isToday}>
+          <DayInside
+            isthismonth={isThisMonth}
+            istoday={isToday}
+            ismini={isMini}
+            isselected={isSelected}
+          >
             {format(day, "d")}
           </DayInside>
           {isThisMonth === "thisMonth" ? (
@@ -73,7 +88,7 @@ const CalendarCells = ({ currentMonth, accountByMonth }: props) => {
               <div>{accountByMonth.outputs[parseInt(format(day, "d"))]}</div>
             </div>
           ) : (
-            <div></div>
+            <></>
           )}
         </DayCover>
       );
@@ -99,20 +114,30 @@ const FullCells = styled.div`
 
 const DayCover = styled.div<dayDivProps>`
   width: 100%;
-  height: 7rem;
-  border: ${({ istoday }) => (istoday === "today" ? "2px solid" : "0px")};
+  height: ${({ ismini }) => (ismini === "yes" ? "2rem" : "7rem")};
+  border: ${({ istoday, ismini }) =>
+    istoday === "today" && ismini === "not" ? "2px solid" : "0px"};
   border-color: ${({ istoday }) => (istoday === "today" ? "#ec9b9b" : "")};
   cursor: ${({ isthismonth }) =>
     isthismonth === "thisMonth" ? "pointer" : "default"};
-  color: ${({ isthismonth }) =>
-    isthismonth === "thisMonth" ? "black" : "#dddddd"};
+  color: ${({ isthismonth, isselected, ismini }) =>
+    isthismonth === "thisMonth" && isselected === "selected" && ismini === "yes"
+      ? "blue"
+      : isthismonth === "thisMonth"
+      ? "black"
+      : "#dddddd"};
 `;
 
 const DayInside = styled.span<dayDivProps>`
   display: flex;
   flex-direction: column;
   font-size: 1rem;
-  font-weight: ${({ istoday }) => (istoday === "today" ? "bold" : "normal")};
+  font-weight: ${({ istoday, isselected, ismini }) =>
+    istoday === "today"
+      ? "bold"
+      : isselected === "selected" && ismini === "yes"
+      ? "bold"
+      : "normal"};
   color: ${({ istoday }) => (istoday === "today" ? "#ec9b9b" : "inherit")};
 `;
 

@@ -6,7 +6,11 @@ import { addMonths, format, subMonths } from "date-fns";
 import { accountByMonthResponse } from "../../../types/accountType";
 import InOutMonthly from "../InOutMonthly";
 
-const Calendar = () => {
+export interface props {
+  isMini: string;
+}
+
+const Calendar = ({ isMini }: props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [accountByMonth, setAccountByMonth] = useState<accountByMonthResponse>({
     totalInput: 100,
@@ -39,15 +43,21 @@ const Calendar = () => {
         prevMonth={prevMonth}
         nextMonth={nextMonth}
         setToday={setToday}
+        isMini={isMini}
       />
-      <InOutMonthly
-        totalInput={accountByMonth.totalInput}
-        totalOutput={accountByMonth.totalOutput}
-      />
-      <CalendarDays />
+      {!isMini ? (
+        <InOutMonthly
+          totalInput={accountByMonth.totalInput}
+          totalOutput={accountByMonth.totalOutput}
+        />
+      ) : (
+        <></>
+      )}
+      <CalendarDays isMini={isMini} />
       <CalendarCells
         currentMonth={currentMonth}
         accountByMonth={accountByMonth}
+        isMini={isMini}
       />
     </div>
   );

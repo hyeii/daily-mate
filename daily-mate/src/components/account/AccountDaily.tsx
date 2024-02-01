@@ -1,3 +1,5 @@
+import Calendar from "./calendar/Calendar";
+
 interface props {
   currentDay: string;
 }
@@ -7,6 +9,7 @@ const AccountDaily = ({ currentDay }: props) => {
     <div>
       <div>일 통계</div>
       <div>{currentDay}</div>
+      <Calendar isMini={"yes"} />
     </div>
   );
 };

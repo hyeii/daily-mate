@@ -4,7 +4,7 @@ const AccountCalendar = () => {
   return (
     <div>
       <div>캘린더</div>
-      <Calendar />
+      <Calendar isMini={"not"} />
     </div>
   );
 };
