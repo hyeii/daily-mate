@@ -10,6 +10,7 @@ public class DiaryReqDto {
 
     private String title;
     private String content;
+    private String date;
     private MultipartFile image;
     private String weather;
     private String feeling;

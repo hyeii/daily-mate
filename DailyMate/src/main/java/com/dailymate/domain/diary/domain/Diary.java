@@ -38,6 +38,9 @@ public class Diary extends BaseTime {
     private String content;
 
     @Column
+    private String date;
+
+    @Column
     private String image;
 
     @Enumerated(EnumType.STRING)
