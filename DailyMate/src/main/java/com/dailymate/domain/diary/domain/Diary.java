@@ -3,6 +3,7 @@ package com.dailymate.domain.diary.domain;
 import com.dailymate.domain.diary.constant.Feeling;
 import com.dailymate.domain.diary.constant.OpenType;
 import com.dailymate.domain.diary.constant.Weather;
+import com.dailymate.domain.diary.dto.DiaryReqDto;
 import com.dailymate.global.common.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -51,4 +52,21 @@ public class Diary extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     private OpenType openType;
+
+    public static Diary createDiary(DiaryReqDto diaryReqDto) {
+        return Diary.builder()
+                .userId(1l)
+                .title(diaryReqDto.getTitle())
+                .content(diaryReqDto.getContent())
+                .date(diaryReqDto.getDate())
+                .weather(Weather.getWeather(diaryReqDto.getWeather()))
+                .feeling(Feeling.getFeeling(diaryReqDto.getFeeling()))
+                .openType(OpenType.getOpenType(diaryReqDto.getOpenType()))
+                .build();
+    }
+
+    public void updateImage(String image){
+        this.image = image;
+    }
+
 }
