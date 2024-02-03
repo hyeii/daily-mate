@@ -10,7 +10,17 @@ interface props {
 const AccountDaily = ({ currentDay }: props) => {
   const [accountListByDate, setAccountListByDate] = useState<
     accountByDateResponse[]
-  >([]);
+  >([
+    {
+      accountId: 1,
+      amount: 500,
+      category: "식비",
+      content: "막대사탕",
+      date: "2024-02-03",
+      type: "지출",
+      userId: 321,
+    },
+  ]);
   useEffect(() => {
     // currentDay가 바뀔 떄 마다 /account GET요청
   }, [currentDay]);
