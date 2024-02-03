@@ -5,6 +5,7 @@ import {
   CategoryByMonthMap,
   accountByMonthResponse,
 } from "../../types/accountType";
+import { getAccountByCategory, getAccountMonthly } from "../../apis/accountApi";
 
 const AccountMonthly = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -28,8 +29,24 @@ const AccountMonthly = () => {
   };
 
   useEffect(() => {
-    // 월별 지출 카테고리별 금액 조회 /account/category/map => setOutputByMonth
-    // 월별 거래 금액 조회 account/month RequestParam : format(currentMonth, "yyyy-MM") => extractInOutValue 넣어서 setInOutByMonth
+    const fetchData = async () => {
+      // 월별 거래 금액 조회 account/month
+      const accountMonthlyData: accountByMonthResponse | null =
+        await getAccountMonthly(format(currentMonth, "yyyy-MM"));
+      if (accountMonthlyData !== null) {
+        setInOutByMonth(extractInOutValue(accountMonthlyData));
+      }
+
+      // 월별 지출 카테고리별 금액 조회
+      const accountByCategoryData: CategoryByMonthMap | null =
+        await getAccountByCategory(format(currentMonth, "yyyy-MM"));
+      if (accountByCategoryData !== null) {
+        setOutputByMonth(accountByCategoryData);
+      }
+    };
+
+    fetchData();
+
     console.log(formatDate);
   }, [currentMonth, formatDate]);
 

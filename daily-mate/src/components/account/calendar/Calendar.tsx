@@ -5,6 +5,7 @@ import CalendarHeader from "./CalendarHeader";
 import { addMonths, format, subMonths } from "date-fns";
 import { accountByMonthResponse } from "../../../types/accountType";
 import InOutMonthly from "../InOutMonthly";
+import { getAccountMonthly } from "../../../apis/accountApi";
 
 export interface props {
   isMini: string;
@@ -32,8 +33,16 @@ const Calendar = ({ isMini }: props) => {
 
   useEffect(() => {
     console.log("현재 월 : " + format(currentMonth, "yyyy-MM"));
-    // 월별 거래 금액 조회 account/month RequestParam : format(currentMonth, "yyyy-MM")
-    // 조회 성공 시 setAccountByMonth
+    const fetchData = async () => {
+      // 월별 거래 금액 조회 account/month
+      const accountMonthlyData: accountByMonthResponse | null =
+        await getAccountMonthly(format(currentMonth, "yyyy-MM"));
+      if (accountMonthlyData !== null) {
+        setAccountByMonth(accountMonthlyData);
+      }
+    };
+
+    fetchData();
   }, [currentMonth]);
 
   return (

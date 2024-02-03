@@ -5,6 +5,7 @@ import {
   modalTypeState,
   openModalState,
 } from "../../atoms/accountAtom";
+import { deleteAccount } from "../../apis/accountApi";
 
 interface props {
   accountList: accountByDateResponse[];
@@ -26,7 +27,7 @@ const AccountHistory = ({ accountList }: props) => {
   };
 
   const handleDeleteAccount = (accountId: number) => {
-    // /account/{accountId} api DELETE 요청
+    deleteAccount(accountId);
   };
   return (
     <div>

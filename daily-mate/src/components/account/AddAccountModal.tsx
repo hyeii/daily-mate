@@ -5,7 +5,8 @@ import {
   modalTypeState,
   openModalState,
 } from "../../atoms/accountAtom";
-import { accountByDateResponse } from "../../types/accountType";
+import { accountByDateResponse, accountRequest } from "../../types/accountType";
+import { addAccount, modifyAccount } from "../../apis/accountApi";
 
 interface props {
   openType: string;
@@ -43,6 +44,19 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
     // add일때 modify일때 다르게 처리
     // openType="add" :  /account api POST 요청
     // openType="modify" :  /account/{accountId} api PATCH 요청
+    const newAccount: accountRequest = {
+      content: content,
+      date: date,
+      ammount: ammount,
+      category: category,
+    };
+    if (openType === "add") {
+      addAccount(newAccount);
+    }
+
+    if (openType === "modify") {
+      modifyAccount(newAccount, originAccount.accountId);
+    }
   };
   const handleCloseModal = () => {
     setModalType("");

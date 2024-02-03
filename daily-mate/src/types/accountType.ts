@@ -30,3 +30,10 @@ export interface accountByDateResponse {
   amount: number;
   category: string;
 }
+
+export interface accountRequest {
+  content: string;
+  date: string;
+  ammount: number;
+  category: string;
+}
