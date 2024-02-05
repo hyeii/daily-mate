@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Calendar from "./calendar/Calendar";
+import Calendar from "../calendar/Calendar";
 import { accountByDateResponse } from "../../types/accountType";
 import AccountHistory from "./AccountHistory";
 import { getAccountByDate } from "../../apis/accountApi";

@@ -7,9 +7,9 @@ import {
   startOfWeek,
 } from "date-fns";
 import styled from "styled-components";
-import { accountByMonthResponse } from "../../../types/accountType";
+import { accountByMonthResponse } from "../../types/accountType";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { accountTabState, selectedDateState } from "../../../atoms/accountAtom";
+import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 
 interface props {
   currentMonth: Date;
