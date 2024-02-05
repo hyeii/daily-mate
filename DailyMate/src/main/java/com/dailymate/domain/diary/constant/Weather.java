@@ -22,13 +22,13 @@ public enum Weather {
             return 맑음;
 
         if(value.contains("흐림"))
-            return 맑음;
+            return 흐림;
 
         if(value.contains("눈"))
-            return 맑음;
+            return 눈;
 
         if(value.contains("비"))
-            return 맑음;
+            return 비;
 
         else return null;
     }
