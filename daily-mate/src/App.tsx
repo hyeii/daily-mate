@@ -3,6 +3,7 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import {
   AccountPage,
+  DiaryDailyPage,
   DiaryMonthlyPage,
   FriendsListPage,
   MainPage,
@@ -29,6 +30,7 @@ function App() {
         <Route path="/friends/search" element={<SearchPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/diary/monthly" element={<DiaryMonthlyPage />} />
+        <Route path="/diary/daily/:id/:date" element={<DiaryDailyPage />} />
       </Routes>
     </div>
   );

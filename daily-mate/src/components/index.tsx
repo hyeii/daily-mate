@@ -1,6 +1,7 @@
 import SignInPage from "./auth/SignInPage";
 import SignUpPage from "./auth/SIgnUpPage";
 import DiaryMonthlyPage from "./diary/DiaryMonthlyPage";
+import DiaryDailyPage from "./diary/DiaryDailyPage";
 import DiaryWritePage from "./diary/DiaryWritePage";
 import FriendsListPage from "./friends/FriendsListPage";
 import SearchPage from "./friends/SearchPage";
@@ -16,6 +17,7 @@ export {
   SignInPage,
   SignUpPage,
   DiaryMonthlyPage,
+  DiaryDailyPage,
   DiaryWritePage,
   FriendsListPage,
   SearchPage,

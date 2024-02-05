@@ -1,0 +1,44 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { diaryByDateResponse, diaryDailyParams } from "../../types/diaryType";
+import { getDiaryByDate } from "../../apis/diaryApi";
+
+const DiaryDailyPage = () => {
+  const { id, date } = useParams<diaryDailyParams>();
+  const [diaryDetail, setDiaryDetail] = useState<diaryByDateResponse>({
+    title: "제목",
+    content: "내용",
+    date: "날짜",
+    image: "이미지",
+    weather: "날씨",
+    feeling: "기분",
+    openType: "비공개",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    likeNum: 3,
+    isLike: false,
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      // 해당 경로값이 존재하지 않으면 undefined가 될 수 있음
+      if (date !== undefined) {
+        const diaryByDateData: diaryByDateResponse | null =
+          await getDiaryByDate(date);
+        if (diaryByDateData !== null) {
+          setDiaryDetail(diaryByDateData);
+        }
+      }
+    };
+    fetchData();
+  }, []);
+  return (
+    <div>
+      <h3>다이어리 상세</h3>
+
+      <div>{date}</div>
+      <div>{diaryDetail.feeling}</div>
+    </div>
+  );
+};
+
+export default DiaryDailyPage;

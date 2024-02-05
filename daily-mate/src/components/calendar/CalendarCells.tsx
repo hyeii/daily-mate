@@ -11,6 +11,7 @@ import { accountByMonthResponse } from "../../types/accountType";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 import { diaryByMonthResponse } from "../../types/diaryType";
+import { useNavigate } from "react-router-dom";
 
 interface props {
   currentMonth: Date;
@@ -37,6 +38,8 @@ const CalendarCells = ({
   const setAccountTab = useSetRecoilState(accountTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
 
+  const navigate = useNavigate();
+
   const monthStart = startOfMonth(currentMonth); // 이번달(currentMonth)기준으로 이번달의 시작일
   const monthEnd = endOfMonth(currentMonth); // 이번달(currentMonth)기준으로 이번달 마지막일
   const startDate = startOfWeek(monthStart); // 이번달 시작일이 포함된 주의 시작일
@@ -49,9 +52,13 @@ const CalendarCells = ({
     if (isThisMonth === "otherMonth") {
       return;
     }
-    setAccountTab("daily");
     setSelectedDate(format(day, "yyyy-MM-dd"));
     console.log(format(day, "yyyy-MM-dd"));
+
+    if (calendarType === "account") setAccountTab("daily");
+    if (calendarType === "diary") {
+      navigate(`/diary/daily/id/${format(day, "yyyy-MM-dd")}`);
+    }
   };
 
   let days = [];
