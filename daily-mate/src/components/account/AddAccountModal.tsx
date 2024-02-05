@@ -25,8 +25,8 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
   const [content, setContent] = useState<string>(originAccount.content);
   const [ammount, setAmmount] = useState<number>(originAccount.amount);
 
-  const handleDate = () => {
-    setDate("");
+  const handleDate = (event: ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
   };
 
   const handleCategory = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -39,8 +39,6 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
     setAmmount(parseInt(event.target.value));
   };
   const submitAccount = () => {
-    console.log(category);
-    console.log(ammount);
     // add일때 modify일때 다르게 처리
     // openType="add" :  /account api POST 요청
     // openType="modify" :  /account/{accountId} api PATCH 요청
@@ -77,9 +75,13 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
       {openType === "add" ? <h3>작성하기</h3> : <h3>수정하기</h3>}
       <div onClick={handleCloseModal}>닫기</div>
       <div>날짜</div>
-      <input />
+      <input
+        type="date"
+        defaultValue={originAccount.date}
+        onChange={handleDate}
+      />
       <div>카테고리</div>
-      <select value={category} onChange={handleCategory}>
+      <select defaultValue={category} onChange={handleCategory}>
         <option value="식비">식비</option>
         <option value="카페">카페</option>
         <option value="생활">생활</option>

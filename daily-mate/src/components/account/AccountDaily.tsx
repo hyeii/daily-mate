@@ -15,7 +15,7 @@ const AccountDaily = ({ currentDay }: props) => {
     {
       accountId: 1,
       amount: 500,
-      category: "식비",
+      category: "카페",
       content: "막대사탕",
       date: "2024-02-03",
       type: "지출",
