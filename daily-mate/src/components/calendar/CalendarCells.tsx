@@ -10,10 +10,13 @@ import styled from "styled-components";
 import { accountByMonthResponse } from "../../types/accountType";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
+import { diaryByMonthResponse } from "../../types/diaryType";
 
 interface props {
   currentMonth: Date;
   accountByMonth: accountByMonthResponse;
+  diaryByMonth: diaryByMonthResponse[];
+  calendarType: string;
   isMini: string;
 }
 
@@ -24,7 +27,13 @@ interface dayDivProps {
   ismini: string;
 }
 
-const CalendarCells = ({ currentMonth, accountByMonth, isMini }: props) => {
+const CalendarCells = ({
+  currentMonth,
+  accountByMonth,
+  diaryByMonth,
+  calendarType,
+  isMini,
+}: props) => {
   const setAccountTab = useSetRecoilState(accountTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
 
@@ -82,14 +91,19 @@ const CalendarCells = ({ currentMonth, accountByMonth, isMini }: props) => {
           >
             {format(day, "d")}
           </DayInside>
-          {isThisMonth === "thisMonth" ? (
+          {isThisMonth === "thisMonth" && calendarType === "account" ? (
             <div>
               <div>{accountByMonth.inputs[parseInt(format(day, "d"))]}</div>
               <div>{accountByMonth.outputs[parseInt(format(day, "d"))]}</div>
             </div>
-          ) : (
-            <></>
-          )}
+          ) : isThisMonth === "thisMonth" && calendarType === "diary" ? (
+            // <div>{diaryByMonth[parseInt(format(day, "d"))].title}</div>
+            <div>
+              {diaryByMonth.length > parseInt(format(day, "d")) ? (
+                <div>{diaryByMonth[parseInt(format(day, "d"))].feeling}</div>
+              ) : null}
+            </div>
+          ) : null}
         </DayCover>
       );
 
