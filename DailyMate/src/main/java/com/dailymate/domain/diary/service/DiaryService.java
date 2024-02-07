@@ -6,4 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface DiaryService {
 
     void addDiary(DiaryReqDto diaryReqDto, MultipartFile image);
+    void updateDiary(Long diaryId, DiaryReqDto diaryReqDto, MultipartFile image);
 }

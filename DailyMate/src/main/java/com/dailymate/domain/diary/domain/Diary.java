@@ -20,11 +20,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
-@Where(clause = "deleted_at = null")
+@Where(clause = "deleted_at is null")
 public class Diary extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "diary_id")
     private Long diaryId;
 
     @NotNull
@@ -69,4 +70,12 @@ public class Diary extends BaseTime {
         this.image = image;
     }
 
+    public void updateDiary(String title, String content, String date, Weather weather, Feeling feeling, OpenType openType) {
+        this.title = title == null ? this.title : title;
+        this.content = content == null ? this.content : content;
+        this.date = date == null ? this.date : date;
+        this.weather = weather == null ? this.weather : weather;
+        this.feeling = feeling == null ? this.feeling : feeling;
+        this.openType = openType == null ? this.openType : openType;
+    }
 }

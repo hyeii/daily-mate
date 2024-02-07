@@ -29,8 +29,22 @@ public class DiaryController {
     public ResponseEntity<MessageDto> addDiary(
             @RequestPart(value = "diaryReqDto") DiaryReqDto diaryReqDto,
             @RequestPart(value = "image", required = false) MultipartFile image) {
+
         diaryService.addDiary(diaryReqDto, image);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(MessageDto.message("CREATE SUCCESS"));
+                .body(MessageDto.message("일기를 등록했습니다."));
+    }
+
+    @PatchMapping(value = "/{diaryId}")
+    public ResponseEntity<MessageDto> updateDiary(
+            @PathVariable Long diaryId,
+            @RequestPart(value = "diaryReqDto") DiaryReqDto diaryReqDto,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        diaryService.updateDiary(diaryId, diaryReqDto, image);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(MessageDto.message("일기를 수정했습니다."));
     }
 }

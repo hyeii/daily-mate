@@ -5,8 +5,10 @@ spring:
     password: root
 
   jpa:
+    show-sql: true
     hibernate:
-      ddl-auto: create
+      format-sql: true
+      ddl-auto: update
     properties:
       hibernate:
         jdbc:
