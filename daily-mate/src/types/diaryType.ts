@@ -15,6 +15,7 @@ export interface diaryByMonthResponse {
 }
 
 export interface diaryByDateResponse {
+  diaryId: number;
   title: string;
   content: string;
   date: string;
@@ -26,4 +27,21 @@ export interface diaryByDateResponse {
   updatedAt: Date;
   likeNum: number;
   isLike: boolean;
+}
+
+export interface commentListResponse {
+  nickname: string;
+  content: string;
+  likeNum: number;
+  createdAt: Date;
+  updatedAt: Date;
+  isLiked: boolean;
+}
+
+export interface commentBody {
+  nickname: string;
+  content: string;
+  likeNum: number;
+  createdAt: Date;
+  updatedAt: Date;
 }

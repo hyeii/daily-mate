@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { diaryByDateResponse, diaryDailyParams } from "../../types/diaryType";
 import { getDiaryByDate } from "../../apis/diaryApi";
+import DiaryComment from "./DiaryComment";
 
 const DiaryDailyPage = () => {
   const { id, date } = useParams<diaryDailyParams>();
   const [diaryDetail, setDiaryDetail] = useState<diaryByDateResponse>({
+    diaryId: 100,
     title: "제목",
     content: "내용",
     date: "날짜",
@@ -37,6 +39,7 @@ const DiaryDailyPage = () => {
 
       <div>{date}</div>
       <div>{diaryDetail.feeling}</div>
+      <DiaryComment diaryId={diaryDetail.diaryId} />
     </div>
   );
 };
