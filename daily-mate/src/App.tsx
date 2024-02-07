@@ -5,6 +5,7 @@ import {
   AccountPage,
   DiaryDailyPage,
   DiaryMonthlyPage,
+  DiaryWritePage,
   FriendsListPage,
   MainPage,
   ProfilePage,
@@ -31,6 +32,7 @@ function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/diary/monthly" element={<DiaryMonthlyPage />} />
         <Route path="/diary/daily/:id/:date" element={<DiaryDailyPage />} />
+        <Route path="/diary/daily/write" element={<DiaryWritePage />} />
       </Routes>
     </div>
   );
