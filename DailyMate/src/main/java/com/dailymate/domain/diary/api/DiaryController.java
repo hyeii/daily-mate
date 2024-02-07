@@ -47,4 +47,11 @@ public class DiaryController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("일기를 수정했습니다."));
     }
+
+    @DeleteMapping("/{diaryId}")
+    public ResponseEntity<MessageDto> deleteDiary(@PathVariable Long diaryId) {
+        diaryService.deleteDiary(diaryId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(MessageDto.message("일기를 삭제했습니다."));
+    }
 }

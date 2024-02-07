@@ -32,6 +32,7 @@ public class DiaryServiceImpl implements DiaryService {
      * @param image MultipartFile
      */
     @Override
+    @Transactional
     public void addDiary(DiaryReqDto diaryReqDto, MultipartFile image) {
 
         // 제목 입력값 검증
@@ -74,7 +75,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         // 이미 삭제된 일기인지 확인
         if(diary.getDeletedAt() != null) {
-            throw new DiaryNotFoundException("[UPDATE_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg());
+            throw new DiaryNotFoundException("[UPDATE_DIARY] " + DiaryExceptionMessage.DIARY_ALREADY_DELETED.getMsg());
         }
 
         // 일기 작성자와 같은지 확인(!!!)
@@ -113,5 +114,34 @@ public class DiaryServiceImpl implements DiaryService {
             diary.updateImage(imageUrl);
         }
 
+    }
+
+    /**
+     * 일기 삭제
+     * @param diaryId Long
+     */
+    @Override
+    @Transactional
+    public void deleteDiary(Long diaryId) {
+
+        // 일기 존재하는 지 확인
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> {
+                    throw new DiaryNotFoundException("[DELETE_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg());
+                });
+
+        // 이미 삭제된 일기인지 확인
+        if(diary.getDeletedAt() != null) {
+            throw new DiaryNotFoundException("[DELETE_DIARY] " + DiaryExceptionMessage.DIARY_ALREADY_DELETED.getMsg());
+        }
+
+        // 일기 작성자와 같은지 확인(!!!)
+
+        // 이미지가 존재한다면 삭제
+        if(diary.getImage() != null) {
+            imageService.deleteImage(diary.getImage());
+        }
+
+        diary.delete();
     }
 }

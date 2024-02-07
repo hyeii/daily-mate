@@ -7,4 +7,5 @@ public interface DiaryService {
 
     void addDiary(DiaryReqDto diaryReqDto, MultipartFile image);
     void updateDiary(Long diaryId, DiaryReqDto diaryReqDto, MultipartFile image);
+    void deleteDiary(Long diaryId);
 }
