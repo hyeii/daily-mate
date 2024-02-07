@@ -30,6 +30,7 @@ export interface diaryByDateResponse {
 }
 
 export interface commentListResponse {
+  commentId: number;
   nickname: string;
   content: string;
   likeNum: number;

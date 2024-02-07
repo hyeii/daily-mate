@@ -46,3 +46,28 @@ export const addComment = async (diaryId: number, body: commentBody) => {
     console.error("댓글 작성 오류 : ", error);
   }
 };
+
+export const updateComment = async (commentId: number, body: commentBody) => {
+  try {
+    const res: AxiosResponse<{ message: string }> = await axios.put(
+      `/api/comment/${commentId}`,
+      body
+    );
+    alert("댓글 수정 완료");
+    console.log(res.data.message);
+  } catch (error) {
+    console.error("댓글 수정 오류 : ", error);
+  }
+};
+
+export const deleteComment = async (commentId: number) => {
+  try {
+    const res: AxiosResponse<{ message: string }> = await axios.delete(
+      `/api/comment/${commentId}`
+    );
+    alert("댓글 삭제 완료");
+    console.log(res.data.message);
+  } catch (error) {
+    console.error("댓글 삭제 오류 : ", error);
+  }
+};
