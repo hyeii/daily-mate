@@ -75,6 +75,10 @@ public class DiaryController {
                 .body(MessageDto.message("좋아요 상태를 변경했습니다."));
     }
 
+    @Operation(
+            summary = "일기 조회 (일별)",
+            description = "해당 날짜의 일기를 조회합니다."
+    )
     @GetMapping("/date")
     public ResponseEntity<DiaryResDto> findDiary(@RequestParam("date") String date) {
         return ResponseEntity.status(HttpStatus.OK)

@@ -204,6 +204,11 @@ public class DiaryServiceImpl implements DiaryService {
         // 일기 확인
         Diary diary = diaryRepository.findDiaryByDateAndUserId(date, userId);
 
+        // 일기 없으면 null 반환
+        if(diary == null) {
+            return null;
+        }
+
         // 좋아요 여부
         Boolean isLike = false;
 
