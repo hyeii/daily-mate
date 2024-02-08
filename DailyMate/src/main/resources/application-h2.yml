@@ -40,24 +40,7 @@ spring:
       type.descriptor.sql: trace # sql의 데이터까지 다 보이게 // query의 ?에 어떤 값이 들어가는지 추적할 수 있는 설정. TRACE Log에 값을 보여줌
 
 server:
-  port: 8083
+  port: 8080
 
 cors:
   front_url: "*"
-
-
-# swagger 관련 - https://adjh54.tistory.com/72 / https://tall-developer.tistory.com/27
-springdoc:
-  packages-to-scan: com.dailymate # swagger를 적용하기 위해 스캔할 패키지를 지정
-  default-consumes-media-type: application/json;charset=UTF-8
-  default-produces-media-type: application/json;charset=UTF-8
-  swagger-ui:
-    path: daily-mate.html       # Swagger-ui 경로 => localhost:8083/daily-mate.html
-    tags-sorter: alpha          # alpha : 알파벳 순 태그 정렬, method : HTTP Method 순 정렬
-    operations-sorter: alpha
-  api-docs:
-    path: /api-docs/json
-    groups:
-      enabled: true
-  cache:
-    disabled: true

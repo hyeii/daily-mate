@@ -1,8 +1,10 @@
 spring:
   profiles:
     include:
-      - mariaDb
+      - h2
+#      - mariaDb
       - s3
+      - swagger
   servlet:
     multipart:
       max-file-size: 10MB
