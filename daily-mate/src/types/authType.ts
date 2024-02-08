@@ -1,4 +1,5 @@
 export interface userInfo {
+  userId: number;
   nickname: string;
   email: string;
   profileMessage: string;
@@ -8,6 +9,7 @@ export interface userInfo {
 
 // 로그인 ResponseData
 export interface userResponse {
+  userId: number;
   accessToken: string;
   refreshToken: string;
   email: string;

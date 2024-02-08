@@ -62,6 +62,7 @@ const SignInPage = () => {
       );
 
       const logInUserInfo: userInfo = {
+        userId: result.userId,
         nickname: result.nickName,
         email: result.email,
         profileMessage: result.profile,

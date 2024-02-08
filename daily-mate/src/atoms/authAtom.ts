@@ -16,6 +16,7 @@ export const isLoginState = atom<boolean>({
 export const userInfoState = atom<userInfo>({
   key: "userInfo",
   default: {
+    userId: 1,
     nickname: "당근",
     email: "hyehye@dailymate.com",
     profileMessage: "한줄소개입니다",
