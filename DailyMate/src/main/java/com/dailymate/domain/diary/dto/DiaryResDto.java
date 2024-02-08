@@ -1,5 +1,7 @@
 package com.dailymate.domain.diary.dto;
 
+import com.dailymate.domain.diary.constant.Weather;
+import com.dailymate.domain.diary.domain.Diary;
 import lombok.*;
 
 @Getter
@@ -18,8 +20,23 @@ public class DiaryResDto {
     private String openType;
     private String createdAt;
     private String updatedAt;
-    private Integer likeNum;
+    private Long likeNum;
     private Boolean isLike;
 
-
+    public static DiaryResDto createDto(Diary diary, Long likeNum, Boolean isLike) {
+        return DiaryResDto.builder()
+                .diaryId(diary.getDiaryId())
+                .title(diary.getTitle())
+                .content(diary.getContent())
+                .date(diary.getDate())
+                .image(diary.getImage())
+                .weather(diary.getWeather().getValue())
+                .feeling(diary.getFeeling().getValue())
+                .openType(diary.getOpenType().getValue())
+                .createdAt(diary.getCreatedAt())
+                .updatedAt(diary.getUpdatedAt())
+                .likeNum(likeNum)
+                .isLike(isLike)
+                .build();
+    }
 }

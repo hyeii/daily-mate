@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
-
     boolean existsDiaryByDateAndUserId(String date, Long userId);
+    Diary findDiaryByDateAndUserId(String date, Long userId);
 }

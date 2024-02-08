@@ -195,7 +195,28 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     @Transactional
-    public DiaryResDto findDiary(String date) {
-        return null;
+    public DiaryResDto findDiary(String date, Long userId) {
+
+        // 사용자 확인(!!!)
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new DiaryNotFoundException("[LIKE_DIARY] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 일기 확인
+        Diary diary = diaryRepository.findDiaryByDateAndUserId(date, userId);
+
+        // 좋아요 여부
+        Boolean isLike = false;
+
+        LikeDiaryKey key = LikeDiaryKey.createKey(userId, diary.getDiaryId());
+        Optional<LikeDiary> likeDiary = likeDiaryRepository.findById(key);
+
+        if(likeDiary.isPresent()) {
+            isLike = true;
+        }
+
+        // 좋아요 개수
+        Long likeNum = likeDiaryRepository.countLikesByDiaryId(diary.getDiaryId());
+
+        return DiaryResDto.createDto(diary, likeNum, isLike);
     }
 }

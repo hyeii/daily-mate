@@ -1,10 +1,13 @@
 spring:
   profiles:
     include:
+#      - h2
       - mariaDb
       - s3
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
-      enabled: true
+      - swagger
+
+servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 10MB
+    enabled: true

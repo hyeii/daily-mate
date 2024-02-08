@@ -10,5 +10,5 @@ public interface DiaryService {
     void updateDiary(Long diaryId, DiaryReqDto diaryReqDto, MultipartFile image);
     void deleteDiary(Long diaryId);
     void likeDiary(Long diaryId, Long userId);
-    DiaryResDto findDiary(String date);
+    DiaryResDto findDiary(String date, Long userId);
 }

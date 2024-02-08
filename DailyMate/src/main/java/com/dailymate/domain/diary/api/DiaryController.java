@@ -1,6 +1,7 @@
 package com.dailymate.domain.diary.api;
 
 import com.dailymate.domain.diary.dto.DiaryReqDto;
+import com.dailymate.domain.diary.dto.DiaryResDto;
 import com.dailymate.domain.diary.service.DiaryService;
 import com.dailymate.global.dto.MessageDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,5 +73,11 @@ public class DiaryController {
         diaryService.likeDiary(diaryId, 1l);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("좋아요 상태를 변경했습니다."));
+    }
+
+    @GetMapping("/date")
+    public ResponseEntity<DiaryResDto> findDiary(@RequestParam("date") String date) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(diaryService.findDiary(date, 1l));
     }
 }
