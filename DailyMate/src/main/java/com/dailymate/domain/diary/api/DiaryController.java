@@ -36,6 +36,10 @@ public class DiaryController {
                 .body(MessageDto.message("일기를 등록했습니다."));
     }
 
+    @Operation(
+            summary = "일기 수정",
+            description = "일기를 수정합니다."
+    )
     @PatchMapping(value = "/{diaryId}")
     public ResponseEntity<MessageDto> updateDiary(
             @PathVariable Long diaryId,
@@ -48,10 +52,25 @@ public class DiaryController {
                 .body(MessageDto.message("일기를 수정했습니다."));
     }
 
+    @Operation(
+            summary = "일기 삭제",
+            description = "일기를 삭제합니다."
+    )
     @DeleteMapping("/{diaryId}")
     public ResponseEntity<MessageDto> deleteDiary(@PathVariable Long diaryId) {
         diaryService.deleteDiary(diaryId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("일기를 삭제했습니다."));
+    }
+
+    @Operation(
+            summary = "일기 좋아요",
+            description = "좋아요 상태를 변경합니다."
+    )
+    @PostMapping("/like/{diaryId}")
+    public ResponseEntity<MessageDto> likeDiary(@PathVariable Long diaryId) {
+        diaryService.likeDiary(diaryId, 1l);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(MessageDto.message("좋아요 상태를 변경했습니다."));
     }
 }

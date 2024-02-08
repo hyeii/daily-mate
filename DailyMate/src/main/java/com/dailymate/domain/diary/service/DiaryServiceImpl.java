@@ -4,19 +4,28 @@ import com.dailymate.domain.diary.constant.Feeling;
 import com.dailymate.domain.diary.constant.OpenType;
 import com.dailymate.domain.diary.constant.Weather;
 import com.dailymate.domain.diary.dao.DiaryRepository;
+import com.dailymate.domain.diary.dao.LikeDiaryRepository;
 import com.dailymate.domain.diary.domain.Diary;
+import com.dailymate.domain.diary.domain.LikeDiary;
+import com.dailymate.domain.diary.domain.LikeDiaryKey;
 import com.dailymate.domain.diary.dto.DiaryReqDto;
+import com.dailymate.domain.diary.dto.DiaryResDto;
 import com.dailymate.domain.diary.exception.DiaryBadRequestException;
 import com.dailymate.domain.diary.exception.DiaryExceptionMessage;
 import com.dailymate.domain.diary.exception.DiaryForbiddenException;
 import com.dailymate.domain.diary.exception.DiaryNotFoundException;
+import com.dailymate.domain.user.UserRepository;
+import com.dailymate.domain.user.Users;
 import com.dailymate.global.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,6 +34,8 @@ public class DiaryServiceImpl implements DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final ImageService imageService;
+    private final UserRepository userRepository;
+    private final LikeDiaryRepository likeDiaryRepository;
 
     /**
      * 일기 작성
@@ -143,5 +154,44 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         diary.delete();
+    }
+
+    /**
+     * 일기 좋아요
+     * @param diaryId Long
+     * @param userId Long
+     */
+    @Override
+    @Transactional
+    public void likeDiary(Long diaryId, Long userId) {
+
+        // 일기 확인
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new DiaryNotFoundException("[LIKE_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
+
+        // 사용자 확인(!!!)
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new DiaryNotFoundException("[LIKE_DIARY] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 복합키 생성
+        LikeDiaryKey key = LikeDiaryKey.createKey(userId, diaryId);
+
+        // 좋아요 토글
+        Optional<LikeDiary> likeDiary = likeDiaryRepository.findById(key);
+
+        if(likeDiary.isPresent()) {
+            likeDiaryRepository.delete(likeDiary.get());
+        } else {
+            likeDiaryRepository.save(LikeDiary.builder()
+                    .user(user)
+                    .diary(diary)
+                    .build());
+        }
+    }
+
+    @Override
+    @Transactional
+    public DiaryResDto findDiary(String date) {
+        return null;
     }
 }
