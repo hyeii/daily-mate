@@ -12,6 +12,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 import { diaryByMonthResponse } from "../../types/diaryType";
 import { useNavigate } from "react-router-dom";
+import AccountCell from "./cell/AccountCell";
 
 interface props {
   currentMonth: Date;
@@ -98,14 +99,22 @@ const CalendarCells = ({
           >
             {format(day, "d")}
           </DayInside>
-          {isThisMonth === "thisMonth" && calendarType === "account" ? (
+          {isThisMonth === "thisMonth" &&
+          calendarType === "account" &&
+          isMini === "not" ? (
             <div>
-              <div>{accountByMonth.inputs[parseInt(format(day, "d"))]}</div>
-              <div>{accountByMonth.outputs[parseInt(format(day, "d"))]}</div>
+              <AccountCell
+                date={format(day, "yyyy-MM-dd")}
+                input={accountByMonth.inputs[parseInt(format(day, "d"))]}
+                output={accountByMonth.outputs[parseInt(format(day, "d"))]}
+              />
             </div>
           ) : isThisMonth === "thisMonth" && calendarType === "myDiary" ? (
             // <div>{diaryByMonth[parseInt(format(day, "d"))].title}</div>
             <div>
+              {/* length 조건 삼항연산자 건 이유 : 
+              더미데이터로 넣은 값이 30,31일만큼 채운 값이 아닌 확인용 짧은 배열이라 배열의 길이를 넘어가는 날짜에서는 오류가 발생함. 
+              실제 데이터 받아오면 필요 X */}
               {diaryByMonth.length > parseInt(format(day, "d")) ? (
                 <div>{diaryByMonth[parseInt(format(day, "d"))].feeling}</div>
               ) : null}

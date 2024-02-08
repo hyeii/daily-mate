@@ -29,24 +29,28 @@ const Calendar = ({ isMini, calendarType }: props) => {
   });
   const [diaryByMonth, setDiaryByMonth] = useState<diaryByMonthResponse[]>([
     {
+      diaryId: 123,
       title: "제목0",
       image: "이미지0",
       weather: "날씨0",
       feeling: "기분0",
     },
     {
+      diaryId: 124,
       title: "제목1",
       image: "이미지1",
       weather: "날씨1",
       feeling: "기분1",
     },
     {
+      diaryId: 125,
       title: "제목2",
       image: "이미지2",
       weather: "날씨2",
       feeling: "기분2",
     },
     {
+      diaryId: 126,
       title: "제목3",
       image: "이미지3",
       weather: "날씨3",

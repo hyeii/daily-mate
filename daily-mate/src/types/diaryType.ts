@@ -12,6 +12,7 @@ export type diaryMonthlyParams = {
 };
 
 export interface diaryByMonthResponse {
+  diaryId: number;
   title: string;
   image: string;
   weather: string;
