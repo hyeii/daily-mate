@@ -29,6 +29,15 @@ export interface diaryByDateResponse {
   isLike: boolean;
 }
 
+export interface diaryRequest {
+  title: string;
+  content: string;
+  date: string;
+  weather: string;
+  feeling: string;
+  openType: string;
+}
+
 export interface commentListResponse {
   commentId: number;
   nickname: string;

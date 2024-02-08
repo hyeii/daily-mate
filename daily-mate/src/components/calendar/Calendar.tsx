@@ -7,6 +7,9 @@ import { accountByMonthResponse } from "../../types/accountType";
 import InOutMonthly from "../account/InOutMonthly";
 import { getAccountMonthly } from "../../apis/accountApi";
 import { diaryByMonthResponse } from "../../types/diaryType";
+import { getDiaryByMonth } from "../../apis/diaryApi";
+import { userInfoState } from "../../atoms/authAtom";
+import { useRecoilValue } from "recoil";
 
 export interface props {
   isMini: string;
@@ -15,6 +18,7 @@ export interface props {
 
 const Calendar = ({ isMini, calendarType }: props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const userInfo = useRecoilValue(userInfoState);
   const [accountByMonth, setAccountByMonth] = useState<accountByMonthResponse>({
     totalInput: 100,
     totalOutput: 300,
@@ -75,12 +79,17 @@ const Calendar = ({ isMini, calendarType }: props) => {
       // 월별 일기 조회
       if (calendarType === "diary") {
         console.log("다이어리 캘린더 렌더링");
-        //
+        const diaryMonthlyData: diaryByMonthResponse[] | null =
+          await getDiaryByMonth(format(currentMonth, "yyyy-MM"), 123);
+        // userInfo id
+        if (diaryMonthlyData !== null) {
+          setDiaryByMonth(diaryMonthlyData);
+        }
       }
     };
 
     fetchData();
-  }, [currentMonth]);
+  }, [calendarType, currentMonth]);
 
   return (
     <div>

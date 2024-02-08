@@ -1,4 +1,7 @@
 import { ChangeEvent, useState } from "react";
+import { diaryRequest } from "../../types/diaryType";
+import { addDiary } from "../../apis/diaryApi";
+import { format } from "date-fns";
 
 const DiaryWritePage = () => {
   const [inputTitle, setInputTitle] = useState<string>("");
@@ -8,8 +11,6 @@ const DiaryWritePage = () => {
   const [inputOpenType, setInputOpenType] = useState<string>("");
   const [inputImage, setInputImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
-
-  const formData = new FormData();
 
   const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setInputTitle(event.target.value);
@@ -35,6 +36,7 @@ const DiaryWritePage = () => {
     if (imageFile) {
       setInputImage(imageFile);
 
+      // 첨부한 이미지 프리뷰 확인용
       const imagePreviewUrl = URL.createObjectURL(imageFile);
       setImagePreview(imagePreviewUrl);
       console.log(imagePreviewUrl);
@@ -43,6 +45,16 @@ const DiaryWritePage = () => {
 
   const submitDiary = () => {
     // 일기 저장
+    const diaryData: diaryRequest = {
+      title: inputTitle,
+      content: inputContent,
+      date: format(new Date(), "yyyy-MM-dd"),
+      weather: inputWeather,
+      feeling: inputFeeling,
+      openType: inputOpenType,
+    };
+
+    addDiary(diaryData, inputImage);
   };
   return (
     // 이하 select, radio 추후 컴포넌트 처리

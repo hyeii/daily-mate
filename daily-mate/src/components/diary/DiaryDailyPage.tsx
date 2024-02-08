@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { diaryByDateResponse, diaryDailyParams } from "../../types/diaryType";
-import { getDiaryByDate } from "../../apis/diaryApi";
+import { deleteDiary, getDiaryByDate } from "../../apis/diaryApi";
 import DiaryComment from "./DiaryComment";
 
 const DiaryDailyPage = () => {
@@ -20,6 +20,9 @@ const DiaryDailyPage = () => {
     likeNum: 3,
     isLike: false,
   });
+  const deleteDiaryNow = () => {
+    deleteDiary(diaryDetail.diaryId);
+  };
   useEffect(() => {
     const fetchData = async () => {
       // 해당 경로값이 존재하지 않으면 undefined가 될 수 있음
@@ -40,6 +43,7 @@ const DiaryDailyPage = () => {
       <div>{date}</div>
       <div>{diaryDetail.feeling}</div>
       <DiaryComment diaryId={diaryDetail.diaryId} />
+      <button onClick={deleteDiaryNow}>다이어리 삭제</button>
     </div>
   );
 };

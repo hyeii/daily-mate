@@ -3,6 +3,8 @@ import {
   commentBody,
   commentListResponse,
   diaryByDateResponse,
+  diaryByMonthResponse,
+  diaryRequest,
 } from "../types/diaryType";
 
 export const getDiaryByDate = async (date: string) => {
@@ -19,6 +21,56 @@ export const getDiaryByDate = async (date: string) => {
   } catch (error) {
     console.error("일별 일기 조회 오류 : ", error);
     return null;
+  }
+};
+
+export const getDiaryByMonth = async (date: string, userId: number) => {
+  try {
+    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> =
+      await axios.get(`/api/diary/${userId}/month`, {
+        params: {
+          date: date,
+        },
+      });
+    return res.data.data;
+  } catch (error) {
+    console.error("월별 일기 조회 오류 : ", error);
+    return null;
+  }
+};
+
+export const addDiary = async (diaryData: diaryRequest, image: File | null) => {
+  try {
+    const formData = new FormData();
+    formData.append("diaryReqDto", JSON.stringify(diaryData));
+    if (image) {
+      formData.append("image", image);
+    }
+
+    const res: AxiosResponse<{ message: string }> = await axios.post(
+      "/api/diary",
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    console.log(res.data.message);
+    alert("일기 작성 완료");
+  } catch (error) {
+    console.error("일기 작성 오류 : ", error);
+  }
+};
+
+export const deleteDiary = async (diaryId: number) => {
+  try {
+    const res: AxiosResponse<{ message: string }> = await axios.delete(
+      `/api/diary/${diaryId}`
+    );
+    console.log(res.data.message);
+    alert("일기 삭제 완료");
+  } catch (error) {
+    console.error("일기 삭제 오류 : ", error);
   }
 };
 
