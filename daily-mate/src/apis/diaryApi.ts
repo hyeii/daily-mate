@@ -39,6 +39,23 @@ export const getDiaryByMonth = async (date: string, userId: number) => {
   }
 };
 
+export const getOtherDiaryByDate = async (date: string, diaryId: number) => {
+  try {
+    const res: AxiosResponse<{ data: diaryByDateResponse }> = await axios.get(
+      `/api/diary/friend/${diaryId}`,
+      {
+        params: {
+          date: date,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (error) {
+    console.error("다른 사람 일별 일기 조회 오류 : ", error);
+    return null;
+  }
+};
+
 export const getOtherDiaryByMonth = async (date: string, userId: number) => {
   try {
     const res: AxiosResponse<{ data: diaryByMonthResponse[] }> =
@@ -89,6 +106,17 @@ export const deleteDiary = async (diaryId: number) => {
   }
 };
 
+export const likeDiary = async (diaryId: number) => {
+  try {
+    const res: AxiosResponse<{ message: string }> = await axios.post(
+      `/api/diary/like/${diaryId}`
+    );
+    console.log(res.data.message);
+  } catch (error) {
+    console.error("일기 좋아요 오류 : ", error);
+  }
+};
+
 export const getCommentList = async (diaryId: number) => {
   try {
     const res: AxiosResponse<{ data: commentListResponse[] }> = await axios.get(
@@ -136,5 +164,16 @@ export const deleteComment = async (commentId: number) => {
     console.log(res.data.message);
   } catch (error) {
     console.error("댓글 삭제 오류 : ", error);
+  }
+};
+
+export const likeComment = async (commentId: number) => {
+  try {
+    const res: AxiosResponse<{ message: string }> = await axios.post(
+      `/api/comment/like/${commentId}`
+    );
+    console.log(res.data.message);
+  } catch (error) {
+    console.error("댓글 좋아요 오류 : ", error);
   }
 };

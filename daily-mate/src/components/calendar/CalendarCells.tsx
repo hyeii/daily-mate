@@ -13,6 +13,8 @@ import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 import { diaryByMonthResponse } from "../../types/diaryType";
 import { useNavigate } from "react-router-dom";
 import AccountCell from "./cell/AccountCell";
+import MyDiaryCell from "./cell/MyDiaryCell";
+import OtherDiaryCell from "./cell/OtherDiaryCell";
 
 interface props {
   currentMonth: Date;
@@ -110,19 +112,28 @@ const CalendarCells = ({
               />
             </div>
           ) : isThisMonth === "thisMonth" && calendarType === "myDiary" ? (
-            // <div>{diaryByMonth[parseInt(format(day, "d"))].title}</div>
             <div>
               {/* length 조건 삼항연산자 건 이유 : 
               더미데이터로 넣은 값이 30,31일만큼 채운 값이 아닌 확인용 짧은 배열이라 배열의 길이를 넘어가는 날짜에서는 오류가 발생함. 
               실제 데이터 받아오면 필요 X */}
               {diaryByMonth.length > parseInt(format(day, "d")) ? (
-                <div>{diaryByMonth[parseInt(format(day, "d"))].feeling}</div>
+                <div>
+                  <MyDiaryCell
+                    date={format(day, "yyyy-MM-dd")}
+                    diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
+                  />
+                </div>
               ) : null}
             </div>
           ) : isThisMonth === "thisMonth" && calendarType === "otherDiary" ? (
             <div>
               {diaryByMonth.length > parseInt(format(day, "d")) ? (
-                <div>{diaryByMonth[parseInt(format(day, "d"))].feeling}</div>
+                <div>
+                  <OtherDiaryCell
+                    date={format(day, "yyyy-MM-dd")}
+                    diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
+                  />
+                </div>
               ) : null}
             </div>
           ) : null}
