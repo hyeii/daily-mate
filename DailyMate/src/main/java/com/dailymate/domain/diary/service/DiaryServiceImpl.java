@@ -153,6 +153,10 @@ public class DiaryServiceImpl implements DiaryService {
             imageService.deleteImage(diary.getImage());
         }
 
+        // 좋아요 삭제
+        likeDiaryRepository.deleteAllByDiary(diary);
+
+        // 일기 삭제
         diary.delete();
     }
 
