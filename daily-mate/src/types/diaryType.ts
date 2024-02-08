@@ -7,6 +7,10 @@ export type diaryDailyParams = {
   date: string;
 };
 
+export type diaryMonthlyParams = {
+  id: string;
+};
+
 export interface diaryByMonthResponse {
   title: string;
   image: string;

@@ -103,8 +103,14 @@ const CalendarCells = ({
               <div>{accountByMonth.inputs[parseInt(format(day, "d"))]}</div>
               <div>{accountByMonth.outputs[parseInt(format(day, "d"))]}</div>
             </div>
-          ) : isThisMonth === "thisMonth" && calendarType === "diary" ? (
+          ) : isThisMonth === "thisMonth" && calendarType === "myDiary" ? (
             // <div>{diaryByMonth[parseInt(format(day, "d"))].title}</div>
+            <div>
+              {diaryByMonth.length > parseInt(format(day, "d")) ? (
+                <div>{diaryByMonth[parseInt(format(day, "d"))].feeling}</div>
+              ) : null}
+            </div>
+          ) : isThisMonth === "thisMonth" && calendarType === "otherDiary" ? (
             <div>
               {diaryByMonth.length > parseInt(format(day, "d")) ? (
                 <div>{diaryByMonth[parseInt(format(day, "d"))].feeling}</div>
@@ -113,6 +119,7 @@ const CalendarCells = ({
           ) : null}
         </DayCover>
       );
+      // 내 일기인 경우와 다른 사람의 일기인 경우 발생 이벤트 다르게 추후 설정 필요
 
       day = addDays(day, 1);
       index++;

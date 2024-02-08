@@ -39,6 +39,21 @@ export const getDiaryByMonth = async (date: string, userId: number) => {
   }
 };
 
+export const getOtherDiaryByMonth = async (date: string, userId: number) => {
+  try {
+    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> =
+      await axios.get(`/api/diary/friend/${userId}/month`, {
+        params: {
+          date: date,
+        },
+      });
+    return res.data.data;
+  } catch (error) {
+    console.log("다른 사람 월별 일기 조회 오류 : ", error);
+    return null;
+  }
+};
+
 export const addDiary = async (diaryData: diaryRequest, image: File | null) => {
   try {
     const formData = new FormData();
