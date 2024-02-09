@@ -16,19 +16,23 @@ import {
   UpdateInfoPage,
   UpdatePasswordPage,
 } from "./components/index";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { sideBarOpenState } from "./atoms/sideBarAtom";
 import styled from "styled-components";
+import { isLoginState } from "./atoms/authAtom";
 
 function App() {
   const [isOpen, setIsOpen] = useRecoilState(sideBarOpenState);
+  const isLogin = useRecoilValue(isLoginState);
   const handleOpen = () => {
     setIsOpen(!isOpen);
   };
   return (
     <div>
+      {isLogin ? <SideBar /> : null}
       <SideBar />
       <MainContainer isopen={isOpen ? "open" : "close"}>
+        {isLogin ? <button onClick={handleOpen}>버튼</button> : null}
         <button onClick={handleOpen}>버튼</button>
         <Routes>
           {/* 라우팅 추후 수정 예정 */}

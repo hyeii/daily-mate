@@ -1,16 +1,66 @@
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { sideBarOpenState } from "../../atoms/sideBarAtom";
+import {
+  isLoginState,
+  refreshTokenState,
+  userImageURLState,
+  userInfoState,
+} from "../../atoms/authAtom";
+import { logOut } from "../../apis/authApis";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useRecoilState(sideBarOpenState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const setIsLogin = useSetRecoilState(isLoginState);
+  const setImageURL = useSetRecoilState(userImageURLState);
+  const setRefreshToken = useSetRecoilState(refreshTokenState);
+  const navigate = useNavigate();
+
   const handleOpen = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogOut = async () => {
+    const logOutResult = await logOut();
+    if (logOutResult !== null) {
+      setUserInfo({
+        userId: -1,
+        nickname: "",
+        email: "",
+        profile: "",
+        type: "",
+      });
+      setIsLogin(false);
+      setImageURL("");
+      setRefreshToken("");
+      // 인터셉터 초기화
+      alert("로그아웃 완료");
+      navigate("/");
+    }
+  };
+
+  const moveDiary = () => {
+    navigate("/diary/monthly/1");
+  };
+  const moveAccount = () => {
+    navigate("/account");
+  };
+  const moveMyPage = () => {
+    navigate("/mypage/profile");
   };
   return (
     <SidebarContainer isopen={isOpen ? "open" : "close"}>
       사이드바
       <button onClick={handleOpen}>버튼</button>
+      <div>{userInfo.nickname}님</div>
+      <div>검색</div>
+      <div onClick={moveDiary}>다이어리</div>
+      <div onClick={moveAccount}>가계부</div>
+      <div>할 일</div>
+      <div onClick={moveMyPage}>마이페이지</div>
+      <button onClick={handleLogOut}>로그아웃</button>
     </SidebarContainer>
   );
 };
@@ -29,6 +79,4 @@ const SidebarContainer = styled.div<SidebarProps>`
   background-color: #fbeffb;
   overflow-x: hidden;
   transition: left 0.3s ease;
-  display: flex;
-  flex-direction: column;
 `;

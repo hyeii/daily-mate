@@ -83,6 +83,20 @@ export const signIn = async (email: string, password: string) => {
   }
 };
 
+export const logOut = async () => {
+  try {
+    const res: AxiosResponse<{ message: string }> = await axios.post(
+      "/api/user/logout"
+    );
+    console.log(res.data.message);
+    return res.data;
+  } catch (error) {
+    console.error("로그아웃 오류 : ", error);
+    alert("로그아웃 실패");
+    return null;
+  }
+};
+
 export const updateUserInfo = async (
   newNickname: string,
   newProfile: string
