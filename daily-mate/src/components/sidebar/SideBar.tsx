@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { sideBarOpenState } from "../../atoms/sideBarAtom";
@@ -24,12 +23,12 @@ interface SidebarProps {
 
 const SidebarContainer = styled.div<SidebarProps>`
   position: fixed;
-  height: calc(100% - 60px);
-  left: 0;
-  width: ${({ isopen }) => (isopen === "open" ? "300px" : "0")};
+  height: 100vh;
+  left: ${({ isopen }) => (isopen === "open" ? "0" : "-300px")};
+  width: 300px;
   background-color: #fbeffb;
   overflow-x: hidden;
-  transition: width 0.3s ease;
+  transition: left 0.3s ease;
   display: flex;
   flex-direction: column;
 `;
