@@ -10,15 +10,24 @@ import {
   MainPage,
   ProfilePage,
   SearchPage,
+  SideBar,
   SignInPage,
   SignUpPage,
   UpdateInfoPage,
   UpdatePasswordPage,
 } from "./components/index";
+import { useRecoilState } from "recoil";
+import { sideBarOpenState } from "./atoms/sideBarAtom";
 
 function App() {
+  const [isOpen, setIsOpen] = useRecoilState(sideBarOpenState);
+  const handleOpen = () => {
+    setIsOpen(!isOpen);
+  };
   return (
     <div>
+      <SideBar />
+      <button onClick={handleOpen}>버튼</button>
       <Routes>
         {/* 라우팅 추후 수정 예정 */}
         <Route path="/" element={<MainPage />} />
