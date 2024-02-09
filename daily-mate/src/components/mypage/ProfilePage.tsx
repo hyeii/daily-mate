@@ -26,7 +26,7 @@ const ProfilePage = () => {
       <div>
         <div>
           <span>{userInfo.nickname}</span>
-          <span onClick={friendsHandler}>{userInfo.friendsCount}명의 친구</span>
+          <span onClick={friendsHandler}>0명의 친구</span>
         </div>
         <div>한줄소개</div>
         <div>
@@ -35,7 +35,7 @@ const ProfilePage = () => {
         </div>
         <div>
           <span>소셜 로그인</span>
-          <span>{userInfo.loginType}</span>
+          <span>{userInfo.type}</span>
         </div>
       </div>
       <div onClick={updateInfoHandler}>회원 정보 수정</div>

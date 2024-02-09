@@ -9,6 +9,7 @@ import {
 } from "../../atoms/authAtom";
 import { useNavigate } from "react-router-dom";
 import { userInfo, userResponse } from "../../types/authType";
+import { signIn } from "../../apis/authApis";
 
 const SignInPage = () => {
   // TODO : api 요청 분리
@@ -40,45 +41,24 @@ const SignInPage = () => {
       return;
     }
 
-    try {
-      const res: AxiosResponse<userResponse> = await axios.post(
-        "/api/user/login",
-        {
-          email: inputEmail,
-          password: inputPassword,
-        }
-      );
-      const result = res.data;
-      console.log(result);
-
-      axios.interceptors.request.use(
-        (config) => {
-          config.headers.Authorization = `Bearer ${result.accessToken}`;
-          return config;
-        },
-        (error) => {
-          // TODO :  토큰 만료 가능성
-        }
-      );
-
+    const signInResult = await signIn(inputEmail, inputPassword);
+    if (signInResult !== null) {
       const logInUserInfo: userInfo = {
-        userId: result.userId,
-        nickname: result.nickName,
-        email: result.email,
-        profileMessage: result.profile,
-        loginType: result.type,
-        friendsCount: 0,
+        userId: signInResult.userId,
+        nickname: signInResult.nickName,
+        email: signInResult.email,
+        profile: signInResult.profile,
+        type: signInResult.type,
       };
 
       setUserInfo(logInUserInfo);
-      setUserImage(result.image);
-      setRefreshToken(result.refreshToken);
+      setUserImage(signInResult.image);
+      setRefreshToken(signInResult.refreshToken);
 
       setIsLogged(true);
       navigate("/");
-    } catch (error) {
-      console.error("로그인 오류:", error);
-      alert("입력 정보를 확인해주세요");
+    } else {
+      alert("로그인 정보를 확인해주세요");
     }
   };
   return (

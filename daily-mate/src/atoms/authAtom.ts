@@ -5,7 +5,16 @@ import { userInfo } from "../types/authType";
 const { persistAtom } = recoilPersist();
 
 // 회원 정보 관련
-// - 이메일, 닉네임, 한줄소개, 프로필사진, 소셜로그인종류(아니라면x), 친구 수
+// {
+// 	"accessToken" : String, => 인터셉터
+// 	"refreshToken" : String, => refreshTokenState
+// 	"email" : String,
+// 	"nickName" : String,
+// 	"image" : String, => imageState
+// 	"profile" : String,
+// 	"type" : String
+// }
+// => 여기에 userId 추가
 
 export const isLoginState = atom<boolean>({
   key: "isLogin",
@@ -19,9 +28,8 @@ export const userInfoState = atom<userInfo>({
     userId: 1,
     nickname: "당근",
     email: "hyehye@dailymate.com",
-    profileMessage: "한줄소개입니다",
-    loginType: "카카오",
-    friendsCount: 10,
+    profile: "한줄소개입니다",
+    type: "카카오",
   },
   effects_UNSTABLE: [persistAtom],
 });

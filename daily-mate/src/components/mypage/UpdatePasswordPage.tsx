@@ -2,10 +2,11 @@ import { ChangeEvent, useState } from "react";
 import { updatePasswordInput } from "../../types/authType";
 import axios, { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+import { updateUserPassword } from "../../apis/authApis";
 
 const UpdatePasswordPage = () => {
   const [updatePassword, setUpdatePassword] = useState<updatePasswordInput>({
-    existPassword: "",
+    password: "",
     newPassword: "",
     newPasswordCheck: "",
   });
@@ -17,14 +18,14 @@ const UpdatePasswordPage = () => {
     updatePassword.newPassword === updatePassword.newPasswordCheck;
 
   const beforeEnter =
-    updatePassword.existPassword === "" ||
+    updatePassword.password === "" ||
     updatePassword.newPassword === "" ||
     updatePassword.newPasswordCheck === "";
 
   const existPasswordHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setUpdatePassword({
       ...updatePassword,
-      existPassword: event.target.value,
+      password: event.target.value,
     });
   };
 
@@ -46,22 +47,9 @@ const UpdatePasswordPage = () => {
     // console.log(updatePassword);
     if (isEqual && !beforeEnter) {
       // 비밀번호 변경
-      try {
-        const res: AxiosResponse<{ message: string }> = await axios.patch(
-          "/api/user/password",
-          {
-            password: updatePassword.existPassword,
-            newPassword: updatePassword.newPassword,
-            newPasswordCheck: updatePassword.newPasswordCheck,
-          }
-        );
-        const result = res.data;
-        console.log(result);
-        alert("비밀번호가 변경되었습니다");
+      const updateResult = await updateUserPassword(updatePassword);
+      if (updateResult !== null) {
         navigate("/mypage/profile");
-      } catch (error) {
-        console.error("비밀번호 변경 오류 : ", error);
-        alert("비밀번호를 다시 확인해주세요");
       }
     } else {
       alert("올바르게 입력해주세요.");

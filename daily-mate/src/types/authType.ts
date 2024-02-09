@@ -2,9 +2,8 @@ export interface userInfo {
   userId: number;
   nickname: string;
   email: string;
-  profileMessage: string;
-  loginType: string;
-  friendsCount: number;
+  profile: string;
+  type: string;
 }
 
 // 로그인 ResponseData
@@ -27,8 +26,15 @@ export interface myInfoResponse {
   profile: string;
 }
 
+// 회원가입 body
+export interface signUpRequest {
+  email: string;
+  password: string;
+  nickname: string;
+}
+
 export interface updatePasswordInput {
-  existPassword: string;
+  password: string;
   newPassword: string;
   newPasswordCheck: string;
 }

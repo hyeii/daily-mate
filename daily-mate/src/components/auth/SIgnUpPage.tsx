@@ -1,6 +1,7 @@
-import axios, { AxiosResponse } from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { checkEmail, checkNickname, signUp } from "../../apis/authApis";
+import { signUpRequest } from "../../types/authType";
 
 const SignUpPage = () => {
   const [inputNickname, setInputNickname] = useState<string>("");
@@ -25,27 +26,12 @@ const SignUpPage = () => {
     if (inputNickname === "") {
       alert("닉네임을 입력해주세요");
     } else {
-      try {
-        const res: AxiosResponse<{ check: boolean }> = await axios.get(
-          "/api/user/check-nickname",
-          {
-            params: {
-              nickname: inputNickname,
-            },
-          }
-        );
-        const checkResult = res.data.check;
-
-        if (checkResult) {
-          alert("사용 가능한 닉네임입니다");
-          setValidateNickname(true);
-        } else {
-          alert("중복된 닉네임입니다.");
-          setValidateNickname(false);
-        }
-      } catch (error) {
-        console.error("닉네임 확인 오류:", error);
-        alert("오류가 발생했습니다.");
+      const checkResult = await checkNickname(inputNickname);
+      if (checkResult) {
+        alert("사용 가능한 닉네임입니다");
+        setValidateNickname(true);
+      } else {
+        alert("중복된 닉네임입니다.");
         setValidateNickname(false);
       }
     }
@@ -61,27 +47,12 @@ const SignUpPage = () => {
     if (inputEmail === "") {
       alert("이메일을 입력해주세요");
     } else {
-      try {
-        const res: AxiosResponse<{ check: boolean }> = await axios.get(
-          "/api/user/email/check",
-          {
-            params: {
-              email: inputEmail,
-            },
-          }
-        );
-        const checkResult = res.data.check;
-
-        if (checkResult) {
-          alert("사용 가능한 이메일입니다");
-          setValidateEmail(true);
-        } else {
-          alert("중복된 이메일입니다.");
-          setValidateEmail(false);
-        }
-      } catch (error) {
-        console.error("이메일 확인 오류:", error);
-        alert("오류가 발생했습니다.");
+      const checkResult = await checkEmail(inputEmail);
+      if (checkResult) {
+        alert("사용 가능한 이메일입니다");
+        setValidateEmail(true);
+      } else {
+        alert("중복된 이메일입니다.");
         setValidateEmail(false);
       }
     }
@@ -135,23 +106,17 @@ const SignUpPage = () => {
     }
 
     // 회원가입 api 호출
-    try {
-      const res: AxiosResponse<{ message: string }> = await axios.post(
-        "/api/user/sign-up",
-        {
-          email: inputEmail,
-          password: inputPassword,
-          nickname: inputNickname,
-        }
-      );
-      const result = res.data.message;
+    const signUpBody: signUpRequest = {
+      email: inputEmail,
+      password: inputPassword,
+      nickname: inputNickname,
+    };
 
-      console.log(result);
-      alert("회원가입이 완료되었습니다. 로그인 후 이용해주세요");
+    const signUpResult = await signUp(signUpBody);
+    if (signUpResult) {
       navigate("/signin");
-    } catch (error) {
-      console.error("회원가입 오류:", error);
-      alert("오류가 발생했습니다.");
+    } else {
+      //  새로고침
     }
   };
 
