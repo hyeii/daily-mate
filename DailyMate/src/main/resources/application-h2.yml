@@ -40,7 +40,7 @@ spring:
       type.descriptor.sql: trace # sql의 데이터까지 다 보이게 // query의 ?에 어떤 값이 들어가는지 추적할 수 있는 설정. TRACE Log에 값을 보여줌
 
 server:
-  port: 8080
+  port: 8083
 
 cors:
   front_url: "*"
