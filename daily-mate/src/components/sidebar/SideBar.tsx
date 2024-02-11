@@ -50,11 +50,16 @@ const SideBar = () => {
   const moveMyPage = () => {
     navigate("/mypage/profile");
   };
+
+  const moveNotifications = () => {
+    navigate("/notifications");
+  };
   return (
     <SidebarContainer isopen={isOpen ? "open" : "close"}>
       사이드바
       <button onClick={handleOpen}>버튼</button>
       <div>{userInfo.nickname}님</div>
+      <button onClick={moveNotifications}>알림</button>
       <div>검색</div>
       <div onClick={moveDiary}>다이어리</div>
       <div onClick={moveAccount}>가계부</div>

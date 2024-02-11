@@ -8,6 +8,7 @@ import {
   DiaryWritePage,
   FriendsListPage,
   MainPage,
+  NotificationPage,
   ProfilePage,
   SearchPage,
   SideBar,
@@ -48,6 +49,7 @@ function App() {
           <Route path="/diary/monthly/:id" element={<DiaryMonthlyPage />} />
           <Route path="/diary/daily/:id/:date" element={<DiaryDailyPage />} />
           <Route path="/diary/daily/write" element={<DiaryWritePage />} />
+          <Route path="/notifications" element={<NotificationPage />} />
         </Routes>
       </MainContainer>
     </div>
