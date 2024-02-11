@@ -1,5 +1,6 @@
 package com.dailymate.domain.diary.api;
 
+import com.dailymate.domain.diary.dto.DiaryMonthlyResDto;
 import com.dailymate.domain.diary.dto.DiaryReqDto;
 import com.dailymate.domain.diary.dto.DiaryResDto;
 import com.dailymate.domain.diary.service.DiaryService;
@@ -83,5 +84,17 @@ public class DiaryController {
     public ResponseEntity<DiaryResDto> findDiary(@RequestParam("date") String date) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(diaryService.findDiary(date, 1l));
+    }
+
+    @Operation(
+            summary = "일기 조회 (월별)",
+            description = "당월 일기를 조회합니다."
+    )
+    @GetMapping("/{userId}/month")
+    public ResponseEntity<DiaryMonthlyResDto[]> findDiaryByMonth(
+            @PathVariable Long userId,
+            @RequestParam String date) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(diaryService.findDiaryByMonth(date, userId));
     }
 }

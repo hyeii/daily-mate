@@ -8,6 +8,7 @@ import com.dailymate.domain.diary.dao.LikeDiaryRepository;
 import com.dailymate.domain.diary.domain.Diary;
 import com.dailymate.domain.diary.domain.LikeDiary;
 import com.dailymate.domain.diary.domain.LikeDiaryKey;
+import com.dailymate.domain.diary.dto.DiaryMonthlyResDto;
 import com.dailymate.domain.diary.dto.DiaryReqDto;
 import com.dailymate.domain.diary.dto.DiaryResDto;
 import com.dailymate.domain.diary.exception.DiaryBadRequestException;
@@ -19,12 +20,12 @@ import com.dailymate.domain.user.Users;
 import com.dailymate.global.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -177,6 +178,10 @@ public class DiaryServiceImpl implements DiaryService {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new DiaryNotFoundException("[LIKE_DIARY] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
 
+        // 친구 관계 확인(!!!)
+
+        // 공개 여부 확인(!!!)
+
         // 복합키 생성
         LikeDiaryKey key = LikeDiaryKey.createKey(userId, diaryId);
 
@@ -193,13 +198,19 @@ public class DiaryServiceImpl implements DiaryService {
         }
     }
 
+    /**
+     * 일기 조회 (일별)
+     * @param date String
+     * @param userId Long
+     * @return DiaryResDto
+     */
     @Override
     @Transactional
     public DiaryResDto findDiary(String date, Long userId) {
 
         // 사용자 확인(!!!)
         Users user = userRepository.findById(userId)
-                .orElseThrow(() -> new DiaryNotFoundException("[LIKE_DIARY] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
+                .orElseThrow(() -> new DiaryNotFoundException("[FIND_DIARY] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
 
         // 일기 확인
         Diary diary = diaryRepository.findDiaryByDateAndUserId(date, userId);
@@ -223,5 +234,36 @@ public class DiaryServiceImpl implements DiaryService {
         Long likeNum = likeDiaryRepository.countLikesByDiaryId(diary.getDiaryId());
 
         return DiaryResDto.createDto(diary, likeNum, isLike);
+    }
+
+    /**
+     * 일기 조회 (월별)
+     * @param date String
+     * @param userId Long
+     * @return DiaryMonthlyResDto[]
+     */
+    @Override
+    public DiaryMonthlyResDto[] findDiaryByMonth(String date, Long userId) {
+
+        // 입력값 검증
+        if(date == null || date.isEmpty() || userId == null) {
+            throw new DiaryBadRequestException("[FIND_DIARY_BY_MONTH] " + DiaryExceptionMessage.DIARY_BAD_REQUEST.getMsg());
+        }
+
+        // 사용자 확인(!!!)
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new DiaryNotFoundException("[FIND_DIARY_BY_MONTH] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        List<DiaryMonthlyResDto> diaries = diaryRepository.findByUserIdAndYearMonth(userId, date);
+
+        DiaryMonthlyResDto[] monthly = new DiaryMonthlyResDto[32];
+
+        // 인덱스에 해당하는 날짜의 일기 넣어주기
+        for(DiaryMonthlyResDto diary : diaries) {
+            int day = Integer.parseInt(diary.getDate().substring(8, 10));
+            monthly[day] = diary;
+        }
+
+        return monthly;
     }
 }
