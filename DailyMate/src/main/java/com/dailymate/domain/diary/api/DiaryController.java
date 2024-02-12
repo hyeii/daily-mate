@@ -97,4 +97,16 @@ public class DiaryController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(diaryService.findDiaryByMonth(date, userId));
     }
+
+    @Operation(
+            summary = "친구 일기 조회 (일별)",
+            description = "친구의 일기를 조회합니다."
+    )
+    @GetMapping("/friend/{diaryId}")
+    public ResponseEntity<DiaryResDto> findFriendDiary(
+            @PathVariable("diaryId") Long diaryId,
+            @RequestParam("userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(diaryService.findFriendDiary(diaryId, userId));
+    }
 }

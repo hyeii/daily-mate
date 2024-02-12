@@ -266,4 +266,47 @@ public class DiaryServiceImpl implements DiaryService {
 
         return monthly;
     }
+
+    /**
+     * 친구 일기 조회 (일별)
+     * @param diaryId Long
+     * @param userId Long
+     * @return DiaryResDto
+     */
+    @Override
+    public DiaryResDto findFriendDiary(Long diaryId, Long userId) {
+
+        // 입력값 검증
+        if(diaryId == null || userId == null) {
+            throw new DiaryBadRequestException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_BAD_REQUEST.getMsg());
+        }
+
+        // 사용자 확인(!!!)
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new DiaryNotFoundException("[FIND_DIARY_BY_MONTH] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 다이어리 확인
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new DiaryNotFoundException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
+
+        // 열람 자격 확인(!!!)
+        // diary userId랑 userId랑 친구 -> diary 비공개 아니면 ㅇㅋ -> else 는 예외 처리
+        // diary userId랑 userId랑 친구 ㄴㄴ -> diary 공개만 ㅇㅋ -> else 는 예외 처리
+
+        // 좋아요 여부
+        Boolean isLike = false;
+
+        LikeDiaryKey key = LikeDiaryKey.createKey(userId, diaryId);
+        Optional<LikeDiary> likeDiary = likeDiaryRepository.findById(key);
+
+        if(likeDiary.isPresent()) {
+            isLike = true;
+        }
+
+        // 좋아요 개수
+        Long likeNum = likeDiaryRepository.countLikesByDiaryId(diaryId);
+
+        return DiaryResDto.createDto(diary, likeNum, isLike);
+
+    }
 }

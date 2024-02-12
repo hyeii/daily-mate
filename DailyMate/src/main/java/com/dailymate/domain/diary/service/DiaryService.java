@@ -15,4 +15,5 @@ public interface DiaryService {
     void likeDiary(Long diaryId, Long userId);
     DiaryResDto findDiary(String date, Long userId);
     DiaryMonthlyResDto[] findDiaryByMonth(String date, Long userId);
+    DiaryResDto findFriendDiary(Long diaryId, Long userId);
 }
