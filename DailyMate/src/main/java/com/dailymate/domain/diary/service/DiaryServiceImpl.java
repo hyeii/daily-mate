@@ -309,4 +309,44 @@ public class DiaryServiceImpl implements DiaryService {
         return DiaryResDto.createDto(diary, likeNum, isLike);
 
     }
+
+    /**
+     * 친구 일기 조회 (월별)
+     * @param date String
+     * @param userId Long
+     * @param friendId Long
+     * @return DiaryMonthlyResDto[]
+     */
+    @Override
+    public DiaryMonthlyResDto[] findFriendDiaryByMonth(String date, Long userId, Long friendId) {
+
+        // 입력값 검증
+        if(date == null || date.isEmpty() || userId == null || friendId == null) {
+            throw new DiaryBadRequestException("[FIND_FRIEND_DIARY_BY_MONTH] " + DiaryExceptionMessage.DIARY_BAD_REQUEST.getMsg());
+        }
+
+        // 사용자 확인(!!!)
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new DiaryNotFoundException("[FIND_FRIEND_DIARY_BY_MONTH] " + DiaryExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 친구 확인(!!!)
+        Boolean isFriend = true;
+
+        List<DiaryMonthlyResDto> diaries;
+        if(isFriend){
+            diaries = diaryRepository.findByUserIdAndYearMonthAAndOpenTypeNot(friendId, date, OpenType.getOpenType("비공개"));
+        } else {
+            diaries = diaryRepository.findByUserIdAndYearMonthAAndOpenType(friendId, date, OpenType.getOpenType("공개"));
+        }
+
+        DiaryMonthlyResDto[] monthly = new DiaryMonthlyResDto[32];
+
+        for(DiaryMonthlyResDto diary : diaries) {
+            int day = Integer.parseInt(diary.getDate().substring(8, 10));
+            monthly[day] = diary;
+        }
+        return monthly;
+    }
+
+
 }

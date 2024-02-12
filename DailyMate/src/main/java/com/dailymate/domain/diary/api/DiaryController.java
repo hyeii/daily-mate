@@ -109,4 +109,16 @@ public class DiaryController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(diaryService.findFriendDiary(diaryId, userId));
     }
+
+    @Operation(
+            summary = "친구 일기 조회 (월별)",
+            description = "친구의 당월 일기를 조회합니다."
+    )
+    @GetMapping("/friend/{userId}/month")
+    public ResponseEntity<DiaryMonthlyResDto[]> findFriendDiaryByMonth(
+            @PathVariable Long userId,
+            @RequestParam String date) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(diaryService.findFriendDiaryByMonth(date, 1l, userId));
+    }
 }
