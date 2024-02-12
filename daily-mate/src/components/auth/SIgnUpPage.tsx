@@ -1,7 +1,8 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkEmail, checkNickname, signUp } from "../../apis/authApis";
 import { signUpRequest } from "../../types/authType";
+import styled from "styled-components";
 
 const SignUpPage = () => {
   const [inputNickname, setInputNickname] = useState<string>("");
@@ -12,6 +13,12 @@ const SignUpPage = () => {
   const [validateNickname, setValidateNickname] = useState<boolean>(false);
   const [validateEmail, setValidateEmail] = useState<boolean>(false);
   const [validatePassword, setValidatePassword] = useState<boolean>(false);
+  const [regPasswordMessage, setRegPasswordMessage] = useState<string>(
+    "8자 이상, 영문자, 숫자, 특수문자를 포함해주세요"
+  );
+  const [regPasswordValue, setRegPasswordValue] = useState<boolean>(false);
+  const [regEmailValue, setRegEmailValue] = useState<boolean>(false);
+  const [regEmailMessage, setRegEmailMessage] = useState<string>("");
   const [passwordMessage, setPasswordMessage] = useState<string>("");
 
   const navigate = useNavigate();
@@ -44,6 +51,11 @@ const SignUpPage = () => {
 
   const handleValidateEmail = async () => {
     // 이메일 중복확인 호출
+    if (!regEmailValue) {
+      alert("이메일을 확인해주세요");
+      return;
+    }
+
     if (inputEmail === "") {
       alert("이메일을 입력해주세요");
     } else {
@@ -67,6 +79,27 @@ const SignUpPage = () => {
   };
 
   useEffect(() => {
+    // 비밀번호 정규식. 최소 하나 이상의 영문자(대소문자 구분 X), 최소 하나 이상의 숫자 및 특수문자
+    const regPassword =
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (regPassword.test(inputPassword)) {
+      setRegPasswordMessage("사용 가능한 비밀번호입니다.");
+      setRegPasswordValue(true);
+    } else {
+      setRegPasswordMessage("8자 이상, 영문자, 숫자, 특수문자를 포함해주세요");
+      setRegPasswordValue(false);
+    }
+
+    const regEmail =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+    if (regEmail.test(inputEmail)) {
+      setRegEmailMessage("");
+      setRegEmailValue(true);
+    } else {
+      setRegEmailMessage("올바른 이메일을 입력해주세요");
+      setRegEmailValue(false);
+    }
+
     if (inputPassword === "" || inputPasswordCheck === "") {
       setPasswordMessage("");
       setValidatePassword(false);
@@ -77,7 +110,7 @@ const SignUpPage = () => {
       setPasswordMessage("비밀번호가 일치하지 않습니다");
       setValidatePassword(false);
     }
-  }, [inputPassword, inputPasswordCheck]);
+  }, [inputEmail, inputPassword, inputPasswordCheck, regPasswordMessage]);
 
   const submitSignUp = async () => {
     if (inputNickname === "") {
@@ -123,26 +156,152 @@ const SignUpPage = () => {
   return (
     <div>
       <h3>회원가입</h3>
-      <div>
-        <div>닉네임</div>
-        <input type="text" onChange={handleNickname} />
-        <button onClick={handleValidateNickname}>중복확인</button>
-        {validateNickname ? <div>사용 가능한 닉네임입니다</div> : <div></div>}
-        <div>이메일</div>
-        <input type="email" onChange={handleEmail} />
-        <button onClick={handleValidateEmail}>중복확인</button>
-        {validateEmail ? <div>사용 가능한 이메일입니다</div> : <div></div>}
-        <div>비밀번호</div>
-        <input type="password" onChange={handlePassword} />
-        <div>비밀번호 확인</div>
-        <input type="password" onChange={handlePasswordCheck} />
-        <div>{passwordMessage}</div>
+      <Container>
+        <InputDiv>
+          <div>닉네임</div>
+          <DataInput setwidth="short" type="text" onChange={handleNickname} />
+          <CheckBtn onClick={handleValidateNickname}>중복확인</CheckBtn>{" "}
+          {validateNickname ? (
+            <CheckText check="true">사용 가능한 닉네임입니다</CheckText>
+          ) : (
+            <Hidden>숨김</Hidden>
+          )}
+        </InputDiv>
+        <InputDiv>
+          <div>이메일</div>
+          <DataInput setwidth="short" type="email" onChange={handleEmail} />
+          <CheckBtn onClick={handleValidateEmail}>중복확인</CheckBtn>
+          {inputEmail !== "" && !regEmailValue ? (
+            <CheckText check={regEmailValue ? "true" : "false"}>
+              {regEmailMessage}
+            </CheckText>
+          ) : validateEmail ? (
+            <CheckText check="true">사용 가능한 이메일입니다</CheckText>
+          ) : (
+            <Hidden>숨김</Hidden>
+          )}{" "}
+        </InputDiv>
+        <InputDiv>
+          <div>비밀번호</div>
+          <DataInput
+            setwidth="long"
+            type="password"
+            onChange={handlePassword}
+          />
+          <CheckText check={regPasswordValue ? "true" : "false"}>
+            {regPasswordMessage}
+          </CheckText>
+        </InputDiv>
+        <InputDiv>
+          <div>비밀번호 확인</div>
+          <DataInput
+            setwidth="long"
+            type="password"
+            onChange={handlePasswordCheck}
+          />
+          {passwordMessage === "" ? (
+            <Hidden>숨김</Hidden>
+          ) : (
+            <CheckText check={validatePassword ? "true" : "false"}>
+              {passwordMessage}
+            </CheckText>
+          )}
+        </InputDiv>
         <div>
-          <button onClick={submitSignUp}>회원가입</button>
+          <SignUpBtn onClick={submitSignUp}>회원가입</SignUpBtn>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };
 
 export default SignUpPage;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+`;
+
+const InputDiv = styled.div`
+  margin: 10px 0;
+  flex-grow: 1;
+`;
+
+interface inputprop {
+  setwidth: string;
+}
+
+const DataInput = styled.input<inputprop>`
+  // width: 250px;
+  width: ${({ setwidth }) => (setwidth === "short" ? "250px" : "340px")};
+  height: 35px;
+  border: 1.5px solid #cccccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #afafaf;
+    outline: none;
+  }
+`;
+
+const CheckBtn = styled.button`
+  font-family: "S-CoreDream-3Light";
+  width: 80px;
+  height: 35px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.2s, background-color 0.3s;
+  background-color: #f6dee2;
+
+  margin-left: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #fbe4e6;
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+`;
+
+const Hidden = styled.div`
+  visibility: hidden;
+`;
+
+interface checkvalue {
+  check: string;
+}
+
+const CheckText = styled.div<checkvalue>`
+  color: ${({ check }) => (check === "true" ? "green" : "red")};
+`;
+
+const SignUpBtn = styled.button`
+  font-family: "S-CoreDream-3Light";
+  width: 340px;
+  height: 35px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.2s, background-color 0.3s;
+  background-color: #f6dee2;
+
+  margin: 10px 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #fbe4e6;
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+`;

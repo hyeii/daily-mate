@@ -29,7 +29,7 @@ function App() {
     setIsOpen(!isOpen);
   };
   return (
-    <div>
+    <Wrapper>
       {isLogin ? <SideBar /> : null}
       <SideBar />
       <MainContainer isopen={isOpen ? "open" : "close"}>
@@ -52,7 +52,7 @@ function App() {
           <Route path="/notifications" element={<NotificationPage />} />
         </Routes>
       </MainContainer>
-    </div>
+    </Wrapper>
   );
 }
 
@@ -63,8 +63,11 @@ interface SidebarProps {
 }
 
 const MainContainer = styled.div<SidebarProps>`
+  margin: 2rem 5rem;
   position: fixed;
   width: ${({ isopen }) => (isopen === "open" ? "calc(100% - 300px)" : "100%")};
   left: ${({ isopen }) => (isopen === "open" ? "300px" : "0px")};
   transition: width 0.3s ease, left 0.3s ease;
 `;
+
+const Wrapper = styled.div``;
