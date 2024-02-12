@@ -27,7 +27,6 @@ public class UserDetailsImpl implements UserDetails {
 //    private Long userId;
     private String email; // username
 
-//    @JsonIgnore // response데이터에서 해당 필드가 제외됨
     private String password;
 
 //    private String authority;
@@ -52,7 +51,7 @@ public class UserDetailsImpl implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     /**
