@@ -153,6 +153,11 @@ const SignUpPage = () => {
     }
   };
 
+  const handleKakao = () => {
+    const kakaoURL: string = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
+    window.location.href = kakaoURL;
+  };
+
   return (
     <div>
       <h3>회원가입</h3>
@@ -210,6 +215,11 @@ const SignUpPage = () => {
         <div>
           <SignUpBtn onClick={submitSignUp}>회원가입</SignUpBtn>
         </div>
+        <div>
+          <span>이미 회원이신가요?</span>
+          <span>로그인</span>
+        </div>
+        <button onClick={handleKakao}>카카오</button>
       </Container>
     </div>
   );
