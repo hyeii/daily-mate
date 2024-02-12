@@ -64,7 +64,7 @@ public class JwtTokenProvider {
                 .compact();
 
         return JwtTokenDto.builder()
-                .grantType("Bearer") // 띄어쓰기안해도되나?
+                .grantType("Bearer ") // 띄어쓰기안해도되나?
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
