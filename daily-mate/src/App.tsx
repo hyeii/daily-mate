@@ -14,6 +14,7 @@ import {
   SideBar,
   SignInPage,
   SignUpPage,
+  TodoPage,
   UpdateInfoPage,
   UpdatePasswordPage,
 } from "./components/index";
@@ -50,6 +51,7 @@ function App() {
           <Route path="/diary/daily/:id/:date" element={<DiaryDailyPage />} />
           <Route path="/diary/daily/write" element={<DiaryWritePage />} />
           <Route path="/notifications" element={<NotificationPage />} />
+          <Route path="/todo" element={<TodoPage />}></Route>
         </Routes>
       </MainContainer>
     </Wrapper>
