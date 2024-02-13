@@ -13,6 +13,7 @@ import NotificationPage from "./notifications/NotificationPage";
 import TodoPage from "./todo/TodoPage";
 import SideBar from "./sidebar/SideBar";
 import AccountPage from "./account/AccountPage";
+import KakaoRedirectPage from "./auth/KakaoRedirectPage";
 export {
   SignInPage,
   SignUpPage,
@@ -29,4 +30,5 @@ export {
   NotificationPage,
   SideBar,
   TodoPage,
+  KakaoRedirectPage,
 };

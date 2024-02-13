@@ -7,6 +7,7 @@ import {
   DiaryMonthlyPage,
   DiaryWritePage,
   FriendsListPage,
+  KakaoRedirectPage,
   MainPage,
   NotificationPage,
   ProfilePage,
@@ -52,6 +53,7 @@ function App() {
           <Route path="/diary/daily/write" element={<DiaryWritePage />} />
           <Route path="/notifications" element={<NotificationPage />} />
           <Route path="/todo" element={<TodoPage />}></Route>
+          <Route path="/oauth/kakao" element={<KakaoRedirectPage />} />
         </Routes>
       </MainContainer>
     </Wrapper>
