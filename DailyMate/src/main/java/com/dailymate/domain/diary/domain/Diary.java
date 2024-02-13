@@ -1,5 +1,6 @@
 package com.dailymate.domain.diary.domain;
 
+import com.dailymate.domain.comment.domain.Comment;
 import com.dailymate.domain.diary.constant.Feeling;
 import com.dailymate.domain.diary.constant.OpenType;
 import com.dailymate.domain.diary.constant.Weather;
@@ -12,6 +13,8 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Diary")
 @Getter
@@ -36,7 +39,7 @@ public class Diary extends BaseTime {
     @Column
     private String title;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column
@@ -53,6 +56,10 @@ public class Diary extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     private OpenType openType;
+
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
 
     public static Diary createDiary(DiaryReqDto diaryReqDto) {
         return Diary.builder()
