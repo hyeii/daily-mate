@@ -9,6 +9,10 @@ public interface UserService {
 
     void signUp(SignUpReqDto reqDto);
 
+    Boolean checkEmail(String email);
+
+    Boolean checkNickname(String nickname);
+
 //    LogInResDto logIn(LogInReqDto reqDto);
     JwtTokenDto logIn(LogInReqDto reqDto);
 }
