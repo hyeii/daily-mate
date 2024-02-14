@@ -7,7 +7,7 @@ import com.dailymate.domain.account.domain.Account;
 import com.dailymate.domain.account.dto.*;
 import com.dailymate.domain.account.exception.AccountBadRequestException;
 import com.dailymate.domain.account.exception.AccountExceptionMessage;
-import com.dailymate.domain.account.exception.AccountNotFountException;
+import com.dailymate.domain.account.exception.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -65,13 +65,13 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> {
                     log.error("[가계부 수정] 존재하지 않는 가계부입니다.");
-                    return new AccountNotFountException("[UPDATE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
+                    return new AccountNotFoundException("[UPDATE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
                 });
 
         // 2. 이미 삭제된 가계부인지 체크
         if(account.getDeletedAt() != null) {
             log.error("[가계부 수정] 이미 삭제된 가계부입니다.");
-            throw new AccountNotFountException("[UPDATE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
+            throw new AccountNotFoundException("[UPDATE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
         }
 
         // 3. 로그인 사용자의 가계부인지 체크(추후 추가)
@@ -99,13 +99,13 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> {
                     log.error("[가계부 삭제] 존재하지 않는 가계부입니다.");
-                    return new AccountNotFountException("[DELETE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
+                    return new AccountNotFoundException("[DELETE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
                 });
 
         // 2. 기삭제된 가계부인지 체크
         if(account.getDeletedAt() != null) {
             log.error("[가계부 삭제] 기삭제된 가계부입니다.");
-            throw new AccountNotFountException("[DELETE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
+            throw new AccountNotFoundException("[DELETE_ACCOUNT] " + AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
         }
 
         // 3. 로그인 사용자의 가계부인지 체크
