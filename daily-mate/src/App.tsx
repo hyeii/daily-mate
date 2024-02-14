@@ -68,10 +68,14 @@ interface SidebarProps {
 
 const MainContainer = styled.div<SidebarProps>`
   margin: 2rem 5rem;
-  position: fixed;
-  width: ${({ isopen }) => (isopen === "open" ? "calc(100% - 300px)" : "100%")};
+  overflow-x: hidden;
+  position: relative;
+  width: ${({ isopen }) =>
+    isopen === "open" ? "calc(100vw - 300px)" : "100vw"};
   left: ${({ isopen }) => (isopen === "open" ? "300px" : "0px")};
   transition: width 0.3s ease, left 0.3s ease;
 `;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  overflow-x: hidden;
+`;

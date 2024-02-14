@@ -156,15 +156,20 @@ const CalendarCells = ({
 export default CalendarCells;
 
 const FullCells = styled.div`
-  width: 70%;
+  width: auto;
   justify-content: center;
 `;
 
 const DayCover = styled.div<dayDivProps>`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.1rem;
+
   width: 100%;
+  background-color: ${({ istoday }) => (istoday === "today" ? "#fdf1f1" : "")};
   height: ${({ ismini }) => (ismini === "yes" ? "2rem" : "7rem")};
-  border: ${({ istoday, ismini }) =>
-    istoday === "today" && ismini === "not" ? "2px solid" : "0px"};
+
   border-color: ${({ istoday }) => (istoday === "today" ? "#ec9b9b" : "")};
   cursor: ${({ isthismonth }) =>
     isthismonth === "thisMonth" ? "pointer" : "default"};
@@ -186,7 +191,7 @@ const DayInside = styled.span<dayDivProps>`
       : isselected === "selected" && ismini === "yes"
       ? "bold"
       : "normal"};
-  color: ${({ istoday }) => (istoday === "today" ? "#ec9b9b" : "inherit")};
+  // color: ${({ istoday }) => (istoday === "today" ? "#ec9b9b" : "inherit")};
 `;
 
 const RowInside = styled.div`

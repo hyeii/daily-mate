@@ -11,6 +11,7 @@ import {
 } from "../../atoms/accountAtom";
 import AddAccountModal from "./AddAccountModal";
 import { useState } from "react";
+import styled from "styled-components";
 
 const AccountPage = () => {
   const [accountTab, setAccountTab] = useRecoilState(accountTabState);
@@ -45,13 +46,12 @@ const AccountPage = () => {
 
   return (
     <div>
-      <h3>가계부 페이지</h3>
-      <div>
-        <span onClick={handleCalendar}>달력</span>
-        <span onClick={handleMonthly}>월 통계</span>
-        <span onClick={handleDaily}>일 통계</span>
-        <span onClick={handleOpenModal}>항목 추가</span>
-      </div>
+      <AccountTabContainer>
+        <AccountTabText onClick={handleCalendar}>달력</AccountTabText>
+        <AccountTabText onClick={handleMonthly}>월 통계</AccountTabText>
+        <AccountTabText onClick={handleDaily}>일 통계</AccountTabText>
+        <AccountTabText onClick={handleOpenModal}>항목 추가</AccountTabText>
+      </AccountTabContainer>
       <div>
         {accountTab === "calendar" ? (
           <AccountCalendar />
@@ -72,3 +72,19 @@ const AccountPage = () => {
 };
 
 export default AccountPage;
+
+const Wrapper = styled.div``;
+const AccountTabContainer = styled.div`
+  display: flex;
+`;
+
+const AccountTabText = styled.h3`
+  margin-right: 2rem;
+  font-size: 1.2rem;
+  font-weight: normal;
+
+  &:hover {
+    cursor: pointer;
+    font-weight: bold;
+  }
+`;

@@ -11,6 +11,7 @@ import { getDiaryByMonth, getOtherDiaryByMonth } from "../../apis/diaryApi";
 import { userInfoState } from "../../atoms/authAtom";
 import { useRecoilValue } from "recoil";
 import { whoseDiaryState } from "../../atoms/diaryAtom";
+import styled from "styled-components";
 
 export interface props {
   isMini: string;
@@ -112,7 +113,7 @@ const Calendar = ({ isMini, calendarType }: props) => {
   }, [calendarType, currentMonth, whoseDiary]);
 
   return (
-    <div>
+    <CalendarWrapper>
       <CalendarHeader
         currentMonth={currentMonth}
         prevMonth={prevMonth}
@@ -120,11 +121,15 @@ const Calendar = ({ isMini, calendarType }: props) => {
         setToday={setToday}
         isMini={isMini}
       />
+      <Spacer />
       {isMini === "not" && calendarType === "account" ? (
-        <InOutMonthly
-          totalInput={accountByMonth.totalInput}
-          totalOutput={accountByMonth.totalOutput}
-        />
+        <div>
+          <InOutMonthly
+            totalInput={accountByMonth.totalInput}
+            totalOutput={accountByMonth.totalOutput}
+          />
+          <Spacer />
+        </div>
       ) : null}
       <CalendarDays isMini={isMini} />
       <CalendarCells
@@ -134,8 +139,20 @@ const Calendar = ({ isMini, calendarType }: props) => {
         calendarType={calendarType}
         isMini={isMini}
       />
-    </div>
+    </CalendarWrapper>
   );
 };
 
 export default Calendar;
+
+const CalendarWrapper = styled.div`
+  width: 80%;
+  padding: 1rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  box-sizing: border-box;
+`;
+
+const Spacer = styled.div`
+  height: 1rem;
+`;
