@@ -2,13 +2,13 @@ package com.dailymate.domain.account.exception;
 
 import com.dailymate.global.exception.exception.NotFoundException;
 
-public class AccountNotFountException extends NotFoundException {
+public class AccountNotFoundException extends NotFoundException {
 
-    public AccountNotFountException() {
+    public AccountNotFoundException() {
         super("ACCOUNT_NOT_FOUND_EXCEPTION 발생");
     }
 
-    public AccountNotFountException(String msg) {
+    public AccountNotFoundException(String msg) {
         super(msg);
     }
 }
