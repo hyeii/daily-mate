@@ -37,10 +37,11 @@ public class Users extends BaseTime {
     private String providerId;
 
     @Builder
-    public Users(String email, String password, String role) {
+    public Users(String email, String password, String nickname, String type) {
         this.email = email;
         this.password = password;
-        this.type = UserType.getUserType(role);
+        this.nickname = nickname;
+        this.type = UserType.getUserType(type);
     }
 
 }
