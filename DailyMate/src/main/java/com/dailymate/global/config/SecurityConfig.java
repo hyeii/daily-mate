@@ -71,6 +71,10 @@ public class SecurityConfig {
             // user
             "/user/sign-up",
             "/user/login",
+            "/user/check/**",
+            "/user/reissue-token",
+
+            // social
 
             // h2-console
             "/h2-console/**",
