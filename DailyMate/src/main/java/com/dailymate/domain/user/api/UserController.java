@@ -8,10 +8,7 @@ import com.dailymate.global.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -25,6 +22,16 @@ public class UserController {
         userService.signUp(signUpReqDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(MessageDto.message("SIGN-UP SUCCESS"));
+    }
+
+    @GetMapping("/check/email")
+    public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userService.checkEmail(email));
+    }
+
+    @GetMapping("/check/nickname")
+    public ResponseEntity<Boolean> checkNickname(@RequestParam String nickname) {
+        return ResponseEntity.ok(userService.checkNickname(nickname));
     }
 
     @PostMapping("/login")
