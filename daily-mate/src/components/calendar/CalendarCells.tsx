@@ -163,12 +163,15 @@ const FullCells = styled.div`
 const DayCover = styled.div<dayDivProps>`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: ${({ ismini }) =>
+    ismini === "yes" ? "center" : "space-between"};
+  align-items: ${({ ismini }) =>
+    ismini === "yes" ? "center" : "space-between"};
   padding: 0.1rem;
 
   width: 100%;
   background-color: ${({ istoday }) => (istoday === "today" ? "#fdf1f1" : "")};
-  height: ${({ ismini }) => (ismini === "yes" ? "2rem" : "7rem")};
+  height: ${({ ismini }) => (ismini === "yes" ? "2.3rem" : "7rem")};
 
   border-color: ${({ istoday }) => (istoday === "today" ? "#ec9b9b" : "")};
   cursor: ${({ isthismonth }) =>

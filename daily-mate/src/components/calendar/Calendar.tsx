@@ -113,7 +113,7 @@ const Calendar = ({ isMini, calendarType }: props) => {
   }, [calendarType, currentMonth, whoseDiary]);
 
   return (
-    <CalendarWrapper>
+    <CalendarWrapper ismini={isMini}>
       <CalendarHeader
         currentMonth={currentMonth}
         prevMonth={prevMonth}
@@ -121,7 +121,7 @@ const Calendar = ({ isMini, calendarType }: props) => {
         setToday={setToday}
         isMini={isMini}
       />
-      <Spacer />
+      {/* <Spacer /> */}
       {isMini === "not" && calendarType === "account" ? (
         <div>
           <InOutMonthly
@@ -145,12 +145,20 @@ const Calendar = ({ isMini, calendarType }: props) => {
 
 export default Calendar;
 
-const CalendarWrapper = styled.div`
-  width: 80%;
+interface calendarStyleProps {
+  ismini: string;
+}
+
+const CalendarWrapper = styled.div<calendarStyleProps>`
+  width: ${({ ismini }) => (ismini === "yes" ? "30vw" : "80vw")};
   padding: 1rem;
   border: 1px solid #e8e8e8;
   border-radius: 5px;
   box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Spacer = styled.div`

@@ -4,6 +4,7 @@ import { accountByDateResponse } from "../../types/accountType";
 import AccountHistory from "./AccountHistory";
 import { getAccountByDate } from "../../apis/accountApi";
 import BarChart from "./BarChart";
+import styled from "styled-components";
 
 interface props {
   currentDay: string;
@@ -56,16 +57,76 @@ const AccountDaily = ({ currentDay }: props) => {
     };
 
     fetchData();
-  }, [currentDay]);
+  }, [accountListByDate, currentDay]);
   return (
-    <div>
-      <div>일 통계</div>
-      <div>{currentDay}</div>
-      <Calendar isMini="yes" calendarType="account" />
-      <BarChart outputValue={dailyOutput} />
+    <AccountDailyWrapper>
+      <DailytContainer>
+        <Calendar isMini="yes" calendarType="account" />
+        <ChartContainer>
+          <BarChart outputValue={dailyOutput} />
+          <CategoryContainer>
+            <CategoryItem>
+              <div>식비</div>
+              <div>{dailyOutput[0]}원</div>
+            </CategoryItem>
+            <CategoryItem>
+              <div>카페 </div>
+              <div>{dailyOutput[1]}원</div>
+            </CategoryItem>
+            <CategoryItem>
+              <div>생활 </div>
+              <div>{dailyOutput[2]}원</div>
+            </CategoryItem>
+            <CategoryItem>
+              <div>교통</div>
+              <div>{dailyOutput[3]}원</div>
+            </CategoryItem>
+            <CategoryItem>
+              <div>기타</div>
+              <div>{dailyOutput[4]}원</div>
+            </CategoryItem>
+          </CategoryContainer>
+        </ChartContainer>
+      </DailytContainer>
       <AccountHistory accountList={accountListByDate} />
-    </div>
+    </AccountDailyWrapper>
   );
 };
 
 export default AccountDaily;
+
+const AccountDailyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const DailytContainer = styled.div`
+  display: flex;
+  height: 20rem;
+`;
+
+const ChartContainer = styled.div`
+  display: grid;
+  grid-template-columns: 30rem;
+  grid-template-rows: 3fr 1fr;
+  grid-gap: 0.2rem;
+
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  margin-left: 0.5rem;
+  padding: 0.3rem 0;
+`;
+
+const CategoryContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-row-gap: 0.3rem;
+  grid-column-gap: 0.7rem;
+  padding: 0.3rem;
+`;
+
+const CategoryItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+`;
