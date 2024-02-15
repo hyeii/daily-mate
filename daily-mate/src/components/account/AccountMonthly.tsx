@@ -6,6 +6,11 @@ import {
   accountByMonthResponse,
 } from "../../types/accountType";
 import { getAccountByCategory, getAccountMonthly } from "../../apis/accountApi";
+import {
+  BackArrowIcon,
+  ForwardArrowIcon,
+} from "../common/CommonStyledComponents";
+import styled from "styled-components";
 
 const AccountMonthly = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -13,7 +18,10 @@ const AccountMonthly = () => {
   const formatDate = format(currentMonth, "yyyy-MM");
   const [outputByMonth, setOutputByMonth] = useState<CategoryByMonthMap>({
     식비: 100000,
+    카페: 200000,
+    생활: 159800,
     교통: 80000,
+    기타: 130000,
   });
   const [inOutByMonth, setInOutByMonth] = useState<number[]>([50000, 30000]);
 
@@ -52,16 +60,22 @@ const AccountMonthly = () => {
 
   return (
     <div>
-      <div>월 통계</div>
-      <div>
-        <button onClick={prevMonth}>이전</button>
-        <span>{currentDate}</span>
-        <button onClick={nextMonth}>다음</button>
-      </div>
-      <div>{formatDate}</div>
+      <MonthContainer>
+        <BackArrowIcon size={24} onClick={prevMonth} />
+        <div>{currentDate}월</div>
+        <ForwardArrowIcon size={24} onClick={nextMonth} />
+      </MonthContainer>
       <AccountMonthlyChart outputs={outputByMonth} inOutValues={inOutByMonth} />
     </div>
   );
 };
 
 export default AccountMonthly;
+
+const MonthContainer = styled.div`
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  width: 100px;
+  justify-content: space-between;
+`;

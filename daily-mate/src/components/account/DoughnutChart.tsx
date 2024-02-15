@@ -22,7 +22,7 @@ const DoughnutChart = ({ inOutValue }: props) => {
       {
         label: "수입지출",
         data: inOutValue,
-        backgroundColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+        backgroundColor: ["#75aefe", "#f18282"],
       },
     ],
   };

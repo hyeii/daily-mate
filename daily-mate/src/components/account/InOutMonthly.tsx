@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AmountNumber } from "../common/CommonStyledComponents";
 
 interface props {
   totalInput: number | null;
@@ -31,14 +32,4 @@ const InOutContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-interface ammountProps {
-  textType: string;
-}
-
-const AmountNumber = styled.div<ammountProps>`
-  font-size: 1.2rem;
-  color: ${({ textType }) =>
-    textType === "in" ? "#478FFA" : textType === "out" ? "#FF4242" : "black"};
 `;
