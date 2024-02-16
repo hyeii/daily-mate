@@ -4,9 +4,10 @@ import com.dailymate.domain.user.dao.RefreshTokenRedisRepository;
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.RefreshToken;
 import com.dailymate.domain.user.domain.Users;
-import com.dailymate.domain.user.dto.LogInReqDto;
-import com.dailymate.domain.user.dto.LogInResDto;
-import com.dailymate.domain.user.dto.SignUpReqDto;
+import com.dailymate.domain.user.dto.request.*;
+import com.dailymate.domain.user.dto.response.LogInResDto;
+import com.dailymate.domain.user.dto.response.MyInfoDto;
+import com.dailymate.domain.user.dto.response.UserInfoDto;
 import com.dailymate.domain.user.exception.UserBadRequestException;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
 import com.dailymate.domain.user.exception.UserNotFoundException;
@@ -14,7 +15,9 @@ import com.dailymate.global.common.jwt.JwtTokenDto;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
 import com.dailymate.global.common.util.SecurityUtil;
+import com.dailymate.global.exception.exception.NotFoundException;
 import com.dailymate.global.exception.exception.TokenException;
+import com.dailymate.global.exception.exception.TokenExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +45,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+
+//    private final SecurityUtil securityUtil;
 
     @Transactional
     @Override
@@ -136,18 +142,138 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JwtTokenDto reissueToken(String refreshToken) {
+    public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
         // 1. refresh Token 검증
         if(!jwtTokenProvider.validateToken(refreshToken)) {
-            log.error("[토큰 재발급] Refresh Token이 유효하지 않습니다.");
-            throw new TokenException("리프레시 토큰 만료. 재로그인 필수.");
+            log.error("[토큰 재발급] 리프레시 토큰이 유효하지 않습니다.");
+            throw new TokenException(TokenExceptionMessage.TOKEN_EXPIRED_ERROR.getValue());
         }
 
-        // 2. accessToken에서 userId 가져오기
-//        Authentication authentication = jwtTokenProvider.getAuthentication();
+        log.info("[토큰 재발급] accessToken : {}", accessToken);
 
+        // 2. authentication 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+
+        // 3. 저장소에서 email을 기반으로 refreshToken 가져오기
+        RefreshToken originalRefreshToken = refreshTokenRedisRepository.findById(authentication.getName())
+                .orElseThrow(() -> {
+                    log.error("[토큰 재발급] 로그아웃 된 사용자입니다.");
+                    return new NotFoundException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
+                });
+
+        // 4. refresh token 일치하는지 검사
+        if(!refreshToken.equals(originalRefreshToken.getRefreshToken())) {
+            log.error("[토큰 재발급] 토큰 불일치로 재발급이 불가합니다.");
+            throw new TokenException(TokenExceptionMessage.TOKEN_NOT_EQUAL.getValue());
+        }
+
+        log.info("[토큰 재발급] 토큰 재발급 가능!");
+        // 5. 토큰 재발급
+        JwtTokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+
+        // 6. 기존에 Redis에 저장된 토큰 업데이트
+        originalRefreshToken.updateRefreshToken(tokenDto.getRefreshToken());
+        refreshTokenRedisRepository.save(originalRefreshToken);
+
+        return tokenDto;
+    }
+
+    @Override
+    public MyInfoDto findMyInfo(String accessToken) {
+        String email = jwtTokenProvider.getAuthentication(accessToken).getName();
+        log.info("[내 정보 조회] 조회 요청 : {}", email);
+
+        Users user = getLoginUser(accessToken);
+
+        return MyInfoDto.builder()
+                .email(email)
+                .nickname(user.getNickname())
+                .image(user.getImage())
+                .profile(user.getProfile())
+                .build();
+    }
+
+    @Override
+    public void updateUser(String accessToken, UpdateUserReqDto reqDto) {
+
+    }
+
+    @Override
+    public void updatePassword(String accessToken, UpdatePasswordReqDto reqDto) {
+        log.info("[패스워드 변경] 패드워드 변경 요청. ");
+
+
+    }
+
+    @Override
+    public void withdraw(String accessToken) {
+
+    }
+
+    @Override
+    public Boolean checkPassword(String accessToken, PasswordDto passwordDto) {
         return null;
     }
+
+    @Override
+    public void logout(String accessToken) {
+
+    }
+
+    @Override
+    public List<UserInfoDto> findUserList(String accessToken) {
+        return null;
+    }
+
+    @Override
+    public UserInfoDto findUser(String accessToken, Long userId) {
+        return null;
+    }
+
+    @Override
+    public UserInfoDto findUserByUserId(String accessToken, Long userId) {
+        return null;
+    }
+
+    @Override
+    public List<MyInfoDto> findUserByNickname(String accessToken, String nickname) {
+        return null;
+    }
+
+//    @Override
+//    public JwtTokenDto reissueToken(String refreshToken) {
+//        // 1. refresh Token 검증
+//        if(!jwtTokenProvider.validateToken(refreshToken)) {
+//            log.error("[토큰 재발급] Refresh Token이 유효하지 않습니다.");
+//            throw new TokenException(TokenExceptionMessage.TOKEN_EXPIRED_ERROR.getValue());
+//        }
+//
+//        // 2. SecurityUtil에서 userEmail 가져오기
+//        String email = securityUtil.getCurrentUserEmail();
+//
+//        // 3. 저장소에서 email을 기반으로 refreshToken 가져오기
+//        RefreshToken originalRefreshToken = refreshTokenRedisRepository.findById(email)
+//                .orElseThrow(() -> {
+//                    log.error("[토큰 재발급] 로그아웃 된 사용자입니다.");
+//                    return new NotFoundException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
+//                });
+//
+//        // 4. refresh token 일치하는지 검사
+//        if(!refreshToken.equals(originalRefreshToken.getRefreshToken())) {
+//            log.error("[토큰 재발급] 토큰 불일치로 재발급이 불가합니다.");
+//            throw new TokenException(TokenExceptionMessage.TOKEN_NOT_EQUAL.getValue());
+//        }
+//
+//        log.info("[토큰 재발급] 토큰 재발급 가능!");
+//        // 5. 토큰 재발급
+//        JwtTokenDto tokenDto = jwtTokenProvider.generateToken();
+//
+//        // 6. 기존에 Redis에 저장된 토큰 업데이트
+//        originalRefreshToken.updateRefreshToken(refreshToken);
+//        refreshTokenRedisRepository.save(originalRefreshToken);
+//
+//        return tokenDto;
+//    }
 
 
     /**
@@ -175,4 +301,24 @@ public class UserServiceImpl implements UserService {
         return matcher.find();
     }
 
+    /**
+     * Access Token으로 로그인 유저 반환
+     */
+    private Users getLoginUser(String accessToken) {
+        String email = jwtTokenProvider.getAuthentication(accessToken).getName();
+//        String loginEmail = securityUtil.getCurrentUserEmail();
+
+//        if(!loginEmail.equals(email)) {
+//            log.error("[로그인 유저 반환] 로그인 사용자와 토큰 정보가 일치하지 않음");
+//            throw new UserNotFoundException("이상해");
+//        }
+
+        Users loginUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    log.error("[로그인 유저 반환] 로그인 유저를 찾을 수 없습니다.");
+                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
+                });
+
+        return loginUser;
+    }
 }
