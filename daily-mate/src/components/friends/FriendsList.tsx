@@ -1,17 +1,38 @@
 import { useEffect, useState } from "react";
-import { getFriends } from "../../types/authType";
+import { friendResponse } from "../../types/authType";
+import { getFriendList } from "../../apis/friendApi";
+import FriendInfo from "./FriendInfo";
 
 const FriendsList = () => {
-  const [friendsList, setFriendsList] = useState<getFriends[]>([]);
+  const [friendsList, setFriendsList] = useState<friendResponse[]>([]);
   useEffect(() => {
     // 렌더링 시 해당 유저의 친구 목록 가져오기
-  });
+    const fetchData = async () => {
+      const getFriendResponse = await getFriendList();
+      if (getFriendResponse !== null) {
+        setFriendsList(getFriendResponse);
+      } else {
+        setFriendsList([
+          {
+            fromId: 10,
+            email: "1232@123.com",
+            nickname: "김더미",
+            image: "url",
+            profile: "졸려",
+            requestDate: new Date(),
+          },
+        ]);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <div>
-      <h3>친구 목록 컴포넌트</h3>
       <div>
         {friendsList.map((friend) => (
-          <div key={friend.fromId}>{friend.fromId}</div>
+          <div key={friend.fromId}>
+            <FriendInfo status="friendsList" friendData={friend} />
+          </div>
         ))}
       </div>
     </div>

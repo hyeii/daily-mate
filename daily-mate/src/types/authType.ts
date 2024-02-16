@@ -51,14 +51,11 @@ export enum diaryOpenType {
   public = "전체공개",
 }
 
-export interface friendInfo {
+export interface friendResponse {
+  fromId: number;
+  email: string;
   nickname: string;
-  profileMessage: string;
-  imageURL: string;
-  openType: diaryOpenType;
-  isFriend: boolean;
-}
-
-export interface friendInfoType {
-  status: "friendsList" | "waitingList" | "search";
+  image: string;
+  profile: string;
+  requestDate: Date;
 }
