@@ -12,6 +12,7 @@ import {
 import AddAccountModal from "./AddAccountModal";
 import { useState } from "react";
 import styled from "styled-components";
+import { TabContainer, TabText } from "../common/CommonStyledComponents";
 
 const AccountPage = () => {
   const [accountTab, setAccountTab] = useRecoilState(accountTabState);
@@ -46,12 +47,27 @@ const AccountPage = () => {
 
   return (
     <div>
-      <AccountTabContainer>
-        <AccountTabText onClick={handleCalendar}>달력</AccountTabText>
-        <AccountTabText onClick={handleMonthly}>월 통계</AccountTabText>
-        <AccountTabText onClick={handleDaily}>일 통계</AccountTabText>
-        <AccountTabText onClick={handleOpenModal}>항목 추가</AccountTabText>
-      </AccountTabContainer>
+      <TabContainer>
+        <TabText
+          onClick={handleCalendar}
+          style={accountTab === "calendar" ? { fontWeight: "bold" } : {}}
+        >
+          달력
+        </TabText>
+        <TabText
+          onClick={handleMonthly}
+          style={accountTab === "monthly" ? { fontWeight: "bold" } : {}}
+        >
+          월 통계
+        </TabText>
+        <TabText
+          onClick={handleDaily}
+          style={accountTab === "daily" ? { fontWeight: "bold" } : {}}
+        >
+          일 통계
+        </TabText>
+        <TabText onClick={handleOpenModal}>항목 추가</TabText>
+      </TabContainer>
       <div>
         {accountTab === "calendar" ? (
           <AccountCalendar />
@@ -72,19 +88,3 @@ const AccountPage = () => {
 };
 
 export default AccountPage;
-
-const Wrapper = styled.div``;
-const AccountTabContainer = styled.div`
-  display: flex;
-`;
-
-const AccountTabText = styled.h3`
-  margin-right: 2rem;
-  font-size: 1.2rem;
-  font-weight: normal;
-
-  &:hover {
-    cursor: pointer;
-    font-weight: bold;
-  }
-`;

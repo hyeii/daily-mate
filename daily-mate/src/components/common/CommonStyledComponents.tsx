@@ -26,3 +26,18 @@ export const AmountNumber = styled.div<ammountProps>`
   color: ${({ textType }) =>
     textType === "in" ? "#478FFA" : textType === "out" ? "#FF4242" : "black"};
 `;
+
+export const TabContainer = styled.div`
+  display: flex;
+`;
+
+export const TabText = styled.h3`
+  margin-right: 2rem;
+  font-size: 1.2rem;
+  font-weight: normal;
+
+  &:hover {
+    cursor: pointer;
+    font-weight: bold;
+  }
+`;
