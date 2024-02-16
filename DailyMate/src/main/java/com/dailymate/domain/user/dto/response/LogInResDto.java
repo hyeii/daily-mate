@@ -1,4 +1,4 @@
-package com.dailymate.domain.user.dto;
+package com.dailymate.domain.user.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

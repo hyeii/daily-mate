@@ -1,4 +1,4 @@
-package com.dailymate.domain.user.dto;
+package com.dailymate.domain.user.dto.request;
 
 import com.dailymate.domain.user.constant.UserType;
 import com.dailymate.domain.user.domain.Users;

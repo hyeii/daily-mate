@@ -1,4 +1,4 @@
-package com.dailymate.domain.user.dto;
+package com.dailymate.domain.user.dto.request;
 
 import lombok.Getter;
 
