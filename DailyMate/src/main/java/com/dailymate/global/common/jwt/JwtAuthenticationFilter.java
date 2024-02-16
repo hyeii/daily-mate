@@ -1,6 +1,7 @@
 package com.dailymate.global.common.jwt;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -20,12 +21,16 @@ import java.io.IOException;
  * 유효한 토큰인 경우 해당 토큰의 인증 정보(Authentication)를 SecurityContext에 저장하여
  * 인증된 요청을 처리할 수 있도록 한다.
  * => JWT를 통해 username + password 인증을 수행한다는 뜻
+ *
+ * 사용자의 요청에서 JWT 토큰을 추출하여
+ * 통과하면 권한을 부여하고, 실패하면 권한부여 없이 다음 필터로 진행시킴
  */
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
+    public static final String BEARER_PREFIX = "Bearer";
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -40,32 +45,47 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 1. Request Header에서 토큰 추출
-        String jwtToken = resolveToken(request);
+//        String jwtToken = resolveToken(request);
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        log.info("[필터] 토큰 : {}", bearerToken); // Bearer 토큰 형태임
 
         // 2. validateToken으로 토큰 유효성 검사
         //      StringUtils.hasText : token != null이랑 같은거임
-        if(StringUtils.hasText(jwtToken) && jwtTokenProvider.validateToken(jwtToken)) {
+        if(StringUtils.hasText(bearerToken) && jwtTokenProvider.validateToken(bearerToken)) {
+            // 로그아웃 여부 확인
+            // 로그아웃 상태라면 해당 accessToken이 만료되지 않았어도 무효함
+//            checkLogout(jwtToken);
+
             // 토큰이 유효할 경우(정상 토큰)
             // 해당 토큰으로 Authentication을 가지고 와서 SecurityContext에 저장   => 요청을 처리하는 동안 인증정보가 유지됨
-            Authentication authentication = jwtTokenProvider.getAuthentication(jwtToken);
+            Authentication authentication = jwtTokenProvider.getAuthentication(bearerToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    /**
-     * Request Header에서 토큰 정보를 추출
-     *  => Authorization 헤더에서 "Bearer "접두사로 시작하는 토큰을 추출하여 반환
-     */
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-
-        // StringUtils.hasText() : 값이 있을 경우 true, 공백이나 NULL일 경우 false
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-
-        return null;
-    }
+//    /**
+//     * Request Header에서 토큰 정보를 추출
+//     *  => Authorization 헤더에서 "Bearer "접두사로 시작하는 토큰을 추출하여 반환
+//     */
+//    private String resolveToken(HttpServletRequest request) {
+////        log.info("request : {}", request);
+////        Enumeration<String> headers = request.getHeaderNames();
+////        while(headers.hasMoreElements()) {
+////            String header = headers.nextElement();
+////            log.info("{} : {}", header, request.getHeader(header));
+////        }
+//
+//        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+//
+//        // StringUtils.hasText() : 값이 있을 경우 true, 공백이나 NULL일 경우 false
+//        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+//            log.info("체크체크 : {}", bearerToken);
+//            log.info("체크체크 : {}", bearerToken.substring(7));
+//            return bearerToken.substring(7);
+//        }
+//
+//        return null;
+//    }
 }
