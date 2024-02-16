@@ -1,5 +1,6 @@
 package com.dailymate.global.common.jwt;
 
+import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -33,10 +34,6 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "Bearer ";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30; // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
-
     private final Key key;
 
     /**
@@ -62,18 +59,17 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())                       // payload "sub": "name"
                 .claim(AUTHORITIES_KEY, authorities)                        // payload "auth": "ROLE_USER"
-                .setExpiration(new Date(now + ACCESS_TOKEN_EXPIRE_TIME))    // payload "exp": 151621022(ex)
+                .setExpiration(new Date(now + JwtTokenExpiration.ACCESS_TOKEN_EXPIRATION_TIME.getTime()))    // payload "exp": 151621022(ex)
                 .signWith(key, SignatureAlgorithm.HS256)                    // header "alg": "HS256"
                 .compact();
 
         // refreshToken 생성 - accessToken의 갱신을 위해 사용 : 갱신용이라 사용자 정보는 아무것도 담지않았음
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .setExpiration(new Date(now + JwtTokenExpiration.REFRESH_TOKEN_EXPIRATION_TIME.getTime()))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         return JwtTokenDto.builder()
-                .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -103,8 +99,7 @@ public class JwtTokenProvider {
 
         // UserDetails 객체를 만들어서 Authentication return
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        log.info("principal : {}", principal
-        );
+        log.info("principal : {}", principal);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
@@ -112,7 +107,7 @@ public class JwtTokenProvider {
     /**
      * 토큰 정보를 검증하는 메서드
      */
-    public boolean validateToken(String token) {
+    public Boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
