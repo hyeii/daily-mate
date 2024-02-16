@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 그 외 처리 - 잘못된 요청(404)
+     * 그 외 처리 - 잘못된 요청(400)
      * @param badRequestException
      */
     @ExceptionHandler(BadRequestException.class)
