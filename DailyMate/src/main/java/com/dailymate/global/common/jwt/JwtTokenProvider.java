@@ -14,7 +14,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String BEARER_PREFIX = "Bearer ";
     private final Key key;
 
     /**
@@ -41,6 +44,7 @@ public class JwtTokenProvider {
      */
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+//        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -82,7 +86,10 @@ public class JwtTokenProvider {
      * 
      * 위의 메서드와 암호화 <-> 복호화로 생각
      */
-    public Authentication getAuthentication(String accessToken) {
+    public Authentication getAuthentication(String accessToken) { // Bearer 토큰형태
+//        if(accessToken.startsWith("Bearer"))
+//            accessToken = accessToken.substring(7);
+        accessToken = resolveToken(accessToken);
 
         // JWT 토큰 복호화
         Claims claims = parseClaims(accessToken);
@@ -107,7 +114,10 @@ public class JwtTokenProvider {
     /**
      * 토큰 정보를 검증하는 메서드
      */
-    public Boolean validateToken(String token) {
+    public Boolean validateToken(String token) { // Bearer 토큰형태
+        token = resolveToken(token);
+        log.info("[validateToken] token : {}", token);
+
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -134,12 +144,12 @@ public class JwtTokenProvider {
      *
      *      클레임(Claims) : 토큰에서 사용할 정보의 조각
      */
-    private Claims parseClaims(String accessToken) {
+    private Claims parseClaims(String token) { // 접두사가 지워진 토큰형태
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(accessToken)
+                    .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
             // 만료된 토큰의 경우에도 Claims를 반환
@@ -147,5 +157,16 @@ public class JwtTokenProvider {
         }
     }
 
+    /**
+     * 토큰의 prefix 체크 후 토큰 접두사를 제외한 토큰 추출
+     */
+    private String resolveToken(String bearerToken) {
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            log.info("[resolveToken] 제대로된 토큰형태");
+            return bearerToken.substring(7);
+        }
+
+        return null;
+    }
 
 }
