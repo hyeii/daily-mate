@@ -2,6 +2,8 @@ package com.dailymate.global.config;
 
 import com.dailymate.global.common.jwt.JwtAuthenticationFilter;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
+import com.dailymate.global.common.jwt.exception.JwtAccessDeniedHandler;
+import com.dailymate.global.common.jwt.exception.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,30 +34,43 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .headers().frameOptions().disable() // h2 접근 허용을 위함
                 .and()
+
                 // REST API이므로 basic auth 및 csrf 보안을 사용하지 않음
                 .httpBasic().disable()
-//                .formLogin().disable()
                 .csrf().disable()
+
                 // JWT를 사용하기 때문에 세션을 사용하지 않음
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
+                // exception handling할 때 우리가 만든 클래스 추가
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
+
                 .authorizeHttpRequests()
                 // 해당 API에 대해서는 모든 요청을 허가 -> 회원가입, 로그인
                 // requestMatchers는 스프링부트3버전부터 -> 2버전은 그대로 antMatchers 사용
 //                .requestMatchers(new AntPathRequestMatcher("/user/login", "/user/sign-up")).permitAll()
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
+
                 // 이 밖에 모든 요청에 대해서 인증을 필요로함
                 .anyRequest().authenticated()
                 .and()
+
                 // JWT 인증을 위하여 직접 구현한 필터를
                 // UsernamePasswordAuthenticationFilter 전에 실행
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+
                 .build();
     }
 
