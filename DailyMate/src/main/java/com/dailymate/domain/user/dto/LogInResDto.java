@@ -1,5 +1,10 @@
 package com.dailymate.domain.user.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
 public class LogInResDto {
 
     private String accessToken;
