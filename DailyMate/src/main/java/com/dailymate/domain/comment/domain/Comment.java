@@ -1,6 +1,8 @@
 package com.dailymate.domain.comment.domain;
 
+import com.dailymate.domain.comment.dto.CommentReqDto;
 import com.dailymate.domain.diary.domain.Diary;
+import com.dailymate.domain.user.Users;
 import com.dailymate.global.common.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -23,9 +25,9 @@ public class Comment extends BaseTime {
     @Column
     private Long commentId;
 
-    @NotNull
-    @Column
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id", nullable = false, updatable = false)
@@ -34,4 +36,16 @@ public class Comment extends BaseTime {
     @NotNull
     @Column(nullable = false, length = 200)
     private String content;
+
+    public static Comment createComment(CommentReqDto commentReqDto, Diary diary, Users users) {
+        return Comment.builder()
+                .content(commentReqDto.getContent())
+                .diary(diary)
+                .users(users)
+                .build();
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

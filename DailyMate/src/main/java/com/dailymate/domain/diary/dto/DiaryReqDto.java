@@ -1,5 +1,6 @@
 package com.dailymate.domain.diary.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,5 +15,6 @@ public class DiaryReqDto {
     private String weather;
     private String feeling;
     private String openType;
+//    @JsonIgnore
     private Long userId;
 }

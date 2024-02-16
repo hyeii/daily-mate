@@ -243,6 +243,7 @@ public class DiaryServiceImpl implements DiaryService {
      * @return DiaryMonthlyResDto[]
      */
     @Override
+    @Transactional
     public DiaryMonthlyResDto[] findDiaryByMonth(String date, Long userId) {
 
         // 입력값 검증
@@ -274,6 +275,7 @@ public class DiaryServiceImpl implements DiaryService {
      * @return DiaryResDto
      */
     @Override
+    @Transactional
     public DiaryResDto findFriendDiary(Long diaryId, Long userId) {
 
         // 입력값 검증
@@ -318,6 +320,7 @@ public class DiaryServiceImpl implements DiaryService {
      * @return DiaryMonthlyResDto[]
      */
     @Override
+    @Transactional
     public DiaryMonthlyResDto[] findFriendDiaryByMonth(String date, Long userId, Long friendId) {
 
         // 입력값 검증
