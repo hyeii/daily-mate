@@ -14,5 +14,6 @@ VALUES (100, 9539, 1000000, null, '월급이 들어왔당 히히', '2024-01-25 2
 
 INSERT INTO USERS (USER_ID, EMAIL, PASSWORD, NICKNAME, TYPE)
 VALUES (100, 'dd39@naver.com', '1234', '천재윤영', 'ROLE_USER'),
-       (101, 'king@gmail.com', '1234', '관리자1', 'ROLE_ADMIN');
+       (101, 'king@gmail.com', '1234', '관리자1', 'ROLE_ADMIN'),
+       (102, 'test@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트1', 'ROLE_USER');
 
