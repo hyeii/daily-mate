@@ -1,20 +1,29 @@
 package com.dailymate.domain.user.service;
 
+import com.dailymate.domain.user.dao.RefreshTokenRedisRepository;
 import com.dailymate.domain.user.dao.UserRepository;
+import com.dailymate.domain.user.domain.RefreshToken;
+import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.dto.LogInReqDto;
 import com.dailymate.domain.user.dto.LogInResDto;
 import com.dailymate.domain.user.dto.SignUpReqDto;
 import com.dailymate.domain.user.exception.UserBadRequestException;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
+import com.dailymate.domain.user.exception.UserNotFoundException;
 import com.dailymate.global.common.jwt.JwtTokenDto;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
+import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
+import com.dailymate.global.common.util.SecurityUtil;
+import com.dailymate.global.exception.exception.TokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -30,7 +39,10 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final PasswordEncoder passwordEncoder;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
+    @Transactional
     @Override
     public void signUp(SignUpReqDto reqDto) {
         String email = reqDto.getEmail();
@@ -79,27 +91,62 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByNickname(nickname);
     }
 
+    @Transactional
     @Override
-    public JwtTokenDto logIn(LogInReqDto reqDto) {
+    public LogInResDto logIn(LogInReqDto reqDto) {
         String email = reqDto.getEmail();
-        String password = reqDto.getPassword();
         log.info("[로그인] 로그인 요청 email : {}", email);
+
+        // 존재하는 회원 체크
+        Users user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    log.error("[로그인] 존재하지 않는 사용자입니다.");
+                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
+                });
 
         // 1. email + password 기반으로 Authentication 객체 생성
         // 이때 authentication은 인증 여부를 확인하는 authenticated값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-        log.info("authenticationToken : {}", authenticationToken);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, reqDto.getPassword());
 
-        // 2. 실제 검증
-        // authenticate() 메서드를 통해 요청된 Users에 대한 검증 진행
-        // authenticate 메서드가 실행될 때 UserDetailsServiceImpl에서 만든 loadUserByUserName메서드 실행
-        Authentication authentication =
-                authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        // 2. 실제 검증(비밀번호 체크)
+        // authenticate 메서드가 실행될 때 UserDetailsServiceImpl에서 만든 loadUserByUserName() 실행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtTokenDto jwtToken = jwtTokenProvider.generateToken(authentication);
 
-        return jwtToken;
+        // 4. Redis에 refreshToken 저장
+        RefreshToken refreshToken = RefreshToken.builder()
+                .email(email)
+                .refreshToken(jwtToken.getRefreshToken())
+                .expiration(JwtTokenExpiration.REFRESH_TOKEN_EXPIRATION_TIME.getTime() / 1000) // 나누기 1000왜하는거징
+                .build();
+
+        refreshTokenRedisRepository.save(refreshToken);
+
+        return LogInResDto.builder()
+                .accessToken(jwtToken.getAccessToken())
+                .refreshToken(jwtToken.getRefreshToken())
+                .email(email)
+                .nickName(user.getNickname())
+                .image(user.getImage())
+                .profile(user.getProfile())
+                .type(user.getType().getRole())
+                .build();
+    }
+
+    @Override
+    public JwtTokenDto reissueToken(String refreshToken) {
+        // 1. refresh Token 검증
+        if(!jwtTokenProvider.validateToken(refreshToken)) {
+            log.error("[토큰 재발급] Refresh Token이 유효하지 않습니다.");
+            throw new TokenException("리프레시 토큰 만료. 재로그인 필수.");
+        }
+
+        // 2. accessToken에서 userId 가져오기
+//        Authentication authentication = jwtTokenProvider.getAuthentication();
+
+        return null;
     }
 
 
