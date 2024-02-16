@@ -19,6 +19,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5' // runtimeOnly ?
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5' // runtimeOnly ?
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
@@ -48,6 +58,9 @@ dependencies {
 
     // mariaDB
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {

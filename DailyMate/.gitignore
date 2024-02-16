@@ -20,6 +20,8 @@ bin/
 ### IntelliJ IDEA ###
 application-s3.yml
 application-mariaDb.yml
+application-jwt.yml
+### 유녕도 추가함
 
 .idea
 *.iws
