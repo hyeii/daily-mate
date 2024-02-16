@@ -2,6 +2,7 @@ package com.dailymate.global.common.security;
 
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.Users;
+import com.dailymate.domain.user.exception.UserExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
@@ -26,25 +27,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException("해당하는 회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg()));
     }
 
     // 해당하는 User의 데이터가 존재한다면 UserDetails 객체로 변환해서 리턴 ===> DB에서 찾은 사용자 정보인 UserDetails
     // 여기서 User는 Users가 아니라 security.core.userdetails.User임
     private UserDetails createUserDetails(Users user) {
-        UserDetails userDetails = User.builder()
+        // 비밀번호 체크를 여기서 한다고 보면됨
+        return User.builder()
                 .username(user.getEmail())
-                .password(passwordEncoder.encode(user.getPassword())) // 나중에 수정할거임  https://suddiyo.tistory.com/entry/Spring-Spring-Security-JWT-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-2 , https://kimtaesoo99.tistory.com/118
+                .password(user.getPassword())
+                //                .password(passwordEncoder.encode(user.getPassword())) // DB에 encoding된 값을 가지고있을땐 그냥 getPw(), 아닐땐 이거사용
                 .roles(user.getType().getRole())
                 .build();
-
-        log.info("UserDetails : {}", userDetails);
-
-//        return User.builder()
-//                .username(user.getEmail())
-//                .password(user.getPassword())
-//                .roles(user.getType().getRole())
-//                .build();
-        return userDetails;
     }
 }
