@@ -2,6 +2,12 @@ import styled from "styled-components";
 import { RxDotsHorizontal } from "react-icons/rx";
 import { friendResponse } from "../../types/authType";
 import { useEffect, useRef, useState } from "react";
+import {
+  confirmFriend,
+  deleteFriend,
+  denyFriend,
+  registFriend,
+} from "../../apis/friendApi";
 
 interface props {
   status: string;
@@ -36,6 +42,42 @@ const FriendInfo = ({ status, friendData }: props) => {
     setEtcClicked(!etcClicked);
   };
 
+  const handleConfirmFriend = (friendId: number, nickname: string) => {
+    const confirmResponse = confirmFriend(friendId, nickname);
+    if (confirmResponse !== null) {
+      // 새로고침
+    } else {
+      alert("다시 시도해 주세요");
+    }
+  };
+
+  const handleDenyFriend = (friendId: number, nickname: string) => {
+    const denyResponse = denyFriend(friendId, nickname);
+    if (denyResponse !== null) {
+      // 새로고침
+    } else {
+      alert("다시 시도해 주세요");
+    }
+  };
+
+  const handleDeleteFriend = (friendId: number) => {
+    const deleteResponse = deleteFriend(friendId);
+    if (deleteResponse !== null) {
+      // 새로고침
+    } else {
+      alert("다시 시도해 주세요");
+    }
+  };
+
+  const handleRegistFriend = (toId: number, nickname: string) => {
+    const registResponse = registFriend(toId, nickname);
+    if (registResponse !== null) {
+      // 새로고침
+    } else {
+      alert("다시 시도해 주세요");
+    }
+  };
+
   return (
     <FriendInfoWrapper>
       <ImageProfileContainer>
@@ -53,11 +95,36 @@ const FriendInfo = ({ status, friendData }: props) => {
         {etcClicked ? (
           <EtcModalWrapper>
             {status === "friendsList" ? (
-              <div>친구 취소</div>
+              <EtcModalBox
+                onClick={() => handleDeleteFriend(friendData.fromId)}
+              >
+                친구 취소
+              </EtcModalBox>
             ) : status === "waitingList" ? (
-              <div>친구 수락</div>
+              <div>
+                <EtcModalBox
+                  onClick={() =>
+                    handleConfirmFriend(friendData.fromId, friendData.nickname)
+                  }
+                >
+                  친구 승인
+                </EtcModalBox>
+                <EtcModalBox
+                  onClick={() =>
+                    handleDenyFriend(friendData.fromId, friendData.nickname)
+                  }
+                >
+                  친구 거절
+                </EtcModalBox>
+              </div>
             ) : (
-              <div>친구 신청</div>
+              <EtcModalBox
+                onClick={() =>
+                  handleRegistFriend(friendData.fromId, friendData.nickname)
+                }
+              >
+                친구 신청
+              </EtcModalBox>
             )}
           </EtcModalWrapper>
         ) : null}
@@ -112,5 +179,13 @@ const EtcModalWrapper = styled.div`
   background: #ffffff;
   box-shadow: 0px 0px 10px #939393;
   border-radius: 10px;
-  padding: 8px;
+  padding: 4px 8px;
+`;
+
+const EtcModalBox = styled.div`
+  cursor: pointer;
+  margin: 0.5rem 0;
+  &: hover {
+    font-weight: bold;
+  }
 `;

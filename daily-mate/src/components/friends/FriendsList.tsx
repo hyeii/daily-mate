@@ -21,6 +21,14 @@ const FriendsList = () => {
             profile: "졸려",
             requestDate: new Date(),
           },
+          {
+            fromId: 11,
+            email: "1232@123.com",
+            nickname: "최더미",
+            image: "url",
+            profile: "배고파",
+            requestDate: new Date(),
+          },
         ]);
       }
     };

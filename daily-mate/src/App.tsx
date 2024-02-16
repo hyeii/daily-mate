@@ -70,6 +70,7 @@ const MainContainer = styled.div<SidebarProps>`
   margin: 2rem 5rem;
   overflow-x: hidden;
   position: relative;
+  min-height: 80vh;
   width: ${({ isopen }) =>
     isopen === "open" ? "calc(100vw - 300px)" : "100vw"};
   left: ${({ isopen }) => (isopen === "open" ? "300px" : "0px")};
