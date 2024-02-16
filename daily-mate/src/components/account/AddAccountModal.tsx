@@ -74,8 +74,11 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
   return (
     <ModalBackDrop>
       <ModalContainer>
-        {openType === "add" ? <h3>항목 추가</h3> : <h3>항목 수정</h3>}
-        {/* <div onClick={handleCloseModal}>닫기</div> */}
+        {openType === "add" ? (
+          <h3 style={{ margin: "5px 0" }}>항목 추가</h3>
+        ) : (
+          <h3 style={{ margin: "5px 0" }}>항목 수정</h3>
+        )}
         <AddContainer>
           <AddBox>날짜</AddBox>
           <AddInput
@@ -145,6 +148,10 @@ const ModalContainer = styled.div`
   border-radius: 30px;
   width: 450px;
   height: 350px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const AddContainer = styled.div`
@@ -166,6 +173,7 @@ const AddInput = styled.input`
   outline: none;
   padding-left: 10px;
   background-color: rgb(233, 233, 233);
+  font-family: "S-CoreDream-3Light";
 `;
 
 const AddSelect = styled.select`
@@ -174,11 +182,12 @@ const AddSelect = styled.select`
   outline: none;
   padding-left: 10px;
   background-color: rgb(233, 233, 233);
+  font-family: "S-CoreDream-3Light";
 `;
 const BtnBox = styled.div`
   display: flex;
   justify-content: end;
-  margin-top: 20px;
+  margin-top: 15px;
 `;
 const CompleteBtn = styled.button`
   background-color: #ff6161;
