@@ -150,7 +150,7 @@ interface calendarStyleProps {
 }
 
 const CalendarWrapper = styled.div<calendarStyleProps>`
-  width: ${({ ismini }) => (ismini === "yes" ? "30vw" : "80vw")};
+  width: ${({ ismini }) => (ismini === "yes" ? "30vw" : "auto")};
   padding: 1rem;
   border: 1px solid #e8e8e8;
   border-radius: 5px;
