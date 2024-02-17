@@ -44,4 +44,9 @@ public class Users extends BaseTime {
         this.type = UserType.getUserType(type);
     }
 
+    public void updateUser(String nickname, String profile) {
+        this.nickname = nickname == null ? this.nickname : nickname;
+        this.profile = profile == null ? this.profile : profile;
+    }
+
 }

@@ -177,68 +177,80 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MyInfoDto findMyInfo(String accessToken) {
-        Long userId = getLoginUserId(accessToken);
+    public MyInfoDto findMyInfo(String token) {
+        Long userId = getLoginUserId(token);
         log.info("[내 정보 조회] 조회 요청 {}", userId);
 
-        Users user = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("[내 정보 조회] 사용자를 찾을 수 없습니다.");
-                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
-                });
+        Users loginUser = getLoginUser(userId);
 
         return MyInfoDto.builder()
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .image(user.getImage())
-                .profile(user.getProfile())
+                .email(loginUser.getEmail())
+                .nickname(loginUser.getNickname())
+                .image(loginUser.getImage())
+                .profile(loginUser.getProfile())
                 .build();
     }
 
     @Override
-    public void updateUser(String accessToken, UpdateUserReqDto reqDto) {
+    public void updateUser(String token, UpdateUserReqDto reqDto) {
+        Long userId = getLoginUserId(token);
+        log.info("[내 정보 수정] 수정 요청 : {}", userId);
 
+        Users loginUser = getLoginUser(userId);
+
+        // 수정 전 비밀번호 체크
+
+        // 수정한 닉네임 중복 검사
+        if(checkNickname(reqDto.getNickname())) {
+            log.error("[내 정보 수정] 이미 사용중인 닉네임입니다. 다른 닉네임을 입력하세요.");
+            throw new UserBadRequestException(UserExceptionMessage.NICKNAME_DUPLICATED.getMsg());
+        }
+
+        loginUser.updateUser(reqDto.getNickname(), reqDto.getProfile());
+        userRepository.save(loginUser);
+
+        log.info("[내 정보 수정] 정보 수정 완료. -----------------------------");
     }
 
     @Override
-    public void updatePassword(String accessToken, UpdatePasswordReqDto reqDto) {
+    public void updatePassword(String token, UpdatePasswordReqDto reqDto) {
         log.info("[패스워드 변경] 패드워드 변경 요청. ");
 
 
     }
 
     @Override
-    public void withdraw(String accessToken) {
+    public void withdraw(String token) {
 
     }
 
     @Override
-    public Boolean checkPassword(String accessToken, PasswordDto passwordDto) {
+    public Boolean checkPassword(String token, PasswordDto passwordDto) {
         return null;
     }
 
     @Override
-    public void logout(String accessToken) {
+    public void logout(String token) {
 
     }
 
     @Override
-    public List<UserInfoDto> findUserList(String accessToken) {
+    public List<UserInfoDto> findUserList(String token) {
         return null;
     }
 
     @Override
-    public UserInfoDto findUser(String accessToken, Long userId) {
+    public UserInfoDto findUser(String token, Long userId) {
         return null;
     }
 
     @Override
-    public UserInfoDto findUserByUserId(String accessToken, Long userId) {
+    public UserInfoDto findUserByUserId(String token, Long userId) {
         return null;
     }
 
     @Override
-    public List<MyInfoDto> findUserByNickname(String accessToken, String nickname) {
+    public List<MyInfoDto> findUserByNickname(String token, String nickname) {
         return null;
     }
 
@@ -270,7 +282,22 @@ public class UserServiceImpl implements UserService {
     /**
      * accessToken을 이용하여 로그인 사용자의 userId를 추출
      */
-    private Long getLoginUserId(String accessToken) {
-        return jwtTokenProvider.getUserId(accessToken);
+    private Long getLoginUserId(String token) {
+        return jwtTokenProvider.getUserId(token);
+    }
+
+    /**
+     * accessToken을 이용하여 로그인 사용자의 email 추출
+     */
+    private String getLoginUserEmail(String token) {
+        return jwtTokenProvider.getUserEmail(token);
+    }
+
+    private Users getLoginUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.error("[유저 서비스] 사용자가 존재하지 않습니다.");
+                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
+                });
     }
 }
