@@ -157,6 +157,7 @@ public class UserServiceImpl implements UserService {
                     log.error("[토큰 재발급] 로그아웃 된 사용자입니다.");
                     return new NotFoundException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
                 });
+        log.info("[토큰 재발급] 리프레시 토큰 가져오기 성공 ! : {}", originalRefreshToken.getRefreshToken());
 
         // 4. refresh token 일치하는지 검사
         if(!refreshToken.equals(originalRefreshToken.getRefreshToken())) {
