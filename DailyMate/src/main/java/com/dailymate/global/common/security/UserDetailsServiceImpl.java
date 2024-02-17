@@ -3,6 +3,7 @@ package com.dailymate.global.common.security;
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
+import com.dailymate.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
@@ -21,13 +22,24 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg()));
+        Users user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        return new UserDetailsImpl(user);
+
+//        return UserDetailsImpl.builder()
+//                .userId(user.getUserId())
+//                .email(user.getEmail())
+//                .password(user.getPassword())
+//                .authority(user.getType().getRole())
+//                .build();
+
+//        return userRepository.findByEmail(email)
+//                .map(this::createUserDetails)
+//                .orElseThrow(() -> new UsernameNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg()));
     }
 
     // 해당하는 User의 데이터가 존재한다면 UserDetails 객체로 변환해서 리턴 ===> DB에서 찾은 사용자 정보인 UserDetails
