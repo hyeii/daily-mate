@@ -25,6 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     // 비밀번호 체크를 여기서 한다고 보면 됨
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.info("[UserDetailsServiceImpl] 입장 : {}", email);
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg()));
 
