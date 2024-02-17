@@ -3,6 +3,7 @@ package com.dailymate.domain.todo.api;
 import com.dailymate.domain.todo.dto.AddTodoReqDto;
 import com.dailymate.domain.todo.dto.TodoReqDto;
 import com.dailymate.domain.todo.dto.TodoResDto;
+import com.dailymate.domain.todo.dto.UpdateTodoReqDto;
 import com.dailymate.domain.todo.service.TodoService;
 import com.dailymate.global.dto.MessageDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,12 +32,12 @@ public class TodoController {
 				.body(MessageDto.message("CREATE SUCCESS"));
 	}
 
-//	@Operation(
-//			summary = "할일 수정",
-//			description = "로그인 사용자의 할일을 수정합니다."
-//	)
-//	@PatchMapping("/{todoId}")
-//	public ResponseEntity<TodoResDto> updateTodo(@PathVariable Long todoId, @RequestBody TodoReqDto reqDto){
-//		return ResponseEntity.ok(todoService.updateTodo(todoId, reqDto));
-//	}
+	@Operation(
+			summary = "할일 수정",
+			description = "로그인 사용자의 할일을 수정합니다."
+	)
+	@PatchMapping("/{todoId}")
+	public ResponseEntity<TodoResDto> updateTodo(@PathVariable Long todoId, @RequestBody UpdateTodoReqDto reqDto){
+		return ResponseEntity.ok(todoService.updateTodo(todoId, reqDto));
+	}
 }

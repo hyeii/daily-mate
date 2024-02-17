@@ -5,6 +5,7 @@ import com.dailymate.domain.todo.domain.Todo;
 import com.dailymate.domain.todo.dto.AddTodoReqDto;
 import com.dailymate.domain.todo.dto.TodoReqDto;
 import com.dailymate.domain.todo.dto.TodoResDto;
+import com.dailymate.domain.todo.dto.UpdateTodoReqDto;
 import com.dailymate.domain.todo.exception.TodoExceptionMessage;
 import com.dailymate.domain.todo.exception.TodoForbiddenException;
 import com.dailymate.domain.todo.exception.TodoNotFoundException;
@@ -50,8 +51,8 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public TodoResDto updateTodo(Long todoId, Long userId, TodoReqDto todoReqDto) {
-		log.info("[할일 수정] 할일 수정 요청. userId : {}", userId);
+	public TodoResDto updateTodo(Long todoId, UpdateTodoReqDto updateTodoReqDto) {
+		log.info("[할일 수정] 할일 수정 요청. userId : {}", 1L);
 		// 1. 존재하는 할일인지 체크
 		Todo todo = todoRepository.findById(todoId)
 				.orElseThrow(()->{
@@ -66,14 +67,18 @@ public class TodoServiceImpl implements TodoService {
 		}
 
 		// 3. 로그인 사용자의 할일인지 체크
-		if(todo.getUserId() != userId){
+		if(todo.getUserId() != 1L){
 			log.error("[할일 수정] 권한이 없는 할일입니다.");
 			throw new TodoForbiddenException("[UPDATE_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}
 
 		log.info("[할일 수정] 할일 찾기 완료.");
-		todo.updateTodo(todoReqDto.getContent(), todoReqDto.getDate());
+
+		todo.updateTodo(updateTodoReqDto.getContent(), updateTodoReqDto.getDate());
+		todoRepository.save(todo);
+
 		log.info("[할일 수정] 할일 수정 완료.");
+
 		return TodoResDto.entityToDto(todo);
 
 	}
