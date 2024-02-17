@@ -242,42 +242,6 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-//    @Override
-//    public JwtTokenDto reissueToken(String refreshToken) {
-//        // 1. refresh Token 검증
-//        if(!jwtTokenProvider.validateToken(refreshToken)) {
-//            log.error("[토큰 재발급] Refresh Token이 유효하지 않습니다.");
-//            throw new TokenException(TokenExceptionMessage.TOKEN_EXPIRED_ERROR.getValue());
-//        }
-//
-//        // 2. SecurityUtil에서 userEmail 가져오기
-//        String email = securityUtil.getCurrentUserEmail();
-//
-//        // 3. 저장소에서 email을 기반으로 refreshToken 가져오기
-//        RefreshToken originalRefreshToken = refreshTokenRedisRepository.findById(email)
-//                .orElseThrow(() -> {
-//                    log.error("[토큰 재발급] 로그아웃 된 사용자입니다.");
-//                    return new NotFoundException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
-//                });
-//
-//        // 4. refresh token 일치하는지 검사
-//        if(!refreshToken.equals(originalRefreshToken.getRefreshToken())) {
-//            log.error("[토큰 재발급] 토큰 불일치로 재발급이 불가합니다.");
-//            throw new TokenException(TokenExceptionMessage.TOKEN_NOT_EQUAL.getValue());
-//        }
-//
-//        log.info("[토큰 재발급] 토큰 재발급 가능!");
-//        // 5. 토큰 재발급
-//        JwtTokenDto tokenDto = jwtTokenProvider.generateToken();
-//
-//        // 6. 기존에 Redis에 저장된 토큰 업데이트
-//        originalRefreshToken.updateRefreshToken(refreshToken);
-//        refreshTokenRedisRepository.save(originalRefreshToken);
-//
-//        return tokenDto;
-//    }
-
-
     /**
      * 회원가입 정보 유효성 검사
      */
