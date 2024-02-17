@@ -21,10 +21,11 @@ public class GlobalExceptionHandler {
      * 토큰 관련 에러 처리(401)
      * @param tokenException
      */
-//    @ExceptionHandler(TokenException.class)
-//    public ResponseEntity<MessageDto> handleTokenException(TokenException tokenException) {
-//        return null;
-//    }
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<MessageDto> handleTokenException(TokenException tokenException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(MessageDto.message(tokenException.getMessage()));
+    }
 
     /**
      * 토큰 인증은 됐으나 해당 유저에게 해당 메서드 사용 권한이 없을 때(403)
@@ -48,7 +49,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 그 외 처리 - 잘못된 요청(404)
+     * 그 외 처리 - 잘못된 요청(400)
      * @param badRequestException
      */
     @ExceptionHandler(BadRequestException.class)
