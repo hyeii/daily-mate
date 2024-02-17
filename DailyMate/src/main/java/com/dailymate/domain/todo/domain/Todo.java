@@ -30,10 +30,7 @@ public class Todo extends BaseTime {
 	private Integer order;
 	@NotNull
 	private Boolean done;
-	@NotNull
-	private String createdAt;
-	private String updatedAt;
-	private String deletedAt;
+
 
 	public void updateTodo(String content, String date){
 		this.content = content == null ? this.content : content;
