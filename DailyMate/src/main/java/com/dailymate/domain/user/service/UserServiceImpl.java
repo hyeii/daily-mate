@@ -76,22 +76,26 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 회원가입 전 이메일 중복 검사
+     * 단, 탈퇴한 회원의 이메일은 재사용 가능
+     *
      * 중복 O - true / 중복 X - false
      */
     @Override
     public Boolean checkEmail(String email) {
         log.info("[이메일 중복 검사] email : {}", email);
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailAndDeletedAtIsNull(email);
     }
 
     /**
      * 회원가입 전 닉네임 중복 검사
+     * 단, 탈퇴한 회원의 닉네임은 재사용 가능
+     *
      * 중복 O - true / 중복 X - false
      */
     @Override
     public Boolean checkNickname(String nickname) {
         log.info("[닉네임 중복 검사] nickname : {}", nickname);
-        return userRepository.existsByNickname(nickname);
+        return userRepository.existsByNicknameAndDeletedAtIsNull(nickname);
     }
 
     @Transactional
@@ -100,8 +104,8 @@ public class UserServiceImpl implements UserService {
         String email = reqDto.getEmail();
         log.info("[로그인] 로그인 요청 email : {}", email);
 
-        // 존재하는 회원 체크
-        Users user = userRepository.findByEmail(email)
+        // 존재하는 회원 체크 && 탈퇴한 회원인지도 체크
+        Users user = userRepository.findByEmailAndDeletedAtIsNull(email)
                 .orElseThrow(() -> {
                     log.error("[로그인] 존재하지 않는 사용자입니다.");
                     return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
@@ -198,7 +202,7 @@ public class UserServiceImpl implements UserService {
 
         Users loginUser = getLoginUser(userId);
 
-        // 수정 전 비밀번호 체크
+        // 수정 전 비밀번호 체크 -> 메서드 따로있음
 
         // 수정한 닉네임 중복 검사
         if(checkNickname(reqDto.getNickname())) {
@@ -214,19 +218,63 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(String token, UpdatePasswordReqDto reqDto) {
-        log.info("[패스워드 변경] 패드워드 변경 요청. ");
+        Long userId = getLoginUserId(token);
+        log.info("[패스워드 변경] 패드워드 변경 요청 : {}", userId);
 
+        Users loginUser = getLoginUser(userId);
+        String newPassword = reqDto.getNewPassword();
 
+        // 1. 현재 비밀번호와 입력한 비밀번호가 일치하는가
+        if(passwordEncoder.matches(reqDto.getPassword(), loginUser.getPassword())) {
+            log.error("[패스워드 변경] 비밀번호가 틀립니다.");
+            throw new UserBadRequestException(UserExceptionMessage.PASSWORD_INCORRECT.getMsg());
+        }
+
+        // 2. 새로 작성한 비밀번호와 현재 비밀번호가 상이한가
+        if(reqDto.getPassword().equals(newPassword)) {
+            log.error("[패스워드 변경] 현재 비밀번호와 다른 비밀번호를 입력해야 합니다.");
+            throw new UserBadRequestException(UserExceptionMessage.PASSWORD_MUST_BE_DIFFERENT.getMsg());
+        }
+
+        // 3. 새로 작성한 비밀번호가 정규식에 부합하는가
+        if(!checkPasswordRegex(newPassword)) {
+            log.error("[패스워드 변경] 새로운 비밀번호는 8~16자 이내의 영문, 숫자, 특수문자를 포함해야 합니다.");
+            throw new UserBadRequestException(UserExceptionMessage.PASSWORD_NOT_MATCH_REGEX.getMsg());
+        }
+
+        // 4. 새로 작성한 비밀번호와 확인용이 일치하는가
+        if(!newPassword.equals(reqDto.getNewPasswordCheck())) {
+            log.error("[패스워드 변경] 비밀번호 확인이 일치하지 않습니다.");
+            throw new UserBadRequestException(UserExceptionMessage.PASSWORD_INCORRECT.getMsg());
+        }
+
+        log.info("[패스워드 변경] 패스워드 변경 가능!");
+        loginUser.updatePassword(newPassword);
+        userRepository.save(loginUser);
+
+        log.info("[패스워드 변경] 변경 완료 -----------------------------");
     }
 
     @Override
     public void withdraw(String token) {
+        Long userId = getLoginUserId(token);
+        log.info("[회원탈퇴] 회원탈퇴 요청 : {}", userId);
 
+        // 서비스 전 비밀번호 체크
+        
+        Users loginUser = getLoginUser(userId);
+        loginUser.delete();
+        userRepository.save(loginUser);
+        
+        log.info("[회원탈퇴] 탈퇴 완료");
     }
 
     @Override
     public Boolean checkPassword(String token, PasswordDto passwordDto) {
-        return null;
+        Long userId = getLoginUserId(token);
+        log.info("[서비스 전 비밀번호 체크] 비밀번호 체크 요청 : {}", userId);
+
+        return passwordEncoder.matches(passwordDto.getPassword(), getLoginUser(userId).getPassword());
     }
 
     @Override
