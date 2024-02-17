@@ -49,4 +49,8 @@ public class Users extends BaseTime {
         this.profile = profile == null ? this.profile : profile;
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
 }
