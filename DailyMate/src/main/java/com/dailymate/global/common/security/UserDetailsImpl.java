@@ -1,8 +1,10 @@
 package com.dailymate.global.common.security;
 
 import com.dailymate.domain.user.constant.UserType;
+import com.dailymate.domain.user.domain.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,12 +16,21 @@ import java.util.List;
 /**
  * Spring Security에서 사용자의 정보를 담는 인터페이스를 구현한 클래스
  */
-@Builder
-@AllArgsConstructor
+//@Builder
+//@AllArgsConstructor
+@Data
 public class UserDetailsImpl implements UserDetails {
 
-    private String email; // username
-    private String authority;
+//    private Long userId;
+//    private String email; // username
+//    private String password;
+//    private String authority;
+
+    private final Users user;
+
+    public UserDetailsImpl(Users user) {
+        this.user = user;
+    }
 
 //    @ElementCollection(fetch = FetchType.EAGER)
 //    @Builder.Default
@@ -39,6 +50,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> auth = new ArrayList<>();
+        String authority = user.getType().getRole();
 
         if(authority.equals(UserType.ROLE_ADMIN.getRole()))
             authority = "ROLE_ADMIN";
@@ -54,7 +66,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
 
     /**
@@ -63,7 +75,7 @@ public class UserDetailsImpl implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return email;
+        return user.getEmail();
     }
 
     /**
