@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@Setter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -27,13 +26,20 @@ public class Todo extends BaseTime {
 	@NotNull
 	private String date;
 	@NotNull
-	private Integer order;
+	private Integer todoOrder;
 	@NotNull
 	private Boolean done;
+
+	@NotNull
+	private Integer repeat;
 
 
 	public void updateTodo(String content, String date){
 		this.content = content == null ? this.content : content;
 		this.date = date == null ? this.date : date;
+	}
+
+	public void toggleDone(){
+		this.done = !this.done;
 	}
 }

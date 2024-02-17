@@ -11,4 +11,6 @@ public class TodoReqDto {
 	private String date;
 	private Integer order;
 	private Boolean done;
+
+	private Integer repeat;
 }

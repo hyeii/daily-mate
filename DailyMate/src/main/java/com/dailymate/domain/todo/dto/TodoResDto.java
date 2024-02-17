@@ -24,7 +24,7 @@ public class TodoResDto {
 				.userId(todo.getUserId())
 				.content(todo.getContent())
 				.date(todo.getDate())
-				.order(todo.getOrder())
+				.order(todo.getTodoOrder())
 				.done(todo.getDone())
 				.createdAt(todo.getCreatedAt())
 				.updatedAt(todo.getUpdatedAt())

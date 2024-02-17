@@ -1,5 +1,6 @@
 package com.dailymate.domain.todo.service;
 
+import com.dailymate.domain.todo.dto.AddTodoReqDto;
 import com.dailymate.domain.todo.dto.TodoReqDto;
 import com.dailymate.domain.todo.dto.TodoResDto;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface TodoService {
 
-	void addTodo(TodoReqDto todoReqDto);
+	void addTodo(AddTodoReqDto addTodoReqDto);
 	TodoResDto updateTodo(Long todoId, Long userId, TodoReqDto todoReqDto);
 	void deleteTodo(Long todoId, Long userId);
 

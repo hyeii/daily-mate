@@ -1,5 +1,6 @@
 package com.dailymate.domain.todo.api;
 
+import com.dailymate.domain.todo.dto.AddTodoReqDto;
 import com.dailymate.domain.todo.dto.TodoReqDto;
 import com.dailymate.domain.todo.dto.TodoResDto;
 import com.dailymate.domain.todo.service.TodoService;
@@ -24,7 +25,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일을 등록합니다."
 	)
 	@PostMapping
-	public ResponseEntity<MessageDto> addTodo(@RequestBody TodoReqDto reqDto){
+	public ResponseEntity<MessageDto> addTodo(@RequestBody AddTodoReqDto reqDto){
 		todoService.addTodo(reqDto);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(MessageDto.message("CREATE SUCCESS"));

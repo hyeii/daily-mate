@@ -2,6 +2,7 @@ package com.dailymate.domain.todo.service;
 
 import com.dailymate.domain.todo.dao.TodoRepository;
 import com.dailymate.domain.todo.domain.Todo;
+import com.dailymate.domain.todo.dto.AddTodoReqDto;
 import com.dailymate.domain.todo.dto.TodoReqDto;
 import com.dailymate.domain.todo.dto.TodoResDto;
 import com.dailymate.domain.todo.exception.TodoExceptionMessage;
@@ -25,18 +26,25 @@ public class TodoServiceImpl implements TodoService {
 	private final TodoRepository todoRepository;
 
 	@Override
-	public void addTodo(TodoReqDto todoReqDto) {
+	public void addTodo(AddTodoReqDto addTodoReqDto) {
 		log.info("[할일 등록] 할일 등록 요청");
+		LocalDate today = LocalDate.now();
+		for(int i = 0; i < addTodoReqDto.getRepeat(); i++){
 
-		Todo todo = Todo.builder()
-				.userId(1L)
-				.content(todoReqDto.getContent())
-				.date(todoReqDto.getDate())
-				.order(todoReqDto.getOrder())
-				.done(todoReqDto.getDone())
-				.build();
+			String todayString = today.plusDays(i).toString();
 
-		todoRepository.save(todo);
+			Todo todo = Todo.builder()
+					.userId(1L)
+					.content(addTodoReqDto.getContent())
+					.date(todayString)
+					.todoOrder(0)
+					.done(false)
+					.repeat(addTodoReqDto.getRepeat())
+					.build();
+
+			todoRepository.save(todo);
+		}
+
 
 		log.info("[할일 등록] 할일 등록 완료");
 	}
@@ -125,7 +133,7 @@ public class TodoServiceImpl implements TodoService {
 		Todo postponedTodo = Todo.builder()
 				.content(todo.getContent())
 				.date(postponedDate.toString()) // LocalDate를 문자열로 변환하여 저장
-				.order(todo.getOrder())
+				.todoOrder(todo.getTodoOrder())
 				.done(todo.getDone())
 				.userId(todo.getUserId())
 				.build();
@@ -217,7 +225,7 @@ public class TodoServiceImpl implements TodoService {
 			throw new TodoForbiddenException("[UPDATE_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}
 
-		todo.setDone(!todo.getDone());
+		todo.toggleDone();
 		todoRepository.save(todo);
 
 		log.info("[할일 완료 체크] 할일 완료. todoId : {}", todoId);
