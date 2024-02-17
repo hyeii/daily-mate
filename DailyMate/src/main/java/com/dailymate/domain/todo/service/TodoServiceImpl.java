@@ -29,6 +29,7 @@ public class TodoServiceImpl implements TodoService {
 		log.info("[할일 등록] 할일 등록 요청");
 
 		Todo todo = Todo.builder()
+				.userId(1L)
 				.content(todoReqDto.getContent())
 				.date(todoReqDto.getDate())
 				.order(todoReqDto.getOrder())
