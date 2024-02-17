@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class DiaryController {
 
+    private final String ACCESS_TOKEN = "authorization";
     private final DiaryService diaryService;
 
     @Operation(
@@ -29,10 +30,11 @@ public class DiaryController {
     )
     @PostMapping(consumes = {"multipart/form-data"}, produces = {"application/json"})
     public ResponseEntity<MessageDto> addDiary(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
             @RequestPart(value = "diaryReqDto") DiaryReqDto diaryReqDto,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
-        diaryService.addDiary(diaryReqDto, image);
+        diaryService.addDiary(accessToken, diaryReqDto, image);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(MessageDto.message("일기를 등록했습니다."));
@@ -44,11 +46,12 @@ public class DiaryController {
     )
     @PatchMapping(value = "/{diaryId}")
     public ResponseEntity<MessageDto> updateDiary(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
             @PathVariable Long diaryId,
             @RequestPart(value = "diaryReqDto") DiaryReqDto diaryReqDto,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
-        diaryService.updateDiary(diaryId, diaryReqDto, image);
+        diaryService.updateDiary(accessToken, diaryId, diaryReqDto, image);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("일기를 수정했습니다."));
@@ -59,8 +62,10 @@ public class DiaryController {
             description = "일기를 삭제합니다."
     )
     @DeleteMapping("/{diaryId}")
-    public ResponseEntity<MessageDto> deleteDiary(@PathVariable Long diaryId) {
-        diaryService.deleteDiary(diaryId);
+    public ResponseEntity<MessageDto> deleteDiary(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @PathVariable Long diaryId) {
+        diaryService.deleteDiary(accessToken, diaryId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("일기를 삭제했습니다."));
     }
@@ -70,8 +75,10 @@ public class DiaryController {
             description = "좋아요 상태를 변경합니다."
     )
     @PostMapping("/like/{diaryId}")
-    public ResponseEntity<MessageDto> likeDiary(@PathVariable Long diaryId) {
-        diaryService.likeDiary(diaryId, 1l);
+    public ResponseEntity<MessageDto> likeDiary(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @PathVariable Long diaryId) {
+        diaryService.likeDiary(accessToken, diaryId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("좋아요 상태를 변경했습니다."));
     }
@@ -81,21 +88,23 @@ public class DiaryController {
             description = "해당 날짜의 일기를 조회합니다."
     )
     @GetMapping("/date")
-    public ResponseEntity<DiaryResDto> findDiary(@RequestParam("date") String date) {
+    public ResponseEntity<DiaryResDto> findDiary(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @RequestParam("date") String date) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(diaryService.findDiary(date, 1l));
+                .body(diaryService.findDiary(accessToken, date));
     }
 
     @Operation(
             summary = "일기 조회 (월별)",
             description = "당월 일기를 조회합니다."
     )
-    @GetMapping("/{userId}/month")
+    @GetMapping("/month")
     public ResponseEntity<DiaryMonthlyResDto[]> findDiaryByMonth(
-            @PathVariable Long userId,
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
             @RequestParam String date) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(diaryService.findDiaryByMonth(date, userId));
+                .body(diaryService.findDiaryByMonth(accessToken, date));
     }
 
     @Operation(
@@ -104,10 +113,10 @@ public class DiaryController {
     )
     @GetMapping("/friend/{diaryId}")
     public ResponseEntity<DiaryResDto> findFriendDiary(
-            @PathVariable("diaryId") Long diaryId,
-            @RequestParam("userId") Long userId) {
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @PathVariable("diaryId") Long diaryId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(diaryService.findFriendDiary(diaryId, userId));
+                .body(diaryService.findFriendDiary(accessToken, diaryId));
     }
 
     @Operation(
@@ -116,9 +125,10 @@ public class DiaryController {
     )
     @GetMapping("/friend/{userId}/month")
     public ResponseEntity<DiaryMonthlyResDto[]> findFriendDiaryByMonth(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
             @PathVariable Long userId,
             @RequestParam String date) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(diaryService.findFriendDiaryByMonth(date, 1l, userId));
+                .body(diaryService.findFriendDiaryByMonth(accessToken, date, userId));
     }
 }

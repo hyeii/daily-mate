@@ -15,6 +15,5 @@ public class DiaryReqDto {
     private String weather;
     private String feeling;
     private String openType;
-//    @JsonIgnore
-    private Long userId;
+
 }

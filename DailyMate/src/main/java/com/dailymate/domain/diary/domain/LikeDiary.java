@@ -1,6 +1,6 @@
 package com.dailymate.domain.diary.domain;
 
-import com.dailymate.domain.user.Users;
+import com.dailymate.domain.user.domain.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -10,9 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CommentReqDto {
 
-//    @JsonIgnore
-    private Long userId;
-//    @JsonIgnore
-    private Long diaryId;
     private String content;
 }

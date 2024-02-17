@@ -11,7 +11,6 @@ public enum DiaryExceptionMessage {
     DIARY_NOT_FOUND("일기가 존재하지 않습니다."),
     DIARY_ALREADY_DELETED("이미 삭제된 일기입니다."),
     DIARY_ALREADY_EXIST("해당 날짜에 일기가 존재합니다."),
-    USER_NOT_FOUND("사용자가 존재하지 않습니다."),
     DIARY_HANDLE_ACCESS_DENIED("권한이 없습니다.");
 
     private String msg;

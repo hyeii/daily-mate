@@ -18,9 +18,9 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-application-s3.yml
-application-mariaDb.yml
-application-jwt.yml
+!**/src/main/resources/application-s3.yml
+!**/src/main/resources/application-mariaDb.yml
+!**/src/main/resources/application-jwt.yml
 ### 유녕도 추가함
 
 .idea

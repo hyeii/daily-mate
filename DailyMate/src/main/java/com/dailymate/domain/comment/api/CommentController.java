@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class CommentController {
 
+    private final String ACCESS_TOKEN = "authorization";
     private final CommentService commentService;
 
     @Operation(
@@ -26,11 +27,11 @@ public class CommentController {
     )
     @PostMapping("/{diaryId}")
     public ResponseEntity<MessageDto> addComment(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
             @PathVariable Long diaryId,
             @RequestBody CommentReqDto commentReqDto) {
 
-        // userId (!!!)
-        commentService.addComment(commentReqDto, diaryId, 1l);
+        commentService.addComment(accessToken, commentReqDto, diaryId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(MessageDto.message("댓글을 작성했습니다."));

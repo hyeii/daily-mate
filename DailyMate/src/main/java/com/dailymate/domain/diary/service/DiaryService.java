@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface DiaryService {
 
-    void addDiary(DiaryReqDto diaryReqDto, MultipartFile image);
-    void updateDiary(Long diaryId, DiaryReqDto diaryReqDto, MultipartFile image);
-    void deleteDiary(Long diaryId);
-    void likeDiary(Long diaryId, Long userId);
-    DiaryResDto findDiary(String date, Long userId);
-    DiaryMonthlyResDto[] findDiaryByMonth(String date, Long userId);
-    DiaryResDto findFriendDiary(Long diaryId, Long userId);
-    DiaryMonthlyResDto[] findFriendDiaryByMonth(String date, Long userId, Long friendId);
+    void addDiary(String accessToken, DiaryReqDto diaryReqDto, MultipartFile image);
+    void updateDiary(String accessToken, Long diaryId, DiaryReqDto diaryReqDto, MultipartFile image);
+    void deleteDiary(String accessToken, Long diaryId);
+    void likeDiary(String accessToken, Long diaryId);
+    DiaryResDto findDiary(String accessToken, String date);
+    DiaryMonthlyResDto[] findDiaryByMonth(String accessToken, String date);
+    DiaryResDto findFriendDiary(String accessToken, Long diaryId);
+    DiaryMonthlyResDto[] findFriendDiaryByMonth(String accessToken, String date, Long friendId);
 }

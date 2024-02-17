@@ -4,5 +4,5 @@ import com.dailymate.domain.comment.dto.CommentReqDto;
 
 public interface CommentService {
 
-    void addComment(CommentReqDto commentReqDto, Long diaryId, Long userId);
+    void addComment(String accessToken, CommentReqDto commentReqDto, Long diaryId);
 }

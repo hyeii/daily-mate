@@ -2,7 +2,7 @@ package com.dailymate.domain.comment.domain;
 
 import com.dailymate.domain.comment.dto.CommentReqDto;
 import com.dailymate.domain.diary.domain.Diary;
-import com.dailymate.domain.user.Users;
+import com.dailymate.domain.user.domain.Users;
 import com.dailymate.global.common.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
