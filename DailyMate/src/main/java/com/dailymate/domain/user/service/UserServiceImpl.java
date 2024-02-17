@@ -14,7 +14,6 @@ import com.dailymate.domain.user.exception.UserNotFoundException;
 import com.dailymate.global.common.jwt.JwtTokenDto;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
-import com.dailymate.global.common.util.SecurityUtil;
 import com.dailymate.global.exception.exception.NotFoundException;
 import com.dailymate.global.exception.exception.TokenException;
 import com.dailymate.global.exception.exception.TokenExceptionMessage;
@@ -45,8 +44,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
-
-    private final SecurityUtil securityUtil;
 
     @Transactional
     @Override
@@ -180,13 +177,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MyInfoDto findMyInfo(String accessToken) {
-        String email = jwtTokenProvider.getAuthentication(accessToken).getName();
-        log.info("[내 정보 조회] 조회 요청 : {}", email);
+        Long userId = getLoginUserId(accessToken);
+        log.info("[내 정보 조회] 조회 요청 {}", userId);
 
-        Users user = getLoginUser(accessToken);
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.error("[내 정보 조회] 사용자를 찾을 수 없습니다.");
+                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
+                });
 
         return MyInfoDto.builder()
-                .email(email)
+                .email(user.getEmail())
                 .nickname(user.getNickname())
                 .image(user.getImage())
                 .profile(user.getProfile())
@@ -302,23 +303,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Access Token으로 로그인 유저 반환
+     * accessToken을 이용하여 로그인 사용자의 userId를 추출
      */
-    private Users getLoginUser(String accessToken) {
-        String email = jwtTokenProvider.getAuthentication(accessToken).getName();
-        String loginEmail = securityUtil.getCurrentUserEmail();
-
-//        if(!loginEmail.equals(email)) {
-//            log.error("[로그인 유저 반환] 로그인 사용자와 토큰 정보가 일치하지 않음");
-//            throw new UserNotFoundException("이상해");
-//        }
-
-        Users loginUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> {
-                    log.error("[로그인 유저 반환] 로그인 유저를 찾을 수 없습니다.");
-                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
-                });
-
-        return loginUser;
+    private Long getLoginUserId(String accessToken) {
+        return jwtTokenProvider.getUserId(accessToken);
     }
 }
