@@ -1,6 +1,7 @@
 package com.dailymate.global.common.jwt;
 
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
+import com.dailymate.global.common.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -16,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -44,7 +44,6 @@ public class JwtTokenProvider {
      */
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-//        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -57,11 +56,16 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        // 권한에서 유저 정보 가져오기
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        log.info("[generateToken] UserDetailsImpl 변환 성공 !! {} : {}", userPrincipal.getUserId(), userPrincipal.getUsername());
+
         long now = (new Date()).getTime();
 
         // accessToken 생성 - 인증된 사용자의 권한 정보와 만료 시간을 담고 있음
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())                       // payload "sub": "name"
+                .claim("userId", userPrincipal.getUserId())           // userId를 뽑아오기 위해 저장 추가!!!!
                 .claim(AUTHORITIES_KEY, authorities)                        // payload "auth": "ROLE_USER"
                 .setExpiration(new Date(now + JwtTokenExpiration.ACCESS_TOKEN_EXPIRATION_TIME.getTime()))    // payload "exp": 151621022(ex)
                 .signWith(key, SignatureAlgorithm.HS256)                    // header "alg": "HS256"
@@ -87,8 +91,6 @@ public class JwtTokenProvider {
      * 위의 메서드와 암호화 <-> 복호화로 생각
      */
     public Authentication getAuthentication(String accessToken) { // Bearer 토큰형태
-//        if(accessToken.startsWith("Bearer"))
-//            accessToken = accessToken.substring(7);
         accessToken = resolveToken(accessToken);
 
         // JWT 토큰 복호화
@@ -109,6 +111,21 @@ public class JwtTokenProvider {
         log.info("principal : {}", principal);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+    }
+
+    /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 userId를 추출함
+     */
+    public Long getUserId(String accessToken) {
+        accessToken = resolveToken(accessToken);
+        
+        Claims claims = parseClaims(accessToken);
+        if(claims.get(AUTHORITIES_KEY) == null) {
+            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+        }
+
+        log.info("[getUserId] userId : {}", claims.get("userId"));
+        return (long) (int) claims.get("userId");
     }
 
     /**
@@ -162,7 +179,6 @@ public class JwtTokenProvider {
      */
     private String resolveToken(String bearerToken) {
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            log.info("[resolveToken] 제대로된 토큰형태");
             return bearerToken.substring(7);
         }
 
