@@ -50,6 +50,20 @@ public class JwtTokenProvider {
     }
 
     /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 userId를 추출함
+     */
+    public Long getUserId(String accessToken) {
+        return (long) (int) parseClaims(resolveToken(accessToken)).get("userId");
+    }
+
+    /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 email을 추출함
+     */
+    public String getUserEmail(String accessToken) {
+        return parseClaims(resolveToken(accessToken)).getSubject();
+    }
+
+    /**
      * 유저 정보를 가지고 토큰을 생성하는 메서드
      */
     public JwtTokenDto generateToken(Authentication authentication) {
@@ -118,21 +132,6 @@ public class JwtTokenProvider {
         log.info("===========================================");
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-    }
-
-    /**
-     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 userId를 추출함
-     */
-    public Long getUserId(String accessToken) {
-        accessToken = resolveToken(accessToken);
-        
-        Claims claims = parseClaims(accessToken);
-        if(claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-        log.info("[getUserId] userId : {}", claims.get("userId"));
-        return (long) (int) claims.get("userId");
     }
 
     /**
