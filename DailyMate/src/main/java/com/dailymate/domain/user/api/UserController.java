@@ -1,6 +1,7 @@
 package com.dailymate.domain.user.api;
 
 import com.dailymate.domain.user.dto.request.LogInReqDto;
+import com.dailymate.domain.user.dto.request.UpdateUserReqDto;
 import com.dailymate.domain.user.dto.response.LogInResDto;
 import com.dailymate.domain.user.dto.request.SignUpReqDto;
 import com.dailymate.domain.user.dto.response.MyInfoDto;
@@ -74,8 +75,18 @@ public class UserController {
             description = "로그인 사용자의 기본 정보를 조회합니다."
     )
     @GetMapping()
-    public ResponseEntity<MyInfoDto> findMyInfo(@RequestHeader(ACCESS_TOKEN) String accessToken) {
-        return ResponseEntity.ok(userService.findMyInfo(accessToken));
+    public ResponseEntity<MyInfoDto> findMyInfo(@RequestHeader(ACCESS_TOKEN) String token) {
+        return ResponseEntity.ok(userService.findMyInfo(token));
+    }
+
+    @Operation(
+            summary = "내 정보 수정",
+            description = "로그인 사용자의 정보를 수정합니다."
+    )
+    @PatchMapping
+    public ResponseEntity<MessageDto> updateUser(@RequestHeader(ACCESS_TOKEN) String token, UpdateUserReqDto reqDto) {
+        userService.updateUser(token, reqDto);
+        return ResponseEntity.ok(MessageDto.message("UPDATE SUCCESS"));
     }
 
 }
