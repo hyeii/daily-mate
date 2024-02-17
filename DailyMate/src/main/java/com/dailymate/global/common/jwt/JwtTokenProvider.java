@@ -2,6 +2,7 @@ package com.dailymate.global.common.jwt;
 
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
 import com.dailymate.global.common.security.UserDetailsImpl;
+import com.dailymate.global.common.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -38,11 +38,13 @@ public class JwtTokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private final Key key;
+    private final UserDetailsServiceImpl userDetailsService;
 
     /**
      * application.yml에서 secret값 가져와서 key에 저장
      */
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -110,7 +112,8 @@ public class JwtTokenProvider {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+//        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject()); // UserDetails를 UserDetailsImpl로 가져와야 나중에 캐스팅해서 userId를 뽑아올 수 있음,,
         log.info("principal : {}", principal);
         log.info("===========================================");
 
