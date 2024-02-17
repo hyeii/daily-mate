@@ -4,6 +4,7 @@ import com.dailymate.global.common.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,7 +38,10 @@ public class SecurityUtil {
             throw new RuntimeException("Security Context에 인증 정보가 없습니다.");
         }
 
-//        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        UserDetailsImpl principalImpl = (UserDetailsImpl) principal;
+        log.info("principalImpl : {}", principalImpl);
+
         log.info("authentication.getName() : {}", authentication.getName());
 
         return authentication.getName();

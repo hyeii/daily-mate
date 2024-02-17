@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
-//    private final SecurityUtil securityUtil;
+    private final SecurityUtil securityUtil;
 
     @Transactional
     @Override
@@ -306,7 +306,7 @@ public class UserServiceImpl implements UserService {
      */
     private Users getLoginUser(String accessToken) {
         String email = jwtTokenProvider.getAuthentication(accessToken).getName();
-//        String loginEmail = securityUtil.getCurrentUserEmail();
+        String loginEmail = securityUtil.getCurrentUserEmail();
 
 //        if(!loginEmail.equals(email)) {
 //            log.error("[로그인 유저 반환] 로그인 사용자와 토큰 정보가 일치하지 않음");
