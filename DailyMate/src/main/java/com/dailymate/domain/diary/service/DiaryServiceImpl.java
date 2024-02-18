@@ -184,10 +184,6 @@ public class DiaryServiceImpl implements DiaryService {
         Users user = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
                 .orElseThrow(() -> new UserNotFoundException("[LIKE_DIARY] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
 
-        // 친구 관계 확인(!!!)
-
-        // 공개 여부 확인(!!!)
-
         // 복합키 생성
         LikeDiaryKey key = LikeDiaryKey.createKey(user.getUserId(), diaryId);
 

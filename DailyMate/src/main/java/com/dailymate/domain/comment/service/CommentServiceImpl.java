@@ -3,6 +3,8 @@ package com.dailymate.domain.comment.service;
 import com.dailymate.domain.comment.dao.CommentRepository;
 import com.dailymate.domain.comment.dao.LikeCommentRepository;
 import com.dailymate.domain.comment.domain.Comment;
+import com.dailymate.domain.comment.domain.LikeComment;
+import com.dailymate.domain.comment.domain.LikeCommentKey;
 import com.dailymate.domain.comment.dto.CommentReqDto;
 import com.dailymate.domain.comment.exception.CommentBadRequestException;
 import com.dailymate.domain.comment.exception.CommentExceptionMessage;
@@ -22,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -120,8 +124,41 @@ public class CommentServiceImpl implements CommentService {
             throw new CommentForbiddenException("[DELETE_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
         }
 
-        // 댓글 좋아요 삭제(!!!)
+        // 댓글 좋아요 삭제
+        likeCommentRepository.deleteAllByComment(comment);
 
         comment.delete();
+    }
+
+    @Override
+    public void likeComment(String accessToken, Long commentId) {
+
+        // 입력값 확인
+        if(accessToken == null) {
+            throw new CommentBadRequestException("[LIKE_COMMENT] " + CommentExceptionMessage.COMMENT_BAD_REQUEST.getMsg());
+        }
+
+        // 사용자 확인
+        Users user = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
+                .orElseThrow(() -> new UserNotFoundException("[LIKE_COMMENT] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 댓글 확인
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("[LIKE_COMMENT] " + CommentExceptionMessage.COMMENT_NOT_FOUND.getMsg()));
+
+        // 복합키 생성
+        LikeCommentKey key = LikeCommentKey.createKey(user.getUserId(), commentId);
+
+        // 좋아요 토글
+        Optional<LikeComment> likeComment = likeCommentRepository.findById(key);
+
+        if(likeComment.isPresent()) {
+            likeCommentRepository.delete(likeComment.get());
+        } else {
+            likeCommentRepository.save(LikeComment.builder()
+                    .user(user)
+                    .comment(comment)
+                    .build());
+        }
     }
 }

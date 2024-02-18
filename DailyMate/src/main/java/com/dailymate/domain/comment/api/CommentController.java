@@ -67,4 +67,19 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("댓글을 삭제했습니다."));
     }
+
+    @Operation(
+            summary = "댓글 좋아요",
+            description = "댓글 좋아요 상태를 변경합니다."
+    )
+    @PostMapping("/like/{commentId}")
+    public ResponseEntity<MessageDto> likeComment(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @PathVariable Long commentId) {
+
+        commentService.likeComment(accessToken, commentId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(MessageDto.message("댓글 좋아요 상태를 변경했습니다."));
+    }
 }
