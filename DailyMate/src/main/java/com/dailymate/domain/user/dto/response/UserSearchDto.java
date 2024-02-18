@@ -14,6 +14,7 @@ public class UserSearchDto {
     private String image;
     private String profile;
     private String status; // 친구상태
+    private String requestDate; // 친구요청일자
 
     public static UserSearchDto entityToDto(Users user) {
         return UserSearchDto.builder()
@@ -23,6 +24,7 @@ public class UserSearchDto {
                 .image(user.getImage())
                 .profile(user.getProfile())
                 .status(null)
+                .requestDate(null)
                 .build();
     }
 
