@@ -19,4 +19,8 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     Boolean existsByEmail(String email); // 이메일 중복검사
     Boolean existsByNickname(String nickname); // 닉네임 중복검사
 
+
+    // 친구 신청 메서드에서 탈퇴한 회원인지 체크하기 위함
+    Boolean existsByUserId(Long userId);
+
 }
