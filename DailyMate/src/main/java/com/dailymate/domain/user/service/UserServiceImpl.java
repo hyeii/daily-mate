@@ -20,6 +20,7 @@ import com.dailymate.global.common.redis.RedisUtil;
 import com.dailymate.global.exception.exception.NotFoundException;
 import com.dailymate.global.exception.exception.TokenException;
 import com.dailymate.global.exception.exception.TokenExceptionMessage;
+import com.dailymate.global.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,14 +41,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final RedisUtil redisUtil;
+    private final ImageService imageService;
 
+    /**
+     * 회원가입
+     */
     @Transactional
     @Override
     public void signUp(SignUpReqDto reqDto) {
@@ -101,6 +105,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByNickname(nickname);
     }
 
+    /**
+     * 로그인
+     */
     @Transactional
     @Override
     public LogInResDto logIn(LogInReqDto reqDto) {
@@ -145,6 +152,9 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    /**
+     * 토큰 재발급
+     */
     @Transactional
     @Override
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
@@ -184,6 +194,9 @@ public class UserServiceImpl implements UserService {
         return tokenDto;
     }
 
+    /**
+     * 내 정보 조회
+     */
     @Override
     public MyInfoDto findMyInfo(String token) {
         Long userId = getLoginUserId(token);
@@ -199,6 +212,9 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    /**
+     * 내 정보 수정
+     */
     @Transactional
     @Override
     public void updateUser(String token, UpdateUserReqDto reqDto) {
@@ -216,6 +232,9 @@ public class UserServiceImpl implements UserService {
         log.info("[내 정보 수정] 정보 수정 완료. -----------------------------");
     }
 
+    /**
+     * 비밀번호 변경
+     */
     @Transactional
     @Override
     public void updatePassword(String token, UpdatePasswordReqDto reqDto) {
@@ -256,6 +275,9 @@ public class UserServiceImpl implements UserService {
         log.info("[패스워드 변경] 변경 완료 -----------------------------");
     }
 
+    /**
+     * 회원탈퇴
+     */
     @Transactional
     @Override
     public void withdraw(String token) {
@@ -273,6 +295,9 @@ public class UserServiceImpl implements UserService {
         // 로그아웃 추가??
     }
 
+    /**
+     * 서비스 전 비밀번호 체크
+     */
     @Override
     public Boolean checkPassword(String token, PasswordDto passwordDto) {
         Long userId = getLoginUserId(token);
@@ -281,6 +306,9 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(passwordDto.getPassword(), getLoginUser(userId).getPassword());
     }
 
+    /**
+     * 로그아웃
+     */
     @Transactional
     @Override
     public void logout(String token) {
