@@ -52,4 +52,19 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("댓글을 수정했습니다."));
     }
+
+    @Operation(
+            summary = "댓글 삭제",
+            description = "댓글을 삭제합니다."
+    )
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<MessageDto> deleteComment(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @PathVariable Long commentId) {
+
+        commentService.deleteComment(accessToken, commentId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(MessageDto.message("댓글을 삭제했습니다."));
+    }
 }

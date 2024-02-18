@@ -57,17 +57,6 @@ public class CommentServiceImpl implements CommentService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new DiaryNotFoundException("[ADD_COMMENT] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
 
-        // 공개여부 및 친구여부 확인(!!!)
-        boolean isFriend = true;
-
-        if(!isFriend && diary.getOpenType().getValue() == "친구공개") {
-            throw new CommentForbiddenException("[ADD_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
-        }
-
-        if(diary.getOpenType().getValue() == "비공개") {
-            throw new CommentForbiddenException("[ADD_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
-        }
-
         Comment comment = Comment.createComment(commentReqDto, diary, user);
 
         commentRepository.save(comment);
@@ -102,5 +91,37 @@ public class CommentServiceImpl implements CommentService {
         }
 
         comment.updateContent(commentReqDto.getContent());
+    }
+
+    /**
+     * 댓글 삭제
+     * @param accessToken String
+     * @param commentId Long
+     */
+    @Override
+    @Transactional
+    public void deleteComment(String accessToken, Long commentId) {
+
+        // 입력값 확인
+        if(accessToken == null) {
+            throw new CommentBadRequestException("[DELETE_COMMENT] " + CommentExceptionMessage.COMMENT_BAD_REQUEST.getMsg());
+        }
+
+        // 사용자 확인
+        Users user = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
+                .orElseThrow(() -> new UserNotFoundException("[DELETE_COMMENT] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 댓글 확인
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("[DELETE_COMMENT] " + CommentExceptionMessage.COMMENT_NOT_FOUND.getMsg()));
+
+        // 사용자와 댓글 작성자 확인
+        if(user != comment.getUsers()) {
+            throw new CommentForbiddenException("[DELETE_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
+        }
+
+        // 댓글 좋아요 삭제(!!!)
+
+        comment.delete();
     }
 }
