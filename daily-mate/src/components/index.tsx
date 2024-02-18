@@ -4,7 +4,7 @@ import DiaryMonthlyPage from "./diary/DiaryMonthlyPage";
 import DiaryDailyPage from "./diary/DiaryDailyPage";
 import DiaryWritePage from "./diary/DiaryWritePage";
 import FriendsListPage from "./friends/FriendsListPage";
-import SearchPage from "./friends/SearchPage";
+import SearchPage from "./search/SearchPage";
 import MainPage from "./main/MainPage";
 import ProfilePage from "./mypage/ProfilePage";
 import UpdateInfoPage from "./mypage/UpdateInfoPage";
@@ -13,6 +13,7 @@ import NotificationPage from "./notifications/NotificationPage";
 import TodoPage from "./todo/TodoPage";
 import SideBar from "./sidebar/SideBar";
 import AccountPage from "./account/AccountPage";
+import KakaoRedirectPage from "./auth/KakaoRedirectPage";
 export {
   SignInPage,
   SignUpPage,
@@ -29,4 +30,5 @@ export {
   NotificationPage,
   SideBar,
   TodoPage,
+  KakaoRedirectPage,
 };

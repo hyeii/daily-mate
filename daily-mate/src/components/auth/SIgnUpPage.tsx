@@ -79,14 +79,16 @@ const SignUpPage = () => {
   };
 
   useEffect(() => {
-    // 비밀번호 정규식. 최소 하나 이상의 영문자(대소문자 구분 X), 최소 하나 이상의 숫자 및 특수문자
+    // 비밀번호 정규식. 최소 하나 이상의 영문자(대소문자 구분 X), 최소 하나 이상의 숫자 및 특수문자, 8자 이상 16자 이하
     const regPassword =
-      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
     if (regPassword.test(inputPassword)) {
       setRegPasswordMessage("사용 가능한 비밀번호입니다.");
       setRegPasswordValue(true);
     } else {
-      setRegPasswordMessage("8자 이상, 영문자, 숫자, 특수문자를 포함해주세요");
+      setRegPasswordMessage(
+        "8자 ~ 16자, 영문자, 숫자, 특수문자를 포함해주세요"
+      );
       setRegPasswordValue(false);
     }
 

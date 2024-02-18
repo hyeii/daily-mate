@@ -7,6 +7,8 @@ import {
 } from "../../atoms/accountAtom";
 import { accountByDateResponse, accountRequest } from "../../types/accountType";
 import { addAccount, modifyAccount } from "../../apis/accountApi";
+import styled from "styled-components";
+import { LuX } from "react-icons/lu";
 
 interface props {
   openType: string;
@@ -24,6 +26,7 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
   const [category, setCategory] = useState<string>(originAccount.category);
   const [content, setContent] = useState<string>(originAccount.content);
   const [ammount, setAmmount] = useState<number>(originAccount.amount);
+  const [addType, setAddType] = useState<string>("out");
 
   const handleDate = (event: ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
@@ -38,16 +41,34 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
   const handleAmmount = (event: ChangeEvent<HTMLInputElement>) => {
     setAmmount(parseInt(event.target.value));
   };
+
+  const handleAddTypeIn = () => {
+    setAddType("in");
+    setCategory("");
+  };
+  const handleAddTypeOut = () => {
+    setAddType("out");
+    if (originAccount.category !== "") setCategory(originAccount.category);
+    else setCategory("식비");
+  };
   const submitAccount = () => {
     // add일때 modify일때 다르게 처리
     // openType="add" :  /account api POST 요청
     // openType="modify" :  /account/{accountId} api PATCH 요청
+    const ammountData = () => {
+      if (addType === "in") {
+        return Math.abs(ammount);
+      } else {
+        return Math.abs(ammount) * -1;
+      }
+    };
     const newAccount: accountRequest = {
       content: content,
       date: date,
-      ammount: ammount,
+      ammount: ammountData(),
       category: category,
     };
+    console.log(newAccount);
     if (openType === "add") {
       addAccount(newAccount);
     }
@@ -70,35 +91,179 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
     });
   };
   return (
-    <div>
-      <h3>가계부작성수정팝업</h3>
-      {openType === "add" ? <h3>작성하기</h3> : <h3>수정하기</h3>}
-      <div onClick={handleCloseModal}>닫기</div>
-      <div>날짜</div>
-      <input
-        type="date"
-        defaultValue={originAccount.date}
-        onChange={handleDate}
-      />
-      <div>카테고리</div>
-      <select defaultValue={category} onChange={handleCategory}>
-        <option value="식비">식비</option>
-        <option value="카페">카페</option>
-        <option value="생활">생활</option>
-        <option value="교통">교통</option>
-        <option value="기타">기타</option>
-      </select>
-      <div>내용</div>
-      <input onChange={handleContent} defaultValue={originAccount.content} />
-      <div>금액</div>
-      <input
-        type="number"
-        onChange={handleAmmount}
-        defaultValue={originAccount.amount}
-      />
-      <div onClick={submitAccount}>완료</div>
-    </div>
+    <ModalBackDrop>
+      <ModalContainer>
+        {openType === "add" ? (
+          <h3 style={{ margin: "5px 0" }}>항목 추가</h3>
+        ) : (
+          <h3 style={{ margin: "5px 0" }}>항목 수정</h3>
+        )}
+        <AddContainer>
+          <div style={{ visibility: "hidden" }}>공백</div>
+          <InOutContainer>
+            <InOutBox type="in" state={addType} onClick={handleAddTypeIn}>
+              수입
+            </InOutBox>
+            <InOutBox type="out" state={addType} onClick={handleAddTypeOut}>
+              지출
+            </InOutBox>
+          </InOutContainer>
+          <AddBox>날짜</AddBox>
+          <AddInput
+            type="date"
+            defaultValue={originAccount.date}
+            onChange={handleDate}
+          />
+
+          <AddBox>카테고리</AddBox>
+          {addType === "out" ? (
+            <AddSelect
+              defaultValue={originAccount.category}
+              key={originAccount.category}
+              onChange={handleCategory}
+            >
+              <option value="식비">식비</option>
+              <option value="카페">카페</option>
+              <option value="생활">생활</option>
+              <option value="교통">교통</option>
+              <option value="기타">기타</option>
+            </AddSelect>
+          ) : (
+            <AddSelect value={""} onChange={handleCategory}>
+              <option value="">수입</option>
+            </AddSelect>
+          )}
+
+          <AddBox>내용</AddBox>
+          <AddInput
+            onChange={handleContent}
+            defaultValue={originAccount.content}
+          />
+
+          <AddBox>금액</AddBox>
+          <AddInput
+            type="number"
+            onChange={handleAmmount}
+            defaultValue={Math.abs(originAccount.amount)}
+          />
+        </AddContainer>
+        <BtnBox>
+          <CompleteBtn onClick={submitAccount}>완료</CompleteBtn>
+        </BtnBox>
+        <CloseBtn size={26} onClick={handleCloseModal}>
+          닫기
+        </CloseBtn>
+      </ModalContainer>
+    </ModalBackDrop>
   );
 };
 
 export default AddAccountModal;
+
+const ModalBackDrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+`;
+
+const ModalContainer = styled.div`
+  padding: 1.5rem 2rem;
+
+  z-index: 999;
+  font-size: 1rem;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background: #ffffff;
+  box-shadow: 0px 0px 15px #000000;
+  border-radius: 30px;
+  width: 450px;
+  height: 350px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const AddContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-row-gap: 0.7rem;
+  height: 230px;
+`;
+
+const AddBox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const AddInput = styled.input`
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+  font-family: "S-CoreDream-3Light";
+`;
+
+const InOutContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+interface InOutProps {
+  type: string;
+  state: string;
+}
+const InOutBox = styled.span<InOutProps>`
+  color: ${({ type, state }) => (type === state ? "#ff6161" : "#afafaf")};
+  font-weight: ${({ type, state }) => (type === state ? "bold" : "default")};
+  cursor: pointer;
+`;
+
+const AddSelect = styled.select`
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(233, 233, 233);
+  font-family: "S-CoreDream-3Light";
+`;
+const BtnBox = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-top: 12px;
+`;
+const CompleteBtn = styled.button`
+  background-color: #ff6161;
+  color: white;
+  border: 0;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 6px 18px;
+  font-family: "S-CoreDream-3Light";
+  transition: transform 0.2s, background-color 0.3s;
+
+  &:hover {
+    background-color: #e45757;
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+`;
+
+const CloseBtn = styled(LuX)`
+  position: absolute;
+  top: 0px;
+  right: -40px;
+  cursor: pointer;
+`;

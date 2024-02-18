@@ -9,9 +9,7 @@ const CalendarDays = ({ isMini }: props) => {
   return (
     <DayTextDiv>
       {date.map((day: string) => (
-        <div key={day}>
-          <div>{day}</div>
-        </div>
+        <DayText key={day}>{day}</DayText>
       ))}
     </DayTextDiv>
   );
@@ -20,7 +18,10 @@ const CalendarDays = ({ isMini }: props) => {
 export default CalendarDays;
 
 const DayTextDiv = styled.div`
-  width: 70%;
   display: flex;
   justify-content: space-around;
+`;
+
+const DayText = styled.div`
+  font-size: 1rem;
 `;
