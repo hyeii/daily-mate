@@ -15,12 +15,12 @@ import com.dailymate.domain.user.exception.UserNotFoundException;
 import com.dailymate.global.common.jwt.JwtTokenDto;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
+import com.dailymate.global.common.redis.RedisUtil;
 import com.dailymate.global.exception.exception.NotFoundException;
 import com.dailymate.global.exception.exception.TokenException;
 import com.dailymate.global.exception.exception.TokenExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final PasswordEncoder passwordEncoder;
-    private final RedisTemplate<String, Object> redisTemplate;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+    private final RedisUtil redisUtil;
 
     @Transactional
     @Override
@@ -268,6 +268,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(loginUser);
         
         log.info("[회원탈퇴] 탈퇴 완료");
+
+        // 로그아웃 추가??
     }
 
     @Override
@@ -281,11 +283,25 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void logout(String token) {
-        Long userId = getLoginUserId(token);
-        log.info("[로그아웃] 로그아웃 요청 : {}", userId);
+        String email = getLoginUserEmail(token);
+        log.info("[로그아웃] 로그아웃 요청 : {}", email);
+
+        Long expirationTime = jwtTokenProvider.getTokenExpirationTime(token);
 
         // 로그아웃 여부를 redis에 넣어서 accessToken이 유효한지 체크
-        
+        if(expirationTime < 0) {
+            log.error("[로그아웃] ACCESS TOKEN이 이미 만료되었습니다.");
+            throw new TokenException(TokenExceptionMessage.TOKEN_EXPIRED_ERROR.getValue());
+        }
+
+        // refresh token 삭제
+        refreshTokenRedisRepository.deleteById(email);
+
+        // redis에 accessToken 사용 못하도록 등록
+        // (로그아웃 요청한 access token이 만료될 때까지 해당 token으로 오는 요청을 막기 위함)
+        redisUtil.setBlackList(token.substring(7), "accessToken", expirationTime);
+
+        log.info("[로그아웃] 로그아웃 완료!");
     }
 
     /**
