@@ -1,6 +1,7 @@
 package com.dailymate.global.common.jwt;
 
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
+import com.dailymate.global.common.redis.RedisUtil;
 import com.dailymate.global.common.security.UserDetailsImpl;
 import com.dailymate.global.common.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
@@ -39,14 +40,17 @@ public class JwtTokenProvider {
     private static final String BEARER_PREFIX = "Bearer ";
     private final Key key;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RedisUtil redisUtil;
 
     /**
      * application.yml에서 secret값 가져와서 key에 저장
      */
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsServiceImpl userDetailsService, RedisUtil redisUtil) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+
+        this.userDetailsService = userDetailsService;
+        this.redisUtil = redisUtil;
     }
 
     /**
@@ -64,6 +68,27 @@ public class JwtTokenProvider {
     }
 
     /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 ROLE을 추출함
+     * 관리자인지 체크하기 위함
+     */
+    public String getUserRole(String accessToken) {
+        return parseClaims(resolveToken(accessToken)).get(AUTHORITIES_KEY).toString();
+    }
+
+    /**
+     * 토큰이 만료되었는지 체크
+     */
+    public Long getTokenExpirationTime(String token) {
+        long now = (new Date()).getTime();
+        long expiration = parseClaims(resolveToken(token)).getExpiration().getTime();
+
+        log.info("[JwtTokenProvider] 토큰 만료 체크 ! 현재시간 : {}", now);
+        log.info("[JwtTokenProvider] 토큰 만료 체크 ! 만료시간 : {}", expiration);
+
+        return expiration - now;
+    }
+
+    /**
      * 유저 정보를 가지고 토큰을 생성하는 메서드
      */
     public JwtTokenDto generateToken(Authentication authentication) {
@@ -74,7 +99,7 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        // 권한에서 유저 정보 가져오기
+        // Authentication에서 유저 정보 가져오기
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         log.info("[generateToken] UserDetailsImpl 변환 성공 !! {} : {}", userPrincipal.getUserId(), userPrincipal.getUsername());
 
@@ -146,6 +171,11 @@ public class JwtTokenProvider {
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
+
+            if(redisUtil.hasKeyBlackList(token)) {
+                log.info("[validate token] 로그아웃 했찌롱 ~~~~ ");
+                return false;
+            }
 
             return true;
         } catch (SecurityException | MalformedJwtException e) {
