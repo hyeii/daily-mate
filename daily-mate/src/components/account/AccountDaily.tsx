@@ -16,7 +16,7 @@ const AccountDaily = ({ currentDay }: props) => {
   >([
     {
       accountId: 1,
-      amount: 500,
+      amount: -500,
       category: "카페",
       content: "막대사탕",
       date: "2024-02-03",
@@ -25,7 +25,7 @@ const AccountDaily = ({ currentDay }: props) => {
     },
     {
       accountId: 2,
-      amount: 4500,
+      amount: -4500,
       category: "식비",
       content: "군것질",
       date: "2024-01-23",

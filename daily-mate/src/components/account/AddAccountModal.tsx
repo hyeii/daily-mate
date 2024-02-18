@@ -26,6 +26,7 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
   const [category, setCategory] = useState<string>(originAccount.category);
   const [content, setContent] = useState<string>(originAccount.content);
   const [ammount, setAmmount] = useState<number>(originAccount.amount);
+  const [addType, setAddType] = useState<string>("out");
 
   const handleDate = (event: ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
@@ -40,16 +41,31 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
   const handleAmmount = (event: ChangeEvent<HTMLInputElement>) => {
     setAmmount(parseInt(event.target.value));
   };
+
+  const handleAddTypeIn = () => {
+    setAddType("in");
+  };
+  const handleAddTypeOut = () => {
+    setAddType("out");
+  };
   const submitAccount = () => {
     // add일때 modify일때 다르게 처리
     // openType="add" :  /account api POST 요청
     // openType="modify" :  /account/{accountId} api PATCH 요청
+    const ammountData = () => {
+      if (addType === "in") {
+        return Math.abs(ammount);
+      } else {
+        return Math.abs(ammount) * -1;
+      }
+    };
     const newAccount: accountRequest = {
       content: content,
       date: date,
-      ammount: ammount,
+      ammount: ammountData(),
       category: category,
     };
+    console.log(newAccount);
     if (openType === "add") {
       addAccount(newAccount);
     }
@@ -80,6 +96,15 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
           <h3 style={{ margin: "5px 0" }}>항목 수정</h3>
         )}
         <AddContainer>
+          <div style={{ visibility: "hidden" }}>공백</div>
+          <InOutContainer>
+            <InOutBox type="in" state={addType} onClick={handleAddTypeIn}>
+              수입
+            </InOutBox>
+            <InOutBox type="out" state={addType} onClick={handleAddTypeOut}>
+              지출
+            </InOutBox>
+          </InOutContainer>
           <AddBox>날짜</AddBox>
           <AddInput
             type="date"
@@ -88,13 +113,19 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
           />
 
           <AddBox>카테고리</AddBox>
-          <AddSelect defaultValue={category} onChange={handleCategory}>
-            <option value="식비">식비</option>
-            <option value="카페">카페</option>
-            <option value="생활">생활</option>
-            <option value="교통">교통</option>
-            <option value="기타">기타</option>
-          </AddSelect>
+          {addType === "out" ? (
+            <AddSelect defaultValue={category} onChange={handleCategory}>
+              <option value="식비">식비</option>
+              <option value="카페">카페</option>
+              <option value="생활">생활</option>
+              <option value="교통">교통</option>
+              <option value="기타">기타</option>
+            </AddSelect>
+          ) : (
+            <AddSelect defaultValue={category} onChange={handleCategory}>
+              <option value="">수입</option>
+            </AddSelect>
+          )}
 
           <AddBox>내용</AddBox>
           <AddInput
@@ -106,7 +137,7 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
           <AddInput
             type="number"
             onChange={handleAmmount}
-            defaultValue={originAccount.amount}
+            defaultValue={Math.abs(originAccount.amount)}
           />
         </AddContainer>
         <BtnBox>
@@ -157,9 +188,9 @@ const ModalContainer = styled.div`
 const AddContainer = styled.div`
   display: grid;
   grid-template-columns: 2fr 5fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-row-gap: 1rem;
-  height: 220px;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-row-gap: 0.7rem;
+  height: 230px;
 `;
 
 const AddBox = styled.div`
@@ -176,6 +207,21 @@ const AddInput = styled.input`
   font-family: "S-CoreDream-3Light";
 `;
 
+const InOutContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+interface InOutProps {
+  type: string;
+  state: string;
+}
+const InOutBox = styled.span<InOutProps>`
+  color: ${({ type, state }) => (type === state ? "#ff6161" : "#afafaf")};
+  font-weight: ${({ type, state }) => (type === state ? "bold" : "default")};
+  cursor: pointer;
+`;
+
 const AddSelect = styled.select`
   border: 0;
   border-radius: 15px;
@@ -187,7 +233,7 @@ const AddSelect = styled.select`
 const BtnBox = styled.div`
   display: flex;
   justify-content: end;
-  margin-top: 15px;
+  margin-top: 12px;
 `;
 const CompleteBtn = styled.button`
   background-color: #ff6161;
