@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -59,12 +60,28 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public List<FriendRequestDto> findFriendRequestList(String token) {
-        return null;
+        Long loginUserId = jwtTokenProvider.getUserId(token);
+        log.info("[친구 신청 리스트 전체 조회] 조회 요청 : {}", loginUserId);
+
+        // toId가 로그인 사용자의 ID고, 아직 대기중인 경우만 조회해야함
+        return friendRepository.findByToIdAndStatusIsFalse(loginUserId).stream()
+                .map(friend -> friendRepository.findFriendRequest(friend.getFromId(), loginUserId))
+                .collect(Collectors.toList());
     }
 
     @Override
     public FriendRequestDto findFriendRequest(String token, Long friendId) {
-        return null;
+        Long loginUserId = jwtTokenProvider.getUserId(token);
+        log.info("[친구 신청 상세 조회] {}님이 {}님의 정보 조회 요청", loginUserId, friendId);
+
+        // 대기중인 친구인지 체크(프론트에서 걸러지지만 그래두!)
+        // 그냥친구도 나오면안대
+        if(!friendRepository.existsByToIdAndFromIdAndStatusIsFalse(loginUserId, friendId)) {
+            log.error("[친구 신청 상세 조회] 친구 요청 대기중 상태가 아니라 조회가 불가합니다.");
+            throw new FriendBadRequestException(FriendExceptionMessage.NOT_WAITING.getMsg());
+        }
+
+        return friendRepository.findFriendRequest(friendId, loginUserId);
     }
 
     @Override
