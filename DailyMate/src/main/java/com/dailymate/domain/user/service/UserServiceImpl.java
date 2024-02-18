@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean checkEmail(String email) {
         log.info("[이메일 중복 검사] email : {}", email);
-        return userRepository.existsByEmailAndDeletedAtIsNull(email);
+        return userRepository.existsByEmail(email);
     }
 
     /**
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean checkNickname(String nickname) {
         log.info("[닉네임 중복 검사] nickname : {}", nickname);
-        return userRepository.existsByNicknameAndDeletedAtIsNull(nickname);
+        return userRepository.existsByNickname(nickname);
     }
 
     @Transactional
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
         log.info("[로그인] 로그인 요청 email : {}", email);
 
         // 존재하는 회원 체크 && 탈퇴한 회원인지도 체크
-        Users user = userRepository.findByEmailAndDeletedAtIsNull(email)
+        Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     log.error("[로그인] 존재하지 않는 사용자입니다.");
                     return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
@@ -298,7 +298,8 @@ public class UserServiceImpl implements UserService {
 //        } --> securityConfig에서  처리
 
         // 탈퇴한 회원을 제외한 모든 회원 조회
-        return userRepository.findByDeletedAtIsNull().stream()
+//        return userRepository.findByDeletedAtIsNull().stream()
+        return userRepository.findAll().stream()
                 .map(user -> UserAllInfoDto.entityToDto(user))
                 .collect(Collectors.toList());
     }
@@ -309,7 +310,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserAllInfoDto findUser(String token, Long userId) {
         log.info("[관리자용 회원 조회] 관리자용 메서드입니다.");
-        Users user = userRepository.findByUserIdAndDeletedAtIsNull(userId)
+        Users user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> {
                     log.error("[관리자용 회원 조회] 존재하지 않는 회원입니다.");
                     return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
@@ -326,7 +327,7 @@ public class UserServiceImpl implements UserService {
         Long loginUserId = getLoginUserId(token);
         log.info("[혜민이의 회원 조회] {}님의 조회 요청 ID : {}", loginUserId, userId);
 
-        Users user = userRepository.findByUserIdAndDeletedAtIsNull(userId)
+        Users user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> {
                     log.error("[혜민이의 회원 조회] 존재하지 않는 회원입니다.");
                     return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
@@ -343,7 +344,7 @@ public class UserServiceImpl implements UserService {
         Long userId = getLoginUserId(token);
         log.info("[회원 검색] {}님의 검색 요청 : {}", userId, nickname);
 
-        return userRepository.findByNicknameContainingAndDeletedAtIsNull(nickname).stream()
+        return userRepository.findByNicknameContaining(nickname).stream()
                 .map(user -> UserSearchDto.entityToDto(user))
                 .collect(Collectors.toList());
     }

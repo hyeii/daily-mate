@@ -9,15 +9,13 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
 
-    Optional<Users> findByEmailAndDeletedAtIsNull(String email);
+    Optional<Users> findByEmail(String email);
 
-    List<Users> findByDeletedAtIsNull();
-    Optional<Users> findByUserIdAndDeletedAtIsNull(Long userId); // 관리자체크는 서비스에서 할거니까
+    Optional<Users> findByUserId(Long userId); // 관리자체크는 서비스에서 할거니까
 
-    List<Users> findByNicknameContainingAndDeletedAtIsNull(String nickname);
-
+    List<Users> findByNicknameContaining(String nickname);
     
-    Boolean existsByEmailAndDeletedAtIsNull(String email); // 이메일 중복검사
-    Boolean existsByNicknameAndDeletedAtIsNull(String nickname); // 닉네임 중복검사
+    Boolean existsByEmail(String email); // 이메일 중복검사
+    Boolean existsByNickname(String nickname); // 닉네임 중복검사
 
 }
