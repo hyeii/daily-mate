@@ -144,6 +144,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Transactional
     @Override
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
         // 1. refresh Token 검증
@@ -197,6 +198,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Transactional
     @Override
     public void updateUser(String token, UpdateUserReqDto reqDto) {
         Long userId = getLoginUserId(token);
@@ -213,6 +215,7 @@ public class UserServiceImpl implements UserService {
         log.info("[내 정보 수정] 정보 수정 완료. -----------------------------");
     }
 
+    @Transactional
     @Override
     public void updatePassword(String token, UpdatePasswordReqDto reqDto) {
         Long userId = getLoginUserId(token);
@@ -252,6 +255,7 @@ public class UserServiceImpl implements UserService {
         log.info("[패스워드 변경] 변경 완료 -----------------------------");
     }
 
+    @Transactional
     @Override
     public void withdraw(String token) {
         Long userId = getLoginUserId(token);
@@ -274,6 +278,7 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(passwordDto.getPassword(), getLoginUser(userId).getPassword());
     }
 
+    @Transactional
     @Override
     public void logout(String token) {
         Long userId = getLoginUserId(token);
