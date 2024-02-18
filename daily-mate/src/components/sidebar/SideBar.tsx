@@ -8,6 +8,7 @@ import {
   userInfoState,
 } from "../../atoms/authAtom";
 import { logOut } from "../../apis/authApis";
+import { IoSearch } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
@@ -54,13 +55,17 @@ const SideBar = () => {
   const moveNotifications = () => {
     navigate("/notifications");
   };
+
+  const moveSearch = () => {
+    navigate("/search");
+  };
   return (
     <SidebarContainer isopen={isOpen ? "open" : "close"}>
       사이드바
       <button onClick={handleOpen}>버튼</button>
       <div>{userInfo.nickname}님</div>
       <button onClick={moveNotifications}>알림</button>
-      <div>검색</div>
+      <IoSearch onClick={moveSearch} />
       <div onClick={moveDiary}>다이어리</div>
       <div onClick={moveAccount}>가계부</div>
       <div>할 일</div>

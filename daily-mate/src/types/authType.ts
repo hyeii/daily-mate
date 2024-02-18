@@ -59,3 +59,12 @@ export interface friendResponse {
   profile: string;
   requestDate: Date;
 }
+
+export interface searchResponse {
+  userId: number;
+  email: string;
+  nickname: string;
+  image: string;
+  profile: string;
+  status: string;
+}

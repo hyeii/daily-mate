@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { searchResponse } from "../../types/authType";
 import { searchUser } from "../../apis/searchApi";
+import UserDataInfo from "../common/UserDataInfo";
 
 const SearchPage = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -15,6 +16,25 @@ const SearchPage = () => {
     const searchResponse = await searchUser(searchValue);
     if (searchResponse !== null) {
       setSearchResult(searchResponse);
+    } else {
+      setSearchResult([
+        {
+          userId: 3,
+          nickname: "냥",
+          email: "qwe@eqwe",
+          profile: "검색테스트1",
+          image: "url",
+          status: "친구",
+        },
+        {
+          userId: 4,
+          nickname: "냥2",
+          email: "qwe@eqwe",
+          profile: "검색테스트2",
+          image: "url",
+          status: "대기중",
+        },
+      ]);
     }
   };
 
@@ -26,7 +46,20 @@ const SearchPage = () => {
       <div>검색 결과</div>
       {searchResult.map((result) => (
         <div key={result.userId}>
-          {/* <FriendInfo status="search" friendData={result} /> */}
+          <UserDataInfo
+            id={result.userId}
+            nickname={result.nickname}
+            profile={result.profile}
+            image={result.image}
+            status={
+              result.status === "친구"
+                ? "friendList"
+                : result.status === "대기중"
+                ? "waitingList"
+                : "search"
+            }
+          />
+          {/* 내가 걸고 상대가 대기중인 상태 고려 추가 */}
         </div>
       ))}
     </div>
