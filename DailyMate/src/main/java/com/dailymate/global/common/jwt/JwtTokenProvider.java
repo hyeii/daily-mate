@@ -1,6 +1,7 @@
 package com.dailymate.global.common.jwt;
 
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
+import com.dailymate.global.common.redis.RedisUtil;
 import com.dailymate.global.common.security.UserDetailsImpl;
 import com.dailymate.global.common.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
@@ -39,14 +40,17 @@ public class JwtTokenProvider {
     private static final String BEARER_PREFIX = "Bearer ";
     private final Key key;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RedisUtil redisUtil;
 
     /**
      * application.yml에서 secret값 가져와서 key에 저장
      */
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsServiceImpl userDetailsService, RedisUtil redisUtil) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+
+        this.userDetailsService = userDetailsService;
+        this.redisUtil = redisUtil;
     }
 
     /**
@@ -69,6 +73,19 @@ public class JwtTokenProvider {
      */
     public String getUserRole(String accessToken) {
         return parseClaims(resolveToken(accessToken)).get(AUTHORITIES_KEY).toString();
+    }
+
+    /**
+     * 토큰이 만료되었는지 체크
+     */
+    public Long getTokenExpirationTime(String token) {
+        long now = (new Date()).getTime();
+        long expiration = parseClaims(resolveToken(token)).getExpiration().getTime();
+
+        log.info("[JwtTokenProvider] 토큰 만료 체크 ! 현재시간 : {}", now);
+        log.info("[JwtTokenProvider] 토큰 만료 체크 ! 만료시간 : {}", expiration);
+
+        return expiration - now;
     }
 
     /**
@@ -154,6 +171,11 @@ public class JwtTokenProvider {
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
+
+            if(redisUtil.hasKeyBlackList(token)) {
+                log.info("[validate token] 로그아웃 했찌롱 ~~~~ ");
+                return false;
+            }
 
             return true;
         } catch (SecurityException | MalformedJwtException e) {
