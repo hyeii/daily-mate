@@ -9,6 +9,7 @@ import com.dailymate.domain.todo.dto.UpdateTodoReqDto;
 import com.dailymate.domain.todo.exception.TodoExceptionMessage;
 import com.dailymate.domain.todo.exception.TodoForbiddenException;
 import com.dailymate.domain.todo.exception.TodoNotFoundException;
+import com.dailymate.global.common.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,17 +26,17 @@ import java.util.stream.Collectors;
 public class TodoServiceImpl implements TodoService {
 
 	private final TodoRepository todoRepository;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	@Override
-	public void addTodo(AddTodoReqDto addTodoReqDto) {
+	public void addTodo(AddTodoReqDto addTodoReqDto, String token) {
 		log.info("[할일 등록] 할일 등록 요청");
+
 		LocalDate today = LocalDate.now();
 		for(int i = 0; i < addTodoReqDto.getRepeat(); i++){
-
 			String todayString = today.plusDays(i).toString();
-
 			Todo todo = Todo.builder()
-					.userId(1L)
+					.userId(jwtTokenProvider.getUserId(token))
 					.content(addTodoReqDto.getContent())
 					.date(todayString)
 					.todoOrder(0)
@@ -51,8 +52,9 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public TodoResDto updateTodo(Long todoId, UpdateTodoReqDto updateTodoReqDto) {
-		log.info("[할일 수정] 할일 수정 요청. userId : {}", 1L);
+	public TodoResDto updateTodo(Long todoId, UpdateTodoReqDto updateTodoReqDto, String token) {
+		Long userId = jwtTokenProvider.getUserId(token);
+		log.info("[할일 수정] 할일 수정 요청. userId : {}", userId);
 		// 1. 존재하는 할일인지 체크
 		Todo todo = todoRepository.findById(todoId)
 				.orElseThrow(()->{
@@ -67,7 +69,7 @@ public class TodoServiceImpl implements TodoService {
 		}
 
 		// 3. 로그인 사용자의 할일인지 체크
-		if(todo.getUserId() != 1L){
+		if(todo.getUserId() != userId){
 			log.error("[할일 수정] 권한이 없는 할일입니다.");
 			throw new TodoForbiddenException("[UPDATE_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}

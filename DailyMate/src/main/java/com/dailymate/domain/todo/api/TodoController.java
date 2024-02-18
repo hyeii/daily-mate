@@ -26,8 +26,8 @@ public class TodoController {
 			description = "로그인 사용자의 할일을 등록합니다."
 	)
 	@PostMapping
-	public ResponseEntity<MessageDto> addTodo(@RequestBody AddTodoReqDto reqDto){
-		todoService.addTodo(reqDto);
+	public ResponseEntity<MessageDto> addTodo(@RequestBody AddTodoReqDto reqDto, @RequestHeader String token){
+		todoService.addTodo(reqDto, token);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(MessageDto.message("CREATE SUCCESS"));
 	}
@@ -37,7 +37,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일을 수정합니다."
 	)
 	@PatchMapping("/{todoId}")
-	public ResponseEntity<TodoResDto> updateTodo(@PathVariable Long todoId, @RequestBody UpdateTodoReqDto reqDto){
-		return ResponseEntity.ok(todoService.updateTodo(todoId, reqDto));
+	public ResponseEntity<TodoResDto> updateTodo(@PathVariable Long todoId, @RequestBody UpdateTodoReqDto reqDto, @RequestHeader String token){
+		return ResponseEntity.ok(todoService.updateTodo(todoId, reqDto, token));
 	}
 }

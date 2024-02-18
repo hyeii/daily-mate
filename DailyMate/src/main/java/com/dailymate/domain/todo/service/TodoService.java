@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface TodoService {
 
-	void addTodo(AddTodoReqDto addTodoReqDto);
-	TodoResDto updateTodo(Long todoId, UpdateTodoReqDto updateTodoReqDto);
+	void addTodo(AddTodoReqDto addTodoReqDto, String token);
+	TodoResDto updateTodo(Long todoId, UpdateTodoReqDto updateTodoReqDto, String token);
 	void deleteTodo(Long todoId, Long userId);
 
 	void postponeTodo(Long todoId, Long userId);
