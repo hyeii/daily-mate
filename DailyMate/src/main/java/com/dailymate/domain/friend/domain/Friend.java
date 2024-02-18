@@ -29,7 +29,6 @@ public class Friend {
 
     private Long toId;
     private Long fromId;
-
     private String requestDate;
 
     @ColumnDefault("false")
@@ -40,6 +39,10 @@ public class Friend {
         this.toId = toId;
         this.fromId = fromId;
         this.requestDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public void acceptFriend() {
+        this.status = true;
     }
 
 }
