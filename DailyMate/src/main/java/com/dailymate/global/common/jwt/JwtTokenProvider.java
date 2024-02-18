@@ -64,6 +64,14 @@ public class JwtTokenProvider {
     }
 
     /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 ROLE을 추출함
+     * 관리자인지 체크하기 위함
+     */
+    public String getUserRole(String accessToken) {
+        return parseClaims(resolveToken(accessToken)).get(AUTHORITIES_KEY).toString();
+    }
+
+    /**
      * 유저 정보를 가지고 토큰을 생성하는 메서드
      */
     public JwtTokenDto generateToken(Authentication authentication) {
@@ -74,7 +82,7 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        // 권한에서 유저 정보 가져오기
+        // Authentication에서 유저 정보 가져오기
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         log.info("[generateToken] UserDetailsImpl 변환 성공 !! {} : {}", userPrincipal.getUserId(), userPrincipal.getUsername());
 
