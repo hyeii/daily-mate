@@ -1,5 +1,6 @@
 package com.dailymate.domain.user.service;
 
+import com.dailymate.domain.user.constant.UserType;
 import com.dailymate.domain.user.dao.RefreshTokenRedisRepository;
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.RefreshToken;
@@ -365,7 +366,15 @@ public class UserServiceImpl implements UserService {
         Long userId = getLoginUserId(token);
         log.info("[회원 검색] {}님의 검색 요청 : {}", userId, nickname);
 
-        return userRepository.findByNicknameContaining(nickname).stream()
+        // 검색조건이 없을 땐 관리자를 제외한 전체 조회!
+        if(nickname == null) {
+            log.info("[회원 검색] 검색 조건이 없어 전체 회원이 조회됩니다.");
+            return userRepository.findByTypeNot(UserType.ROLE_ADMIN).stream()
+                    .map(user -> UserSearchDto.entityToDto(user))
+                    .collect(Collectors.toList());
+        }
+
+        return userRepository.findByNicknameContainingAndTypeNot(nickname, UserType.ROLE_ADMIN).stream()
                 .map(user -> UserSearchDto.entityToDto(user))
                 .collect(Collectors.toList());
     }

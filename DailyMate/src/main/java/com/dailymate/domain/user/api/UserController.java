@@ -162,7 +162,7 @@ public class UserController {
             description = "닉네임으로 회원을 검색할 수 있습니다. 로그인 사용자와의 친구 상태도 확인할 수 있습니다."
     )
     @GetMapping("/search")
-    public ResponseEntity<List<UserSearchDto>> findUserByNickname(@RequestHeader(ACCESS_TOKEN) String token, @RequestParam String nickname) {
+    public ResponseEntity<List<UserSearchDto>> findUserByNickname(@RequestHeader(ACCESS_TOKEN) String token, @RequestParam(required = false) String nickname) {
         return ResponseEntity.ok(userService.findUserByNickname(token, nickname));
     }
 
