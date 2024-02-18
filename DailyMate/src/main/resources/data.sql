@@ -19,3 +19,9 @@ VALUES (101, 'test1@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYG
        (103, 'test3@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트2', 'ROLE_USER', null),
        (104, 'test4@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트3', 'ROLE_USER', null);
 
+INSERT INTO FRIEND (FRIEND_ID, TO_ID, FROM_ID, REQUEST_DATE, STATUS)
+VALUES (10000, 101, 104, '2024-02-18', FALSE),
+       (10001, 101, 103, '2024-02-18', TRUE),
+       (10002, 101, 200, '2024-02-17', FALSE),
+       (10003, 103, 104, '2024-01-31', TRUE);
+

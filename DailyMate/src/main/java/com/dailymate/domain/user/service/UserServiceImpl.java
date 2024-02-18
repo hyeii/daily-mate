@@ -1,15 +1,13 @@
 package com.dailymate.domain.user.service;
 
+import com.dailymate.domain.friend.dao.FriendRepository;
 import com.dailymate.domain.user.constant.UserType;
 import com.dailymate.domain.user.dao.RefreshTokenRedisRepository;
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.RefreshToken;
 import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.dto.request.*;
-import com.dailymate.domain.user.dto.response.LogInResDto;
-import com.dailymate.domain.user.dto.response.UserAllInfoDto;
-import com.dailymate.domain.user.dto.response.MyInfoDto;
-import com.dailymate.domain.user.dto.response.UserSearchDto;
+import com.dailymate.domain.user.dto.response.*;
 import com.dailymate.domain.user.exception.UserBadRequestException;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
 import com.dailymate.domain.user.exception.UserNotFoundException;
@@ -20,6 +18,7 @@ import com.dailymate.global.common.redis.RedisUtil;
 import com.dailymate.global.exception.exception.NotFoundException;
 import com.dailymate.global.exception.exception.TokenException;
 import com.dailymate.global.exception.exception.TokenExceptionMessage;
+import com.dailymate.global.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -40,14 +40,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final RedisUtil redisUtil;
+    private final ImageService imageService;
+    private final FriendRepository friendRepository;
 
+    /**
+     * 회원가입
+     */
     @Transactional
     @Override
     public void signUp(SignUpReqDto reqDto) {
@@ -101,6 +105,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByNickname(nickname);
     }
 
+    /**
+     * 로그인
+     */
     @Transactional
     @Override
     public LogInResDto logIn(LogInReqDto reqDto) {
@@ -145,6 +152,9 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    /**
+     * 토큰 재발급
+     */
     @Transactional
     @Override
     public JwtTokenDto reissueToken(String accessToken, String refreshToken) {
@@ -184,6 +194,9 @@ public class UserServiceImpl implements UserService {
         return tokenDto;
     }
 
+    /**
+     * 내 정보 조회
+     */
     @Override
     public MyInfoDto findMyInfo(String token) {
         Long userId = getLoginUserId(token);
@@ -199,6 +212,9 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    /**
+     * 내 정보 수정
+     */
     @Transactional
     @Override
     public void updateUser(String token, UpdateUserReqDto reqDto) {
@@ -216,6 +232,9 @@ public class UserServiceImpl implements UserService {
         log.info("[내 정보 수정] 정보 수정 완료. -----------------------------");
     }
 
+    /**
+     * 비밀번호 변경
+     */
     @Transactional
     @Override
     public void updatePassword(String token, UpdatePasswordReqDto reqDto) {
@@ -256,6 +275,9 @@ public class UserServiceImpl implements UserService {
         log.info("[패스워드 변경] 변경 완료 -----------------------------");
     }
 
+    /**
+     * 회원탈퇴
+     */
     @Transactional
     @Override
     public void withdraw(String token) {
@@ -273,6 +295,9 @@ public class UserServiceImpl implements UserService {
         // 로그아웃 추가??
     }
 
+    /**
+     * 서비스 전 비밀번호 체크
+     */
     @Override
     public Boolean checkPassword(String token, PasswordDto passwordDto) {
         Long userId = getLoginUserId(token);
@@ -281,6 +306,9 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(passwordDto.getPassword(), getLoginUser(userId).getPassword());
     }
 
+    /**
+     * 로그아웃
+     */
     @Transactional
     @Override
     public void logout(String token) {
@@ -362,7 +390,7 @@ public class UserServiceImpl implements UserService {
      * 검색어를 포함하는 닉네임을 소유한 회원 전체를 조회
      */
     @Override
-    public List<UserSearchDto> findUserByNickname(String token, String nickname) {
+    public List<UserSearchInfoDto> findUserByNickname(String token, String nickname) {
         Long userId = getLoginUserId(token);
         log.info("[회원 검색] {}님의 검색 요청 : {}", userId, nickname);
 
@@ -370,12 +398,16 @@ public class UserServiceImpl implements UserService {
         if(nickname == null) {
             log.info("[회원 검색] 검색 조건이 없어 전체 회원이 조회됩니다.");
             return userRepository.findByTypeNot(UserType.ROLE_ADMIN).stream()
-                    .map(user -> UserSearchDto.entityToDto(user))
+                    .map(user -> userRepository.searchUserInfo(userId, user.getUserId()))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .collect(Collectors.toList());
         }
 
         return userRepository.findByNicknameContainingAndTypeNot(nickname, UserType.ROLE_ADMIN).stream()
-                .map(user -> UserSearchDto.entityToDto(user))
+                .map(user -> userRepository.searchUserInfo(userId, user.getUserId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
