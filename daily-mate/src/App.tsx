@@ -47,13 +47,13 @@ function App() {
             <Route path="/mypage/update" element={<UpdateInfoPage />} />
             <Route path="/mypage/password" element={<UpdatePasswordPage />} />
             <Route path="/friends/list" element={<FriendsListPage />} />
-            <Route path="/friends/search" element={<SearchPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/diary/monthly/:id" element={<DiaryMonthlyPage />} />
             <Route path="/diary/daily/:id/:date" element={<DiaryDailyPage />} />
             <Route path="/diary/daily/write" element={<DiaryWritePage />} />
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/todo" element={<TodoPage />}></Route>
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/oauth/kakao" element={<KakaoRedirectPage />} />
           </Routes>
         </MainBox>
