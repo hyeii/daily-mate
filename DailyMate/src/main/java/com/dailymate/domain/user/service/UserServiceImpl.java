@@ -1,15 +1,13 @@
 package com.dailymate.domain.user.service;
 
+import com.dailymate.domain.friend.dao.FriendRepository;
 import com.dailymate.domain.user.constant.UserType;
 import com.dailymate.domain.user.dao.RefreshTokenRedisRepository;
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.RefreshToken;
 import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.dto.request.*;
-import com.dailymate.domain.user.dto.response.LogInResDto;
-import com.dailymate.domain.user.dto.response.UserAllInfoDto;
-import com.dailymate.domain.user.dto.response.MyInfoDto;
-import com.dailymate.domain.user.dto.response.UserSearchDto;
+import com.dailymate.domain.user.dto.response.*;
 import com.dailymate.domain.user.exception.UserBadRequestException;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
 import com.dailymate.domain.user.exception.UserNotFoundException;
@@ -48,6 +46,7 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final RedisUtil redisUtil;
     private final ImageService imageService;
+    private final FriendRepository friendRepository;
 
     /**
      * 회원가입
@@ -390,7 +389,7 @@ public class UserServiceImpl implements UserService {
      * 검색어를 포함하는 닉네임을 소유한 회원 전체를 조회
      */
     @Override
-    public List<UserSearchDto> findUserByNickname(String token, String nickname) {
+    public List<UserSearchInfoDto> findUserByNickname(String token, String nickname) {
         Long userId = getLoginUserId(token);
         log.info("[회원 검색] {}님의 검색 요청 : {}", userId, nickname);
 
@@ -398,12 +397,12 @@ public class UserServiceImpl implements UserService {
         if(nickname == null) {
             log.info("[회원 검색] 검색 조건이 없어 전체 회원이 조회됩니다.");
             return userRepository.findByTypeNot(UserType.ROLE_ADMIN).stream()
-                    .map(user -> UserSearchDto.entityToDto(user))
+                    .map(user -> userRepository.checkFriendStatus(userId, user.getUserId()))
                     .collect(Collectors.toList());
         }
 
         return userRepository.findByNicknameContainingAndTypeNot(nickname, UserType.ROLE_ADMIN).stream()
-                .map(user -> UserSearchDto.entityToDto(user))
+                .map(user -> userRepository.checkFriendStatus(userId, user.getUserId()))
                 .collect(Collectors.toList());
     }
 
