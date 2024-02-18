@@ -1,10 +1,7 @@
 package com.dailymate.domain.user.api;
 
 import com.dailymate.domain.user.dto.request.*;
-import com.dailymate.domain.user.dto.response.LogInResDto;
-import com.dailymate.domain.user.dto.response.UserAllInfoDto;
-import com.dailymate.domain.user.dto.response.MyInfoDto;
-import com.dailymate.domain.user.dto.response.UserSearchDto;
+import com.dailymate.domain.user.dto.response.*;
 import com.dailymate.domain.user.service.UserService;
 import com.dailymate.global.common.jwt.JwtTokenDto;
 import com.dailymate.global.dto.MessageDto;
@@ -162,7 +159,7 @@ public class UserController {
             description = "닉네임으로 회원을 검색할 수 있습니다. 로그인 사용자와의 친구 상태도 확인할 수 있습니다."
     )
     @GetMapping("/search")
-    public ResponseEntity<List<UserSearchDto>> findUserByNickname(@RequestHeader(ACCESS_TOKEN) String token, @RequestParam(required = false) String nickname) {
+    public ResponseEntity<List<UserSearchInfoDto>> findUserByNickname(@RequestHeader(ACCESS_TOKEN) String token, @RequestParam(required = false) String nickname) {
         return ResponseEntity.ok(userService.findUserByNickname(token, nickname));
     }
 
