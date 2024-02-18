@@ -18,17 +18,24 @@ import java.util.List;
 @Data
 public class UserDetailsImpl implements UserDetails {
 
-    private final Users user;
+//    private final Users user;
+    private Long userId;
+    private String email; // username
+    private String authority;
+    private String password;
 
     @Builder
-    public UserDetailsImpl(Users user) {
-        this.user = user;
+    public UserDetailsImpl(Long userId, String email, String authority, String password) {
+        this.userId = userId;
+        this.email = email;
+        this.authority = authority;
+        this.password = password;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> auth = new ArrayList<>();
-        String authority = user.getType().getRole();
+//        String authority = user.getType().getRole();
 
         if(authority.equals(UserType.ROLE_ADMIN.getRole()))
             authority = "ROLE_ADMIN";
@@ -44,7 +51,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     } // 이걸해줘야 패스워드 비교를하네;; PasswordEncoder 에러가 안뜸
 
     /**
@@ -53,11 +60,11 @@ public class UserDetailsImpl implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return email;
     }
 
     public Long getUserId() {
-        return user.getUserId();
+        return userId;
     }
 
     /**

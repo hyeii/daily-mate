@@ -21,24 +21,24 @@ public interface UserService {
 //    JwtTokenDto reissueToken(String refreshToken);
     JwtTokenDto reissueToken(String accessToken, String refreshToken);
 
-    MyInfoDto findMyInfo(String accessToken);
+    MyInfoDto findMyInfo(String token);
 
-    void updateUser(String accessToken, UpdateUserReqDto reqDto); // 닉네임 중복검사필요
+    void updateUser(String token, UpdateUserReqDto reqDto); // 닉네임 중복검사필요
 
-    void updatePassword(String accessToken, UpdatePasswordReqDto reqDto);
+    void updatePassword(String token, UpdatePasswordReqDto reqDto);
 
-    void withdraw(String accessToken); // 비번체크필요
+    void withdraw(String token); // 비번체크필요
 
-    Boolean checkPassword(String accessToken, PasswordDto passwordDto);
+    Boolean checkPassword(String token, PasswordDto passwordDto);
 
-    void logout(String accessToken);
+    void logout(String token);
 
-    List<UserInfoDto> findUserList(String accessToken);
+    List<UserInfoDto> findUserList(String token);
 
-    UserInfoDto findUser(String accessToken, Long userId);
+    UserInfoDto findUser(String token, Long userId);
 
-    UserInfoDto findUserByUserId(String accessToken, Long userId); // 혜미니요청
+    UserInfoDto findUserByUserId(String token, Long userId); // 혜미니요청
 
-    List<MyInfoDto> findUserByNickname(String accessToken, String nickname);
+    List<MyInfoDto> findUserByNickname(String token, String nickname);
 
 }

@@ -12,8 +12,10 @@
 --        (202, 1004, -5000, '기타', '로또 구매', '2023-01-01 10:00:00', '2023-01-01', '지출', '2024-01-02 00:00:00'),
 --        (203, 1004, -2500, '카페', '아이스 아메리카노', '2023-01-03 10:00:00', '2023-01-03', '지출', null);
 
-INSERT INTO USERS (USER_ID, EMAIL, PASSWORD, NICKNAME, TYPE)
-VALUES (100, 'dd39@naver.com', '1234', '천재윤영', 'ROLE_USER'),
-       (101, 'king@gmail.com', '1234', '관리자1', 'ROLE_ADMIN'),
-       (102, 'test@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트1', 'ROLE_USER');
+INSERT INTO USERS (USER_ID, EMAIL, PASSWORD, NICKNAME, TYPE, DELETED_AT)
+VALUES (101, 'test1@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트1', 'ROLE_USER', null),
+       (200, 'admin1@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '관리자1', 'ROLE_ADMIN', null),
+       (102, 'test2@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트2', 'ROLE_USER', '2024-02-01'),
+       (103, 'test3@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트2', 'ROLE_USER', null),
+       (104, 'test4@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트3', 'ROLE_USER', null);
 

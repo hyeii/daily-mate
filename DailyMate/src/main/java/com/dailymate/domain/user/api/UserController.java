@@ -1,8 +1,7 @@
 package com.dailymate.domain.user.api;
 
-import com.dailymate.domain.user.dto.request.LogInReqDto;
+import com.dailymate.domain.user.dto.request.*;
 import com.dailymate.domain.user.dto.response.LogInResDto;
-import com.dailymate.domain.user.dto.request.SignUpReqDto;
 import com.dailymate.domain.user.dto.response.MyInfoDto;
 import com.dailymate.domain.user.service.UserService;
 import com.dailymate.global.common.jwt.JwtTokenDto;
@@ -74,8 +73,48 @@ public class UserController {
             description = "로그인 사용자의 기본 정보를 조회합니다."
     )
     @GetMapping()
-    public ResponseEntity<MyInfoDto> findMyInfo(@RequestHeader(ACCESS_TOKEN) String accessToken) {
-        return ResponseEntity.ok(userService.findMyInfo(accessToken));
+    public ResponseEntity<MyInfoDto> findMyInfo(@RequestHeader(ACCESS_TOKEN) String token) {
+        return ResponseEntity.ok(userService.findMyInfo(token));
     }
+
+    @Operation(
+            summary = "내 정보 수정",
+            description = "로그인 사용자의 정보를 수정합니다."
+    )
+    @PatchMapping
+    public ResponseEntity<MessageDto> updateUser(@RequestHeader(ACCESS_TOKEN) String token, @RequestBody UpdateUserReqDto reqDto) {
+        userService.updateUser(token, reqDto);
+        return ResponseEntity.ok(MessageDto.message("UPDATE SUCCESS"));
+    }
+
+    @Operation(
+            summary = "서비스 전 비밀번호 체크",
+            description = "특정 서비스 이전에 비밀번호 검사를 합니다."
+    )
+    @PostMapping("/password")
+    public ResponseEntity<Boolean> checkPassword(@RequestHeader(ACCESS_TOKEN) String token, @RequestBody PasswordDto passwordDto) {
+        return ResponseEntity.ok(userService.checkPassword(token, passwordDto));
+    }
+
+    @Operation(
+            summary = "비밀번호 변경",
+            description = "비밀번호를 변경합니다."
+    )
+    @PatchMapping("/password")
+    public ResponseEntity<MessageDto> updatePassword(@RequestHeader(ACCESS_TOKEN) String token, @RequestBody UpdatePasswordReqDto reqDto) {
+        userService.updatePassword(token, reqDto);
+        return ResponseEntity.ok(MessageDto.message("UPDATE SUCCESS"));
+    }
+
+    @Operation(
+            summary = "회원탈퇴",
+            description = "로그인 사용자를 탈퇴처리합니다."
+    )
+    @DeleteMapping
+    public ResponseEntity<MessageDto> withdraw(@RequestHeader(ACCESS_TOKEN) String token) {
+        userService.withdraw(token);
+        return ResponseEntity.ok(MessageDto.message("WITHDRAW SUCCESS"));
+    }
+
 
 }
