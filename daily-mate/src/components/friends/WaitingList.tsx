@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { friendResponse } from "../../types/authType";
 import { getWaitingList } from "../../apis/friendApi";
-import FriendInfo from "./FriendInfo";
+import UserDataInfo from "../common/UserDataInfo";
 
 const WaitingList = () => {
   const [waitingList, setWaitingList] = useState<friendResponse[]>([]);
@@ -32,9 +32,9 @@ const WaitingList = () => {
           {
             fromId: 12,
             email: "1232@123.com",
-            nickname: "박친구아님",
+            nickname: "이친구아님",
             image: "url",
-            profile: "신청받아22",
+            profile: "신청받아33",
             requestDate: new Date(),
           },
         ]);
@@ -47,7 +47,13 @@ const WaitingList = () => {
       <div>
         {waitingList.map((friend) => (
           <div key={friend.fromId}>
-            <FriendInfo status="waitingList" friendData={friend} />
+            <UserDataInfo
+              id={friend.fromId}
+              nickname={friend.nickname}
+              profile={friend.profile}
+              image={friend.image}
+              status="waitingList"
+            />
           </div>
         ))}
       </div>

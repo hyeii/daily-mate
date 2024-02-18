@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { friendResponse } from "../../types/authType";
 import { getFriendList } from "../../apis/friendApi";
-import FriendInfo from "./FriendInfo";
+import UserDataInfo from "../common/UserDataInfo";
 
 const FriendsList = () => {
   const [friendsList, setFriendsList] = useState<friendResponse[]>([]);
@@ -39,7 +39,13 @@ const FriendsList = () => {
       <div>
         {friendsList.map((friend) => (
           <div key={friend.fromId}>
-            <FriendInfo status="friendsList" friendData={friend} />
+            <UserDataInfo
+              id={friend.fromId}
+              nickname={friend.nickname}
+              profile={friend.profile}
+              image={friend.image}
+              status="friendsList"
+            />
           </div>
         ))}
       </div>
