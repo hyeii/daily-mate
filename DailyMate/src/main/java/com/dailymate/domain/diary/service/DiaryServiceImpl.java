@@ -100,7 +100,7 @@ public class DiaryServiceImpl implements DiaryService {
         Users users = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
                 .orElseThrow(() -> new UserNotFoundException("[UPDATE_DIARY] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
 
-        // 일기 작성자와 같은지 확인 (userId로 비교해야 하는지 확인)
+        // 일기 작성자와 같은지 확인
         if(diary.getUsers() != users) {
             throw new DiaryForbiddenException("[UPDATE_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
         }
@@ -150,7 +150,7 @@ public class DiaryServiceImpl implements DiaryService {
         Users users = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
                 .orElseThrow(() -> new UserNotFoundException("[DELETE_DIARY] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
 
-        // 일기 작성자와 같은지 확인 (userId로 비교해야 하는지 확인)
+        // 일기 작성자와 같은지 확인
         if(diary.getUsers() != users) {
             throw new DiaryForbiddenException("[DELETE_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
         }

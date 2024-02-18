@@ -36,4 +36,20 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(MessageDto.message("댓글을 작성했습니다."));
     }
+
+    @Operation(
+            summary = "댓글 수정",
+            description = "댓글을 수정합니다."
+    )
+    @PutMapping("/{commentId}")
+    public ResponseEntity<MessageDto> updateComment(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @RequestBody CommentReqDto commentReqDto,
+            @PathVariable Long commentId) {
+
+        commentService.updateComment(accessToken, commentReqDto, commentId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(MessageDto.message("댓글을 수정했습니다."));
+    }
 }

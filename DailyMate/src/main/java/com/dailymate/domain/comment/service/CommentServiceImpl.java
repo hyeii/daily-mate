@@ -6,6 +6,8 @@ import com.dailymate.domain.comment.domain.Comment;
 import com.dailymate.domain.comment.dto.CommentReqDto;
 import com.dailymate.domain.comment.exception.CommentBadRequestException;
 import com.dailymate.domain.comment.exception.CommentExceptionMessage;
+import com.dailymate.domain.comment.exception.CommentForbiddenException;
+import com.dailymate.domain.comment.exception.CommentNotFoundException;
 import com.dailymate.domain.diary.dao.DiaryRepository;
 import com.dailymate.domain.diary.domain.Diary;
 import com.dailymate.domain.diary.exception.DiaryExceptionMessage;
@@ -55,10 +57,50 @@ public class CommentServiceImpl implements CommentService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new DiaryNotFoundException("[ADD_COMMENT] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
 
-        // 공개여부 및 친구여부 확인(???)
+        // 공개여부 및 친구여부 확인(!!!)
+        boolean isFriend = true;
+
+        if(!isFriend && diary.getOpenType().getValue() == "친구공개") {
+            throw new CommentForbiddenException("[ADD_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
+        }
+
+        if(diary.getOpenType().getValue() == "비공개") {
+            throw new CommentForbiddenException("[ADD_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
+        }
 
         Comment comment = Comment.createComment(commentReqDto, diary, user);
 
         commentRepository.save(comment);
+    }
+
+    /**
+     * 댓글 수정
+     * @param accessToken String
+     * @param commentReqDto CommentReqDto
+     * @param commentId Long
+     */
+    @Override
+    @Transactional
+    public void updateComment(String accessToken, CommentReqDto commentReqDto, Long commentId) {
+
+        // 입력값 확인
+        if(accessToken == null || !StringUtils.hasText(commentReqDto.getContent())) {
+            throw new CommentBadRequestException("[UPDATE_COMMENT] " + CommentExceptionMessage.COMMENT_BAD_REQUEST.getMsg());
+        }
+
+        // 사용자 확인
+        Users user = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
+                .orElseThrow(() -> new UserNotFoundException("[UPDATE_COMMENT] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 댓글 확인
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("[UPDATE_COMMENT] " + CommentExceptionMessage.COMMENT_NOT_FOUND.getMsg()));
+
+        // 사용자와 댓글 작성자 확인
+        if(user != comment.getUsers()) {
+            throw new CommentForbiddenException("[UPDATE_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
+        }
+
+        comment.updateContent(commentReqDto.getContent());
     }
 }
