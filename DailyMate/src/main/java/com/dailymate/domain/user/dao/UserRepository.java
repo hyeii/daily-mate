@@ -26,10 +26,20 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     // 친구 신청 메서드에서 탈퇴한 회원인지 체크하기 위함
     Boolean existsByUserId(Long userId);
 
-    @Query(value = "SELECT new com.dailymate.domain.user.dto.response.UserSearchInfoDto(u.userId, u.email, u.nickname, u.image, u.profile, f.status, f.requestDate)" +
+    // 나랑 친구거나 대기중인 회원의 정보 조회
+//    @Query(value = "SELECT new com.dailymate.domain.user.dto.response.UserSearchInfoDto(u.userId, u.email, u.nickname, u.image, u.profile, f.status, f.requestDate)" +
+//            "FROM Users u " +
+//            "JOIN Friend f ON (u.userId = f.fromId AND f.toId = :userId) OR (u.userId = f.toId AND f.fromId = :userId) " +
+//            "WHERE u.userId = :friendId")
+//    Optional<UserSearchInfoDto> checkFriendStatus(@Param("userId") Long userId, @Param("friendId") Long friendId);
+
+    // 검색한 friendId의 정보를 추출하되
+    // friend 데이터가 있으면 데이터, 없으면 null을 반환해준다.
+    @Query(value = "SELECT new com.dailymate.domain.user.dto.response.UserSearchInfoDto(u.userId, u.email, u.nickname, u.image, u.profile, " +
+            "COALESCE(f.status, NULL), COALESCE(f.requestDate, NULL)) " +
             "FROM Users u " +
-            "JOIN Friend f ON (u.userId = f.fromId AND f.toId = :userId) OR (u.userId = f.toId AND f.fromId = :userId) " +
+            "LEFT JOIN Friend f ON (u.userId = f.fromId AND f.toId = :userId) OR (u.userId = f.toId AND f.fromId = :userId) " +
             "WHERE u.userId = :friendId")
-    Optional<UserSearchInfoDto> checkFriendStatus(@Param("userId") Long userId, @Param("friendId") Long friendId);
+    Optional<UserSearchInfoDto> searchUserInfo(@Param("userId") Long userId, @Param("friendId") Long friendId);
 
 }

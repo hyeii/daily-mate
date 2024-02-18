@@ -398,14 +398,14 @@ public class UserServiceImpl implements UserService {
         if(nickname == null) {
             log.info("[회원 검색] 검색 조건이 없어 전체 회원이 조회됩니다.");
             return userRepository.findByTypeNot(UserType.ROLE_ADMIN).stream()
-                    .map(user -> userRepository.checkFriendStatus(userId, user.getUserId()))
+                    .map(user -> userRepository.searchUserInfo(userId, user.getUserId()))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toList());
         }
 
         return userRepository.findByNicknameContainingAndTypeNot(nickname, UserType.ROLE_ADMIN).stream()
-                .map(user -> userRepository.checkFriendStatus(userId, user.getUserId()))
+                .map(user -> userRepository.searchUserInfo(userId, user.getUserId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

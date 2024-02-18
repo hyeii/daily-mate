@@ -5,15 +5,15 @@ import lombok.Getter;
 @Getter
 public class UserSearchInfoDto {
 
-    private long userId;
+    private Long userId;
     private String email;
     private String nickname;
     private String image;
     private String profile;
-    private boolean status; // 친구상태
+    private Boolean status; // 친구상태
     private String requestDate; // 친구요청일자
 
-    public UserSearchInfoDto(long userId, String email, String nickname, String image, String profile, boolean status, String requestDate) {
+    public UserSearchInfoDto(Long userId, String email, String nickname, String image, String profile, Boolean status, String requestDate) {
         this.userId = userId;
         this.email = email;
         this.nickname = nickname;
