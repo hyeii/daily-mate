@@ -44,9 +44,12 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
 
   const handleAddTypeIn = () => {
     setAddType("in");
+    setCategory("");
   };
   const handleAddTypeOut = () => {
     setAddType("out");
+    if (originAccount.category !== "") setCategory(originAccount.category);
+    else setCategory("식비");
   };
   const submitAccount = () => {
     // add일때 modify일때 다르게 처리
@@ -114,7 +117,11 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
 
           <AddBox>카테고리</AddBox>
           {addType === "out" ? (
-            <AddSelect defaultValue={category} onChange={handleCategory}>
+            <AddSelect
+              defaultValue={originAccount.category}
+              key={originAccount.category}
+              onChange={handleCategory}
+            >
               <option value="식비">식비</option>
               <option value="카페">카페</option>
               <option value="생활">생활</option>
@@ -122,7 +129,7 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
               <option value="기타">기타</option>
             </AddSelect>
           ) : (
-            <AddSelect defaultValue={category} onChange={handleCategory}>
+            <AddSelect value={""} onChange={handleCategory}>
               <option value="">수입</option>
             </AddSelect>
           )}
