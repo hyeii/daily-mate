@@ -73,6 +73,16 @@ public class UserController {
     }
 
     @Operation(
+            summary = "로그아웃",
+            description = "로그인 사용자를 로그아웃 처리합니다."
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<MessageDto> logout(@RequestHeader(ACCESS_TOKEN) String token) {
+        userService.logout(token);
+        return ResponseEntity.ok(MessageDto.message("LOG-OUT SUCCESS"));
+    }
+
+    @Operation(
             summary = "내 정보 조회",
             description = "로그인 사용자의 기본 정보를 조회합니다."
     )
