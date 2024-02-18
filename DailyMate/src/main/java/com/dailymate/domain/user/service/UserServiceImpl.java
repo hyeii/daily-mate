@@ -6,8 +6,9 @@ import com.dailymate.domain.user.domain.RefreshToken;
 import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.dto.request.*;
 import com.dailymate.domain.user.dto.response.LogInResDto;
+import com.dailymate.domain.user.dto.response.UserAllInfoDto;
 import com.dailymate.domain.user.dto.response.MyInfoDto;
-import com.dailymate.domain.user.dto.response.UserInfoDto;
+import com.dailymate.domain.user.dto.response.UserSearchDto;
 import com.dailymate.domain.user.exception.UserBadRequestException;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
 import com.dailymate.domain.user.exception.UserNotFoundException;
@@ -31,6 +32,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -203,12 +205,7 @@ public class UserServiceImpl implements UserService {
         Users loginUser = getLoginUser(userId);
 
         // 수정 전 비밀번호 체크 -> 메서드 따로있음
-
-        // 수정한 닉네임 중복 검사
-        if(checkNickname(reqDto.getNickname())) {
-            log.error("[내 정보 수정] 이미 사용중인 닉네임입니다. 다른 닉네임을 입력하세요.");
-            throw new UserBadRequestException(UserExceptionMessage.NICKNAME_DUPLICATED.getMsg());
-        }
+        // 수정한 닉네임 중복 검사 -> 프론트에서 처리
 
         loginUser.updateUser(reqDto.getNickname(), reqDto.getProfile());
         userRepository.save(loginUser);
@@ -225,7 +222,7 @@ public class UserServiceImpl implements UserService {
         String newPassword = reqDto.getNewPassword();
 
         // 1. 현재 비밀번호와 입력한 비밀번호가 일치하는가
-        if(passwordEncoder.matches(reqDto.getPassword(), loginUser.getPassword())) {
+        if(!passwordEncoder.matches(reqDto.getPassword(), loginUser.getPassword())) {
             log.error("[패스워드 변경] 비밀번호가 틀립니다.");
             throw new UserBadRequestException(UserExceptionMessage.PASSWORD_INCORRECT.getMsg());
         }
@@ -249,7 +246,7 @@ public class UserServiceImpl implements UserService {
         }
 
         log.info("[패스워드 변경] 패스워드 변경 가능!");
-        loginUser.updatePassword(newPassword);
+        loginUser.updatePassword(passwordEncoder.encode(newPassword));
         userRepository.save(loginUser);
 
         log.info("[패스워드 변경] 변경 완료 -----------------------------");
@@ -279,27 +276,76 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(String token) {
+        Long userId = getLoginUserId(token);
+        log.info("[로그아웃] 로그아웃 요청 : {}", userId);
 
+        // 로그아웃 여부를 redis에 넣어서 accessToken이 유효한지 체크
+        
     }
 
+    /**
+     * 관리자용 전체 회원 리스트 조회하는 메서드
+     */
     @Override
-    public List<UserInfoDto> findUserList(String token) {
-        return null;
+    public List<UserAllInfoDto> findUserList(String token) {
+        // 관리자 회원인지 체크
+        String role = jwtTokenProvider.getUserRole(token);
+        log.info("[전체 회원 리스트 조회] 관리자용 메서드입니다. 로그인 사용자 권한 : {}", role);
+
+//        if(!role.equals("ROLE_ADMIN")) {
+//            log.error("[전체 회원 리스트 조회] 관리자 권한이 없습니다. 접근 불가합니다.");
+//            throw new UserForbiddenException(UserExceptionMessage.USER_FORBIDDEN.getMsg());
+//        } --> securityConfig에서  처리
+
+        // 탈퇴한 회원을 제외한 모든 회원 조회
+        return userRepository.findByDeletedAtIsNull().stream()
+                .map(user -> UserAllInfoDto.entityToDto(user))
+                .collect(Collectors.toList());
     }
 
+    /**
+     * 관리자용 회원 상세 조회하는 메서드
+     */
     @Override
-    public UserInfoDto findUser(String token, Long userId) {
-        return null;
+    public UserAllInfoDto findUser(String token, Long userId) {
+        log.info("[관리자용 회원 조회] 관리자용 메서드입니다.");
+        Users user = userRepository.findByUserIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> {
+                    log.error("[관리자용 회원 조회] 존재하지 않는 회원입니다.");
+                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
+                });
+
+        return UserAllInfoDto.entityToDto(user);
     }
 
+    /**
+     * 혜민이가 요청한 아무나 사용가능한 userId로 회원 조회하는 메서드
+     */
     @Override
-    public UserInfoDto findUserByUserId(String token, Long userId) {
-        return null;
+    public UserAllInfoDto findUserByUserId(String token, Long userId) {
+        Long loginUserId = getLoginUserId(token);
+        log.info("[혜민이의 회원 조회] {}님의 조회 요청 ID : {}", loginUserId, userId);
+
+        Users user = userRepository.findByUserIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> {
+                    log.error("[혜민이의 회원 조회] 존재하지 않는 회원입니다.");
+                    return new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg());
+                });
+
+        return UserAllInfoDto.entityToDto(user);
     }
 
+    /**
+     * 검색어를 포함하는 닉네임을 소유한 회원 전체를 조회
+     */
     @Override
-    public List<MyInfoDto> findUserByNickname(String token, String nickname) {
-        return null;
+    public List<UserSearchDto> findUserByNickname(String token, String nickname) {
+        Long userId = getLoginUserId(token);
+        log.info("[회원 검색] {}님의 검색 요청 : {}", userId, nickname);
+
+        return userRepository.findByNicknameContainingAndDeletedAtIsNull(nickname).stream()
+                .map(user -> UserSearchDto.entityToDto(user))
+                .collect(Collectors.toList());
     }
 
     /**
