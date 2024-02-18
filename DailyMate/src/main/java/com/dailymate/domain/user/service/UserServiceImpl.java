@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -398,11 +399,15 @@ public class UserServiceImpl implements UserService {
             log.info("[회원 검색] 검색 조건이 없어 전체 회원이 조회됩니다.");
             return userRepository.findByTypeNot(UserType.ROLE_ADMIN).stream()
                     .map(user -> userRepository.checkFriendStatus(userId, user.getUserId()))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .collect(Collectors.toList());
         }
 
         return userRepository.findByNicknameContainingAndTypeNot(nickname, UserType.ROLE_ADMIN).stream()
                 .map(user -> userRepository.checkFriendStatus(userId, user.getUserId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
