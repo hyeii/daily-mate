@@ -51,10 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 2. validateToken으로 토큰 유효성 검사
         //      StringUtils.hasText : token != null이랑 같은거임
         if(StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-            // 로그아웃 여부 확인
-            // 로그아웃 상태라면 해당 accessToken이 만료되지 않았어도 무효함
-//            checkLogout(jwtToken);
-
             // 토큰이 유효할 경우(정상 토큰)
             // 해당 토큰으로 Authentication을 가지고 와서 SecurityContext에 저장   => 요청을 처리하는 동안 인증정보가 유지됨
             Authentication authentication = jwtTokenProvider.getAuthentication(token);

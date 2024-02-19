@@ -1,9 +1,7 @@
 package com.dailymate.domain.user.service;
 
 import com.dailymate.domain.user.dto.request.*;
-import com.dailymate.domain.user.dto.response.LogInResDto;
-import com.dailymate.domain.user.dto.response.MyInfoDto;
-import com.dailymate.domain.user.dto.response.UserInfoDto;
+import com.dailymate.domain.user.dto.response.*;
 import com.dailymate.global.common.jwt.JwtTokenDto;
 
 import java.util.List;
@@ -18,7 +16,6 @@ public interface UserService {
 
     LogInResDto logIn(LogInReqDto reqDto);
 
-//    JwtTokenDto reissueToken(String refreshToken);
     JwtTokenDto reissueToken(String accessToken, String refreshToken);
 
     MyInfoDto findMyInfo(String token);
@@ -33,12 +30,12 @@ public interface UserService {
 
     void logout(String token);
 
-    List<UserInfoDto> findUserList(String token);
+    List<UserAllInfoDto> findUserList(String token);
 
-    UserInfoDto findUser(String token, Long userId);
+    UserAllInfoDto findUser(String token, Long userId);
 
-    UserInfoDto findUserByUserId(String token, Long userId); // 혜미니요청
+    UserAllInfoDto findUserByUserId(String token, Long userId); // 혜미니요청
 
-    List<MyInfoDto> findUserByNickname(String token, String nickname);
+    List<UserSearchInfoDto> findUserByNickname(String token, String nickname);
 
 }

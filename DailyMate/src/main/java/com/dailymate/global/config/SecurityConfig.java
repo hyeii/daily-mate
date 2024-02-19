@@ -57,10 +57,11 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeHttpRequests()
-                // 해당 API에 대해서는 모든 요청을 허가 -> 회원가입, 로그인
-                // requestMatchers는 스프링부트3버전부터 -> 2버전은 그대로 antMatchers 사용
-//                .requestMatchers(new AntPathRequestMatcher("/user/login", "/user/sign-up")).permitAll()
+                // 해당 API에 대해서는 모든 요청을 허가
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
+
+                // 해당 API에 대해서는 관리자 회원만 접근 가능
+                .antMatchers(PERMIT_ONLY_ADMIN).hasRole("ADMIN")
 
                 // 이 밖에 모든 요청에 대해서 인증을 필요로함
                 .anyRequest().authenticated()
@@ -92,7 +93,10 @@ public class SecurityConfig {
 
             // h2-console
             "/h2-console/**",
+    };
 
+    private static final String[] PERMIT_ONLY_ADMIN = {
+            "/user/admin/**",
 
     };
 
