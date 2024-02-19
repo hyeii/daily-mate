@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   CategoryByMonthMap,
   accountByDateResponse,
@@ -10,7 +10,7 @@ export const addAccount = async (body: accountRequest) => {
   console.log(body);
   try {
     const res: AxiosResponse<{ message: string }> = await axios.post(
-      "/api/account",
+      "/account",
       body
     );
     console.log(res.data.message);
@@ -28,7 +28,7 @@ export const modifyAccount = async (
   console.log(accountId, body);
   try {
     const res: AxiosResponse<{ message: string }> = await axios.patch(
-      `/api/account/${accountId}`,
+      `/account/${accountId}`,
       body
     );
     console.log(res.data.message);
@@ -42,7 +42,7 @@ export const modifyAccount = async (
 export const deleteAccount = async (accountId: number) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.delete(
-      `/api/account/${accountId}`
+      `/account/${accountId}`
     );
     console.log(res.data.message);
     alert("삭제완료");
@@ -70,7 +70,7 @@ export const getAccountMonthly = async (date: string) => {
 export const getAccountByCategory = async (date: string) => {
   try {
     const res: AxiosResponse<{ data: CategoryByMonthMap }> = await axios.get(
-      `/api/account/category/map`,
+      `/account/category/map`,
       {
         params: {
           date: date,

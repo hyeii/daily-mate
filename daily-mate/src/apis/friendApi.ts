@@ -4,7 +4,7 @@ import { friendResponse } from "../types/authType";
 export const getFriendList = async () => {
   try {
     const res: AxiosResponse<{ data: friendResponse[] }> = await axios.get(
-      "/api/friend/all"
+      "/friend/all"
     );
     return res.data.data;
   } catch (error) {
@@ -16,7 +16,7 @@ export const getFriendList = async () => {
 export const getWaitingList = async () => {
   try {
     const res: AxiosResponse<{ data: friendResponse[] }> = await axios.get(
-      "/api/friend/request/all"
+      "/friend/request/all"
     );
     return res.data.data;
   } catch (error) {
@@ -28,7 +28,7 @@ export const getWaitingList = async () => {
 export const deleteFriend = async (friendId: number) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.delete(
-      `/api/friend/${friendId}`
+      `/friend/${friendId}`
     );
     alert("친구가 해제되었습니다");
     return res.data.message;
@@ -41,7 +41,7 @@ export const deleteFriend = async (friendId: number) => {
 export const confirmFriend = async (friendId: number, nickname: string) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.put(
-      `/api/friend/request/${friendId}`
+      `/friend/request/${friendId}`
     );
     alert(`${nickname}님과 친구가 되었습니다`);
     return res.data.message;
@@ -54,7 +54,7 @@ export const confirmFriend = async (friendId: number, nickname: string) => {
 export const denyFriend = async (friendId: number, nickname: string) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.delete(
-      `/api/friend/request/${friendId}`
+      `/friend/request/${friendId}`
     );
     alert(`${nickname}님의 친구 신청이 거절되었습니다`);
     return res.data.message;
@@ -67,7 +67,7 @@ export const denyFriend = async (friendId: number, nickname: string) => {
 export const registFriend = async (toId: number, nickname: string) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.post(
-      `/api/friend/request/${toId}`
+      `/friend/request/${toId}`
     );
     alert(`${nickname}님에게 친구를 신청했습니다`);
     return res.data.message;
