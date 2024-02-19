@@ -14,28 +14,28 @@ const WaitingList = () => {
       } else {
         setWaitingList([
           {
-            fromId: 10,
+            userId: 10,
             email: "1232@123.com",
             nickname: "김아직친구아님",
             image: "url",
             profile: "신청받아",
-            requestDate: new Date(),
+            requestDate: "2024-02-10",
           },
           {
-            fromId: 11,
+            userId: 11,
             email: "1232@123.com",
             nickname: "박친구아님",
             image: "url",
             profile: "신청받아22",
-            requestDate: new Date(),
+            requestDate: "2024-02-10",
           },
           {
-            fromId: 12,
+            userId: 12,
             email: "1232@123.com",
             nickname: "이친구아님",
             image: "url",
             profile: "신청받아33",
-            requestDate: new Date(),
+            requestDate: "2024-02-10",
           },
         ]);
       }
@@ -46,9 +46,9 @@ const WaitingList = () => {
     <div>
       <div>
         {waitingList.map((friend) => (
-          <div key={friend.fromId}>
+          <div key={friend.userId}>
             <UserDataInfo
-              id={friend.fromId}
+              id={friend.userId}
               nickname={friend.nickname}
               profile={friend.profile}
               image={friend.image}
