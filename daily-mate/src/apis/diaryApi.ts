@@ -25,7 +25,7 @@ export const getDiaryByDate = async (date: string) => {
   }
 };
 
-export const getDiaryByMonth = async (date: string, userId: number) => {
+export const getDiaryByMonth = async (date: string) => {
   try {
     const res: AxiosResponse<{ data: diaryByMonthResponse[] }> =
       await axios.get("/diary/month", {

@@ -87,7 +87,7 @@ const Calendar = ({ isMini, calendarType }: props) => {
       if (calendarType === "myDiary") {
         console.log("내 다이어리 캘린더 렌더링");
         const diaryMonthlyData: diaryByMonthResponse[] | null =
-          await getDiaryByMonth(format(currentMonth, "yyyy-MM"), 123);
+          await getDiaryByMonth(format(currentMonth, "yyyy-MM"));
         // userInfo id
         if (diaryMonthlyData !== null) {
           setDiaryByMonth(diaryMonthlyData);
