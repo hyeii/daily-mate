@@ -4,7 +4,7 @@ import { searchResponse } from "../types/authType";
 export const searchUser = async (nickname: string) => {
   try {
     const res: AxiosResponse<{ data: searchResponse[] }> = await axios.get(
-      "/api/user",
+      "/api/user/search",
       {
         params: {
           nickname: nickname,
