@@ -5,8 +5,8 @@ import com.dailymate.domain.account.dto.AccountResDto;
 import com.dailymate.domain.account.dto.OutputResDto;
 import com.dailymate.domain.account.service.AccountService;
 import com.dailymate.global.dto.MessageDto;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +36,7 @@ public class AccountController {
     }
 
     @DeleteMapping("/{accountId}")
-    public ResponseEntity<MessageDto> deleteAccount(@PathVariable Long accountId) {
+    public ResponseEntity<MessageDto> dceleteAcount(@PathVariable Long accountId) {
         accountService.deleteAccount(accountId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("DELETE SUCCESS"));
@@ -48,7 +48,10 @@ public class AccountController {
     }
 
 
-
+    @Operation(
+            summary = "카테고리별 월별 조회",
+            description = ""
+    )
     @GetMapping("/category")
     public ResponseEntity<List<OutputResDto>> findOutputByCategory(Long userId, @RequestParam String date) {
         return ResponseEntity.ok(accountService.findOutputByCategory(userId, date));
