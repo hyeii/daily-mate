@@ -45,47 +45,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 1. Request Header에서 토큰 추출
-//        String jwtToken = resolveToken(request);
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        log.info("[필터] 토큰 : {}", bearerToken); // Bearer 토큰 형태임
+        String token = resolveToken(request);
+        log.info("[필터] 토큰 : {}", token); // Bearer 토큰 형태임
 
         // 2. validateToken으로 토큰 유효성 검사
         //      StringUtils.hasText : token != null이랑 같은거임
-        if(StringUtils.hasText(bearerToken) && jwtTokenProvider.validateToken(bearerToken)) {
-            // 로그아웃 여부 확인
-            // 로그아웃 상태라면 해당 accessToken이 만료되지 않았어도 무효함
-//            checkLogout(jwtToken);
-
+        if(StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             // 토큰이 유효할 경우(정상 토큰)
             // 해당 토큰으로 Authentication을 가지고 와서 SecurityContext에 저장   => 요청을 처리하는 동안 인증정보가 유지됨
-            Authentication authentication = jwtTokenProvider.getAuthentication(bearerToken);
+            Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
     }
 
-//    /**
-//     * Request Header에서 토큰 정보를 추출
-//     *  => Authorization 헤더에서 "Bearer "접두사로 시작하는 토큰을 추출하여 반환
-//     */
-//    private String resolveToken(HttpServletRequest request) {
-////        log.info("request : {}", request);
-////        Enumeration<String> headers = request.getHeaderNames();
-////        while(headers.hasMoreElements()) {
-////            String header = headers.nextElement();
-////            log.info("{} : {}", header, request.getHeader(header));
-////        }
-//
-//        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-//
-//        // StringUtils.hasText() : 값이 있을 경우 true, 공백이나 NULL일 경우 false
-//        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-//            log.info("체크체크 : {}", bearerToken);
-//            log.info("체크체크 : {}", bearerToken.substring(7));
-//            return bearerToken.substring(7);
-//        }
-//
-//        return null;
-//    }
+    /**
+     * 토큰의 prefix 체크 후 토큰 접두사를 제외한 토큰 추출
+     */
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+
+        return null;
+    }
+
 }

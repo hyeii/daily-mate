@@ -1,8 +1,9 @@
 package com.dailymate.global.common.security;
 
 import com.dailymate.domain.user.constant.UserType;
-import lombok.AllArgsConstructor;
+import com.dailymate.domain.user.domain.Users;
 import lombok.Builder;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,31 +15,27 @@ import java.util.List;
 /**
  * Spring Security에서 사용자의 정보를 담는 인터페이스를 구현한 클래스
  */
-@Builder
-@AllArgsConstructor
+@Data
 public class UserDetailsImpl implements UserDetails {
 
+//    private final Users user;
+    private Long userId;
     private String email; // username
     private String authority;
+    private String password;
 
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    @Builder.Default
-//    private List<String> roles = new ArrayList<>(); // 유저가 가지고 있는 권한 목록
-//
-//    /**
-//     * 계정의 권한 목록을 리턴
-//     */
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return this.roles.stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
-
+    @Builder
+    public UserDetailsImpl(Long userId, String email, String authority, String password) {
+        this.userId = userId;
+        this.email = email;
+        this.authority = authority;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> auth = new ArrayList<>();
+//        String authority = user.getType().getRole();
 
         if(authority.equals(UserType.ROLE_ADMIN.getRole()))
             authority = "ROLE_ADMIN";
@@ -54,8 +51,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
-    }
+        return password;
+    } // 이걸해줘야 패스워드 비교를하네;; PasswordEncoder 에러가 안뜸
 
     /**
      * 계정의 고유한 값을 리턴 =========================== 젤 중요한 메서드
@@ -64,6 +61,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     /**

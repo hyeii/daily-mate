@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Where(clause = "deleted_at is null")
 public class Users extends BaseTime {
 
     @Id
@@ -42,6 +44,15 @@ public class Users extends BaseTime {
         this.password = password;
         this.nickname = nickname;
         this.type = UserType.getUserType(type);
+    }
+
+    public void updateUser(String nickname, String profile) {
+        this.nickname = nickname == null ? this.nickname : nickname;
+        this.profile = profile == null ? this.profile : profile;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 
 }

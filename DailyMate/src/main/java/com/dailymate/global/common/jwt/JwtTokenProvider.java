@@ -1,6 +1,9 @@
 package com.dailymate.global.common.jwt;
 
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
+import com.dailymate.global.common.redis.RedisUtil;
+import com.dailymate.global.common.security.UserDetailsImpl;
+import com.dailymate.global.common.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,12 +14,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,30 +39,76 @@ public class JwtTokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private final Key key;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final RedisUtil redisUtil;
 
     /**
      * application.yml에서 secret값 가져와서 key에 저장
      */
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsServiceImpl userDetailsService, RedisUtil redisUtil) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-//        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+
+        this.userDetailsService = userDetailsService;
+        this.redisUtil = redisUtil;
+    }
+
+    /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 userId를 추출함
+     */
+    public Long getUserId(String accessToken) {
+        return (long) (int) parseClaims(resolveToken(accessToken)).get("userId");
+    }
+
+    /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 email을 추출함
+     */
+    public String getUserEmail(String accessToken) {
+        return parseClaims(resolveToken(accessToken)).getSubject();
+    }
+
+    /**
+     * ACCESS TOKEN의 권한 정보에서 로그인 사용자의 ROLE을 추출함
+     * 관리자인지 체크하기 위함
+     */
+    public String getUserRole(String accessToken) {
+        return parseClaims(resolveToken(accessToken)).get(AUTHORITIES_KEY).toString();
+    }
+
+    /**
+     * 토큰이 만료되었는지 체크
+     */
+    public Long getTokenExpirationTime(String token) {
+        long now = (new Date()).getTime();
+        long expiration = parseClaims(resolveToken(token)).getExpiration().getTime();
+
+        log.info("[JwtTokenProvider] 토큰 만료 체크 ! 현재시간 : {}", now);
+        log.info("[JwtTokenProvider] 토큰 만료 체크 ! 만료시간 : {}", expiration);
+
+        return expiration - now;
     }
 
     /**
      * 유저 정보를 가지고 토큰을 생성하는 메서드
      */
     public JwtTokenDto generateToken(Authentication authentication) {
+        log.info("[generateToken] 토큰 생성 입장 : {}", authentication.getName());
+
         // 권한들 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+
+        // Authentication에서 유저 정보 가져오기
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        log.info("[generateToken] UserDetailsImpl 변환 성공 !! {} : {}", userPrincipal.getUserId(), userPrincipal.getUsername());
 
         long now = (new Date()).getTime();
 
         // accessToken 생성 - 인증된 사용자의 권한 정보와 만료 시간을 담고 있음
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())                       // payload "sub": "name"
+                .claim("userId", userPrincipal.getUserId())           // userId를 뽑아오기 위해 저장 추가!!!!
                 .claim(AUTHORITIES_KEY, authorities)                        // payload "auth": "ROLE_USER"
                 .setExpiration(new Date(now + JwtTokenExpiration.ACCESS_TOKEN_EXPIRATION_TIME.getTime()))    // payload "exp": 151621022(ex)
                 .signWith(key, SignatureAlgorithm.HS256)                    // header "alg": "HS256"
@@ -87,9 +134,8 @@ public class JwtTokenProvider {
      * 위의 메서드와 암호화 <-> 복호화로 생각
      */
     public Authentication getAuthentication(String accessToken) { // Bearer 토큰형태
-//        if(accessToken.startsWith("Bearer"))
-//            accessToken = accessToken.substring(7);
         accessToken = resolveToken(accessToken);
+        log.info("[JwtTokenProvider] getAuthentication 입장 : {}", accessToken);
 
         // JWT 토큰 복호화
         Claims claims = parseClaims(accessToken);
@@ -105,8 +151,10 @@ public class JwtTokenProvider {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication return
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+//        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject()); // UserDetails를 UserDetailsImpl로 가져와야 나중에 캐스팅해서 userId를 뽑아올 수 있음,,
         log.info("principal : {}", principal);
+        log.info("===========================================");
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
@@ -114,15 +162,20 @@ public class JwtTokenProvider {
     /**
      * 토큰 정보를 검증하는 메서드
      */
-    public Boolean validateToken(String token) { // Bearer 토큰형태
-        token = resolveToken(token);
+    public Boolean validateToken(String token) { // Bearer없는 토큰 형태
         log.info("[validateToken] token : {}", token);
+        token = resolveToken(token);
 
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
+
+            if(redisUtil.hasKeyBlackList(token)) {
+                log.info("[validate token] 로그아웃 했찌롱 ~~~~ ");
+                return false;
+            }
 
             return true;
         } catch (SecurityException | MalformedJwtException e) {
@@ -158,15 +211,15 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 토큰의 prefix 체크 후 토큰 접두사를 제외한 토큰 추출
+     * 토큰의 prefix 가 존재한다면
+     * 토큰 접두사를 제외한 토큰 추출해준다.(테스트용임)
      */
-    private String resolveToken(String bearerToken) {
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            log.info("[resolveToken] 제대로된 토큰형태");
-            return bearerToken.substring(7);
+    private String resolveToken(String token) {
+        if(StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
+            return token.substring(7);
         }
 
-        return null;
+        return token;
     }
 
 }

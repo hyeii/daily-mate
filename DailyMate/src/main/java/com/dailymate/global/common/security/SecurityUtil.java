@@ -1,6 +1,5 @@
-package com.dailymate.global.common.util;
+package com.dailymate.global.common.security;
 
-import com.dailymate.global.common.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,34 +12,33 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class SecurityUtil {
-    
+
     private SecurityUtil() {}
-    
+
     // SecurityContext에 유저 정보가 저장되는 시점
     // Request가 들어올 때 JwtFilter의 doFilter에서 저장
     public static Long getCurrentUserId() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if(authentication == null || authentication.getName() == null) {
             log.error("[SecurityUtil] 인증 정보 없음");
             throw new RuntimeException("Security Context에 인증 정보가 없습니다.");
         }
-        
-        return Long.parseLong(authentication.getName());
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        return userDetails.getUserId();
     }
 
-    public String getCurrentUserEmail() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public static String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null || authentication.getName() == null) {
             log.error("[SecurityUtil] 인증 정보 없음");
             throw new RuntimeException("Security Context에 인증 정보가 없습니다.");
         }
-
-//        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-        log.info("authentication.getName() : {}", authentication.getName());
 
         return authentication.getName();
     }
-    
+
 }
