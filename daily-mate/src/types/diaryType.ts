@@ -54,9 +54,5 @@ export interface commentListResponse {
 }
 
 export interface commentBody {
-  nickname: string;
   content: string;
-  likeNum: number;
-  createdAt: Date;
-  updatedAt: Date;
 }

@@ -14,7 +14,6 @@ interface props {
 }
 
 const DiaryComment = ({ diaryId }: props) => {
-  // const [commentList, setCommentList] = useState<commentListResponse[]>([]);
   const [commentList, setCommentList] = useState<commentListResponse[]>([
     {
       commentId: 12,
@@ -47,7 +46,7 @@ const DiaryComment = ({ diaryId }: props) => {
       }
     };
     fetchData();
-  }, []);
+  }, [diaryId]);
 
   const CheckUpdateComment = (comment: commentListResponse) => {
     if (comment.nickname !== userInfo.nickname) {
@@ -66,11 +65,7 @@ const DiaryComment = ({ diaryId }: props) => {
   const submitUpdateComment = (comment: commentListResponse) => {
     // 수정 api
     const updatedComment: commentBody = {
-      nickname: userInfo.nickname,
       content: inputUpdateComment,
-      likeNum: comment.likeNum,
-      createdAt: comment.createdAt,
-      updatedAt: new Date(),
     };
     updateComment(comment.commentId, updatedComment);
     // updateState 초기화 위치 고민 필요!

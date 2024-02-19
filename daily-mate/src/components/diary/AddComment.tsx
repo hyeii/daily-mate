@@ -1,7 +1,5 @@
 import { ChangeEvent, useState } from "react";
 import { commentBody } from "../../types/diaryType";
-import { useRecoilValue } from "recoil";
-import { userInfoState } from "../../atoms/authAtom";
 import { addComment } from "../../apis/diaryApi";
 
 interface props {
@@ -10,7 +8,6 @@ interface props {
 
 const AddComment = ({ diaryId }: props) => {
   const [inputComment, setInputComment] = useState<string>("");
-  const userInfo = useRecoilValue(userInfoState);
   const handleComment = (event: ChangeEvent<HTMLInputElement>) => {
     setInputComment(event.target.value);
   };
@@ -20,11 +17,7 @@ const AddComment = ({ diaryId }: props) => {
       return;
     }
     const comment: commentBody = {
-      nickname: userInfo.nickname,
       content: inputComment,
-      likeNum: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
     addComment(diaryId, comment);
   };
