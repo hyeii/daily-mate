@@ -35,21 +35,20 @@ public class AccountServiceImpl implements AccountService{
     @Override
     @Transactional
     public void addAccount(String token, AccountReqDto accountReqDto) {
+        // 토큰으로 로그인 유저의 userId를 추출하자.
+        // 추출하려면? JwtTokenProvider를 사용해야함 -> 위에 변수로 private final JwtTokenProvider로 의존성을 주입받음!
+        Long userId = jwtTokenProvider.getUserId(token);
+        log.info("[가계부 등록] 등록 요청 : {}", userId);
 
         // 금액을 확인하자.
         if(accountReqDto.getAmount() == 0) {
+            log.error("[가계부 등록] 금액이 0원인 가계부는 등록할 수 없어연~ ");
             throw new DiaryBadRequestException(AccountExceptionMessage.ACCOUNT_BAD_REQUEST.getMsg());
         }
 
-        // 작성자 번호로 등록해주자.
-        String email = jwtTokenProvider.getAuthentication(token).getName();
-        Users user = userRepository.findByEmail(email).orElse(null);
-
-
         // 가계부 생성
         Account account = Account.builder()
-//                .userId(1L)
-                .userId(user.getUserId())
+                .userId(userId)     // 추출한 userId를 넣어쥬자
                 .content(accountReqDto.getContent())
                 .type(AccountType.getAccountType(accountReqDto.getAmount()))
                 .date(accountReqDto.getDate())
