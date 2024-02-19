@@ -66,5 +66,6 @@ export interface searchResponse {
   nickname: string;
   image: string;
   profile: string;
-  status: string;
+  status: boolean;
+  requestDate: string | null;
 }

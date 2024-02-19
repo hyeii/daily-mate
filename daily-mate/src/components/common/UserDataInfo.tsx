@@ -17,6 +17,8 @@ interface props {
 }
 
 const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
+  // status : friendList, waitingList, bothWaitingList, search
+
   const [etcClicked, setEtcClicked] = useState<boolean>(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -91,7 +93,7 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
         <EtcIcon onClick={handleEtc} size={24} />
         {etcClicked ? (
           <EtcModalWrapper>
-            {status === "friendsList" ? (
+            {status === "friendList" ? (
               <EtcModalBox onClick={() => handleDeleteFriend(id)}>
                 친구 취소
               </EtcModalBox>
@@ -104,10 +106,12 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
                   친구 거절
                 </EtcModalBox>
               </div>
-            ) : (
+            ) : status === "search" ? (
               <EtcModalBox onClick={() => handleRegistFriend(id, nickname)}>
                 친구 신청
               </EtcModalBox>
+            ) : (
+              <EtcModalBoxWaiting>친구 대기중</EtcModalBoxWaiting>
             )}
           </EtcModalWrapper>
         ) : null}
@@ -171,4 +175,8 @@ const EtcModalBox = styled.div`
   &: hover {
     font-weight: bold;
   }
+`;
+
+const EtcModalBoxWaiting = styled.div`
+  margin: 0.5rem 0;
 `;

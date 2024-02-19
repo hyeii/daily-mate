@@ -22,20 +22,40 @@ const SearchPage = () => {
           userId: 3,
           nickname: "냥",
           email: "qwe@eqwe",
-          profile: "검색테스트1",
+          profile: "검색테스트1 - 친구임",
           image: "url",
-          status: "친구",
+          status: true,
+          requestDate: "2024-02-13",
         },
         {
           userId: 4,
           nickname: "냥2",
           email: "qwe@eqwe",
-          profile: "검색테스트2",
+          profile: "검색테스트2 - 대기중임",
           image: "url",
-          status: "대기중",
+          status: false,
+          requestDate: "2024-02-13",
+        },
+        {
+          userId: 5,
+          nickname: "냥3",
+          email: "qwe@eqwe",
+          profile: "검색테스트3 - 친구아님",
+          image: "url",
+          status: false,
+          requestDate: null,
         },
       ]);
     }
+  };
+
+  const checkFriendState = (result: searchResponse) => {
+    const { status, requestDate } = result;
+    return status
+      ? "friendList"
+      : requestDate !== null
+      ? "bothWaitingList"
+      : "search";
   };
 
   return (
@@ -51,15 +71,8 @@ const SearchPage = () => {
             nickname={result.nickname}
             profile={result.profile}
             image={result.image}
-            status={
-              result.status === "친구"
-                ? "friendList"
-                : result.status === "대기중"
-                ? "waitingList"
-                : "search"
-            }
+            status={checkFriendState(result)}
           />
-          {/* 내가 걸고 상대가 대기중인 상태 고려 추가 */}
         </div>
       ))}
     </div>
