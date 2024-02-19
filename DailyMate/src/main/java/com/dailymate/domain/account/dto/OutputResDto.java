@@ -1,12 +1,16 @@
 package com.dailymate.domain.account.dto;
 
-import lombok.Builder;
+import com.dailymate.domain.account.constant.AccountCategory;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class OutputResDto {
-    private String category;
+    private AccountCategory category;
     private Long amountSum;
+
+    public OutputResDto(AccountCategory category, Long amountSum) {
+        this.category = category;
+        this.amountSum = amountSum;
+    }
 
 }

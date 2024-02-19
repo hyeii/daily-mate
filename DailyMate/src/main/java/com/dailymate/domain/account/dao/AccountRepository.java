@@ -14,7 +14,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findByUserIdAndDate(Long userId, String date);
 
-    @Query("SELECT NEW com.dailymate.domain.account.dto.OutputResDto(a.category, SUM(a.amount) AS amountSum) " +
+    @Query(value = "SELECT NEW com.dailymate.domain.account.dto.OutputResDto(a.category, SUM(a.amount)) " +
             "FROM Account a " +
             "WHERE a.type = '지출' AND a.userId = :userId AND a.date LIKE CONCAT(:date, '%') " +
             "GROUP BY a.category ")
