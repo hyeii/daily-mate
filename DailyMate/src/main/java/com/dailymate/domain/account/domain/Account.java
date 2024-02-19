@@ -7,6 +7,7 @@ import com.dailymate.global.common.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -17,6 +18,7 @@ import javax.persistence.*;
 @Entity
 @DynamicInsert
 @DynamicUpdate
+@Where(clause = "deleted_at is null") // select시, where절에 무조건 내가 설정한 로직이 추가된다.
 public class Account extends BaseTime {
 
     @Id // 해당 변수를 PK로 설정.

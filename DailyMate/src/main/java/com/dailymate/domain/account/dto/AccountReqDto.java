@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public class AccountReqDto {
-//    private long userId;
+//    private Long userId;
     private String content;
     private String date;
     private Integer amount;

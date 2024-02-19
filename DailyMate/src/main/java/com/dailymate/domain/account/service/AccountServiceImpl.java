@@ -5,15 +5,23 @@ import com.dailymate.domain.account.constant.AccountType;
 import com.dailymate.domain.account.dao.AccountRepository;
 import com.dailymate.domain.account.domain.Account;
 import com.dailymate.domain.account.dto.AccountReqDto;
+import com.dailymate.domain.account.dto.AccountResDto;
+import com.dailymate.domain.account.dto.OutputResDto;
 import com.dailymate.domain.account.exception.AccountBadRequestException;
 import com.dailymate.domain.account.exception.AccountExceptionMessage;
+import com.dailymate.domain.account.exception.AccountForbiddenException;
 import com.dailymate.domain.account.exception.AccountNotFoundException;
 import com.dailymate.domain.diary.exception.DiaryBadRequestException;
+import com.dailymate.domain.user.dao.UserRepository;
+import com.dailymate.domain.user.domain.Users;
+import com.dailymate.global.common.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -21,21 +29,27 @@ import javax.transaction.Transactional;
 public class AccountServiceImpl implements AccountService{
 
     private final AccountRepository accountRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
-    public void addAccount(AccountReqDto accountReqDto) {
+    public void addAccount(String token, AccountReqDto accountReqDto) {
 
         // 금액을 확인하자.
         if(accountReqDto.getAmount() == 0) {
             throw new DiaryBadRequestException(AccountExceptionMessage.ACCOUNT_BAD_REQUEST.getMsg());
         }
 
-        // 작성자가 일치하는지 확인하자.
+        // 작성자 번호로 등록해주자.
+        String email = jwtTokenProvider.getAuthentication(token).getName();
+        Users user = userRepository.findByEmail(email).orElse(null);
+
 
         // 가계부 생성
         Account account = Account.builder()
-                .userId(1L)
+//                .userId(1L)
+                .userId(user.getUserId())
                 .content(accountReqDto.getContent())
                 .type(AccountType.getAccountType(accountReqDto.getAmount()))
                 .date(accountReqDto.getDate())
@@ -48,7 +62,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     @Transactional
-    public void updateAccount(Long accountId, AccountReqDto accountReqDto) {
+    public void updateAccount(String token, Long accountId, AccountReqDto accountReqDto) {
 
         // 가계부가 존재하는지 확인하자.
         Account account = accountRepository.findById(accountId)
@@ -62,6 +76,15 @@ public class AccountServiceImpl implements AccountService{
         }
 
         // 작성자가 일치하는지 확인하자.
+        String email = jwtTokenProvider.getAuthentication(token).getName();
+        Users loginUser = userRepository.findByEmail(email)
+                .orElse(null);
+
+        Long loginUserId = loginUser.getUserId();
+        if(account.getUserId() != loginUserId) {
+            // 불일치
+            throw new AccountForbiddenException(AccountExceptionMessage.ACCOUNT_HANDLE_ACCESS_DENIED.getMsg());
+        }
 
         //금액을 확인하자.
         if(account.getAmount() == 0) {
@@ -93,4 +116,67 @@ public class AccountServiceImpl implements AccountService{
         // 가계부 삭제
         account.delete();
     }
+
+    @Transactional
+    @Override
+    public List<AccountResDto> findAccountList(Long userId, String date) {
+
+//        List<Account> accountList = accountRepository.findAll();
+//        List<AccountResDto> accountResDtoList = new ArrayList<>();
+//
+//        for(Account account : accountList) {
+//
+//            // 해당 날짜에 조회할 가계부가 존재하는지 확인하자.
+//
+//            if (account.getCreatedAt() == date) {
+//
+//                // 이미 삭제된 가계부인지 확인하자.
+//                if (account.getDeletedAt() == null) {
+
+//                    // 사용자가 일치하는지 확인하자.
+//
+//                    AccountResDto accountResDto = AccountResDto.builder()
+//                            .userId(1L)
+//                            .accountId(account.getAccountId())
+//                            .content(account.getContent())
+//                            .type(account.getType().getValue())
+//                            .date(account.getDate())
+//                            .amount(account.getAmount())
+//                            .category(account.getCategory().getValue())
+//                            .build();
+//
+//                    accountResDtoList.add(accountResDto);
+//                }
+//            }
+//        }
+//        // 날짜별 가계부 조회
+//        return accountResDtoList;
+
+        List<Account> accountList = accountRepository.findByUserIdAndDate(userId, date);
+        List<AccountResDto> accountResDtoList = new ArrayList<>();
+
+        for(Account account : accountList) {
+            AccountResDto accountResDto = AccountResDto.builder()
+                    .userId(1L)
+                    .accountId(account.getAccountId())
+                    .content(account.getContent())
+                    .type(account.getType().getValue())
+                    .date(account.getDate())
+                    .amount(account.getAmount())
+                    .category(account.getCategory().getValue())
+                    .build();
+            accountResDtoList.add(accountResDto);
+        }
+        return accountResDtoList;
+    }
+
+
+
+    @Transactional
+    @Override
+    public List<OutputResDto> findOutputByCategory(Long userId, String date) {
+        return accountRepository.findByUserIdAndDateStartsWith(userId, date);
+    }
+
+
 }
