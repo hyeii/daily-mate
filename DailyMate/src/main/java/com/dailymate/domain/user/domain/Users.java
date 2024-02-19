@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @DynamicInsert
@@ -27,6 +28,7 @@ public class Users extends BaseTime {
 
     private String password;
 
+    @NotNull
     private String nickname;
 
     private String image;
@@ -36,7 +38,7 @@ public class Users extends BaseTime {
     @Enumerated(EnumType.STRING)
     private UserType type;
 
-    private String providerId;
+    private String providerId; // 소셜 타입의 식별자값(일반 로그인일 경우 null)
 
     @Builder
     public Users(String email, String password, String nickname, String type) {
