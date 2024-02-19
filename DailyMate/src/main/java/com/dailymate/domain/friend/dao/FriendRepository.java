@@ -11,17 +11,20 @@ import java.util.Optional;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    // 이미 친구거나 대기중인지 체크하기
-    // 데이터가 있는거만으로 대기중이거나 친구상태임
+    // 이미 친구거나 대기중인지 체크하기(데이터가 있는거만으로 대기중이거나 친구상태임)(toId, fromId에 각자 번갈아서 사용하세여)
     Boolean existsByToIdAndFromId(Long toId, Long fromId);
 
-    // 대기중인 친구인지 체크하기
+    // 대기중인 친구인지 체크하기(toId, fromId에 각자 번갈아서 사용하세여)
     Boolean existsByToIdAndFromIdAndStatusIsFalse(Long toId, Long fromId);
+
+    // 둘이 친구상태인지 체크(toId, fromId에 각자 번갈아서 사용하세여)
+    Boolean existsByToIdAndFromIdAndStatusIsTrue(Long toId, Long fromId);
+
 
     // 나한테 친구를 걸고 대기중인 회원 목록
     List<Friend> findByToIdAndStatusIsFalse(Long toId);
 
-    // 특정 친구 회원 목록
+    // 특정 친구 목록
     @Query(value = "SELECT new com.dailymate.domain.friend.dto.FriendInfoDto(u.userId, f.requestDate, u.email, u.nickname, u.image, u.profile)" +
             "FROM Users u " +
             "JOIN Friend f ON (u.userId = f.fromId AND f.toId = :userId) OR (u.userId = f.toId AND f.fromId = :userId) " +
@@ -47,5 +50,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     Optional<Friend> findByToIdAndFromIdAndStatusIsFalse(Long toId, Long fromId);
 
     // 친구 상태인 친구 반환
-    Optional<Friend> findByToIdAndFromIdAndStatusIsTrue(Long toId, Long fromId);
+    Friend findByToIdAndFromIdAndStatusIsTrue(Long toId, Long fromId);
+
 }
