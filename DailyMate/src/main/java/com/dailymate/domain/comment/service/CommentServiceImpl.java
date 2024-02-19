@@ -120,14 +120,15 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new CommentNotFoundException("[DELETE_COMMENT] " + CommentExceptionMessage.COMMENT_NOT_FOUND.getMsg()));
 
         // 사용자와 댓글 작성자 확인
-        if(user != comment.getUsers()) {
+        if(user == comment.getUsers() || user == comment.getDiary().getUsers()) {
+            // 댓글 좋아요 삭제
+            likeCommentRepository.deleteAllByComment(comment);
+            // 댓글 삭제
+            comment.delete();
+        } else {
             throw new CommentForbiddenException("[DELETE_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
         }
 
-        // 댓글 좋아요 삭제
-        likeCommentRepository.deleteAllByComment(comment);
-
-        comment.delete();
     }
 
     @Override
