@@ -164,7 +164,7 @@ public class FriendServiceImpl implements FriendService {
     }
 
     /**
-     * 둘이 친구인치 확인합니다.
+     * 둘이 친구인지 확인합니다.
      * 친구일 경우 toId를 반환 / 친구가 아닐경우 null을 반환
      */
     private Long isFriendAndReturnToId(Long loginUserId, Long friendId) {
