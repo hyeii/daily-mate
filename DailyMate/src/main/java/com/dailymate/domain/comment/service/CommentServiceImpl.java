@@ -14,6 +14,8 @@ import com.dailymate.domain.diary.dao.DiaryRepository;
 import com.dailymate.domain.diary.domain.Diary;
 import com.dailymate.domain.diary.exception.DiaryExceptionMessage;
 import com.dailymate.domain.diary.exception.DiaryNotFoundException;
+import com.dailymate.domain.friend.dao.FriendRepository;
+import com.dailymate.domain.friend.domain.Friend;
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
@@ -36,6 +38,7 @@ public class CommentServiceImpl implements CommentService {
     private final DiaryRepository diaryRepository;
     private final LikeCommentRepository likeCommentRepository;
     private final UserRepository userRepository;
+    private final FriendRepository friendRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     /**
@@ -60,6 +63,17 @@ public class CommentServiceImpl implements CommentService {
         // 일기 확인
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new DiaryNotFoundException("[ADD_COMMENT] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
+
+        // 작성 권한 확인
+        Friend friend = friendRepository.findMyFriendToEntity(user.getUserId(), diary.getUsers().getUserId());
+
+        if(friend == null && diary.getOpenType().getValue() == "친구공개") {
+            throw new CommentForbiddenException("[ADD_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
+        }
+
+        if(user != diary.getUsers() && diary.getOpenType().getValue() == "비공개") {
+            throw new CommentForbiddenException("[ADD_COMMENT] " + CommentExceptionMessage.COMMENT_HANDLE_ACCESS_DENIED.getMsg());
+        }
 
         Comment comment = Comment.createComment(commentReqDto, diary, user);
 
