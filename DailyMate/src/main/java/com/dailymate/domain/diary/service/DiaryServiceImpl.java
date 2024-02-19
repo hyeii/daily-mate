@@ -15,6 +15,8 @@ import com.dailymate.domain.diary.exception.DiaryBadRequestException;
 import com.dailymate.domain.diary.exception.DiaryExceptionMessage;
 import com.dailymate.domain.diary.exception.DiaryForbiddenException;
 import com.dailymate.domain.diary.exception.DiaryNotFoundException;
+import com.dailymate.domain.friend.dao.FriendRepository;
+import com.dailymate.domain.friend.domain.Friend;
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
@@ -41,6 +43,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final LikeDiaryRepository likeDiaryRepository;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final FriendRepository friendRepository;
 
     /**
      * 일기 작성
@@ -293,9 +296,16 @@ public class DiaryServiceImpl implements DiaryService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new DiaryNotFoundException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
 
-        // 열람 자격 확인(!!!)
-        // diary userId랑 userId랑 친구 -> diary 비공개 아니면 ㅇㅋ -> else 는 예외 처리
-        // diary userId랑 userId랑 친구 ㄴㄴ -> diary 공개만 ㅇㅋ -> else 는 예외 처리
+        // 조회 권한 확인
+        Friend friend = friendRepository.findMyFriendToEntity(user.getUserId(), diary.getUsers().getUserId());
+
+        if(user != diary.getUsers() && friend == null && diary.getOpenType().getValue() == "친구공개") {
+            throw new DiaryForbiddenException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
+        }
+
+        if(user != diary.getUsers() && diary.getOpenType().getValue() == "비공개") {
+            throw new DiaryForbiddenException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
+        }
 
         // 좋아요 여부
         Boolean isLike = false;
@@ -337,11 +347,11 @@ public class DiaryServiceImpl implements DiaryService {
         Users friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new UserNotFoundException("[FIND_FRIEND_DIARY_BY_MONTH] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
 
-        // 친구 확인(!!!)
-        Boolean isFriend = true;
+        // 조회 권한 확인
+        Friend isFriend = friendRepository.findMyFriendToEntity(user.getUserId(), friendId);
 
         List<DiaryMonthlyResDto> diaries;
-        if(isFriend){
+        if(isFriend != null){
             diaries = diaryRepository.findByUsersAndYearMonthAAndOpenTypeNot(friend, date, OpenType.getOpenType("비공개"));
         } else {
             diaries = diaryRepository.findByUsersAndYearMonthAAndOpenType(friend, date, OpenType.getOpenType("공개"));
