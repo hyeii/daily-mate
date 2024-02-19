@@ -152,10 +152,16 @@ public class AccountServiceImpl implements AccountService{
 //        // 날짜별 가계부 조회
 //        return accountResDtoList;
 
+        log.info("[날짜별 가계부 조회] 조회 요청 : {}", userId);
         List<Account> accountList = accountRepository.findByUserIdAndDate(userId, date);
+
+        log.info("[날짜별 가계부 조회] 조회잘됐엉");
+        log.info("[날짜별 가계부 조회] accountList 개수 : {}", accountList.size());
+
         List<AccountResDto> accountResDtoList = new ArrayList<>();
 
         for(Account account : accountList) {
+            log.info("[날짜별 가계부 조회] 조회된 가계부 : {}", account.getContent());
             AccountResDto accountResDto = AccountResDto.builder()
                     .userId(1L)
                     .accountId(account.getAccountId())
@@ -163,7 +169,7 @@ public class AccountServiceImpl implements AccountService{
                     .type(account.getType().getValue())
                     .date(account.getDate())
                     .amount(account.getAmount())
-                    .category(account.getCategory().getValue())
+                    .category(account.getCategory() == null ? null : account.getCategory().getValue())
                     .build();
             accountResDtoList.add(accountResDto);
         }
