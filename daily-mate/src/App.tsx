@@ -23,9 +23,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { sideBarOpenState } from "./atoms/sideBarAtom";
 import styled from "styled-components";
 import { isLoginState } from "./atoms/authAtom";
-import axios from "axios";
-
-axios.defaults.baseURL = process.env.REACT_APP_URL;
 
 function App() {
   const [isOpen, setIsOpen] = useRecoilState(sideBarOpenState);

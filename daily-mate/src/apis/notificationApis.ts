@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import { axios } from "./api";
 import { notifyResponse } from "../types/notificationType";
 
 export const getNotify = async () => {

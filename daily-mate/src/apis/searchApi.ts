@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import { axios } from "./api";
 import { searchResponse } from "../types/authType";
 
 export const searchUser = async (nickname: string) => {

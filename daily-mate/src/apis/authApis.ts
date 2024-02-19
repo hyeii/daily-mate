@@ -1,10 +1,11 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import {
   myInfoResponse,
   signUpRequest,
   updatePasswordInput,
   userResponse,
 } from "../types/authType";
+import { axios } from "./api";
 
 export const checkNickname = async (nickname: string) => {
   try {
@@ -56,28 +57,23 @@ export const signUp = async (body: signUpRequest) => {
   }
 };
 
-export const signIn = async (email: string, password: string) => {
-  try {
-    const res: AxiosResponse<userResponse> = await axios.post("/user/login", {
-      email: email,
-      password: password,
-    });
-    const signInResult = res.data;
-    axios.interceptors.request.use(
-      (config) => {
-        config.headers.Authorization = `Bearer ${signInResult.accessToken}`;
-        return config;
-      },
-      (error) => {
-        // TODO :  토큰 만료 가능성
-      }
-    );
-    return signInResult;
-  } catch (error) {
-    console.error("로그인 오류 : ", error);
-    alert();
-    return null;
-  }
+export const useSignIn = () => {
+  const signIn = async (email: string, password: string) => {
+    try {
+      const res: AxiosResponse<userResponse> = await axios.post("/user/login", {
+        email: email,
+        password: password,
+      });
+      const signInResult = res.data;
+      window.localStorage.setItem("accessToken", signInResult.accessToken);
+      return signInResult;
+    } catch (error) {
+      console.error("로그인 오류 : ", error);
+      return null;
+    }
+  };
+
+  return signIn;
 };
 
 export const logOut = async () => {
@@ -86,6 +82,7 @@ export const logOut = async () => {
       "/user/logout"
     );
     console.log(res.data.message);
+    window.localStorage.removeItem("accessToken");
     return res.data;
   } catch (error) {
     console.error("로그아웃 오류 : ", error);

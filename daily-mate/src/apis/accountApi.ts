@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import { axios } from "./api";
 import {
   CategoryByMonthMap,
   accountByDateResponse,
@@ -55,7 +56,7 @@ export const deleteAccount = async (accountId: number) => {
 export const getAccountMonthly = async (date: string) => {
   try {
     const res: AxiosResponse<{ data: accountByMonthResponse }> =
-      await axios.get("/api/account/month", {
+      await axios.get("/account/month", {
         params: {
           date: date,
         },
@@ -87,7 +88,7 @@ export const getAccountByCategory = async (date: string) => {
 export const getAccountByDate = async (date: string) => {
   try {
     const res: AxiosResponse<{ data: accountByDateResponse[] }> =
-      await axios.get(`/api/account`, {
+      await axios.get(`/account`, {
         params: {
           date: date,
         },
