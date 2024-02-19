@@ -18,7 +18,7 @@ const extractCategoryValue = (object: CategoryByMonthMap): number[] => {
     "교통",
     "기타",
   ];
-  return categories.map((category) => object[category] || 0);
+  return categories.map((category) => Math.abs(object[category] || 0));
 };
 
 const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
@@ -50,23 +50,33 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
         <CategoryContainer>
           <CategoryItem>
             <div>식비</div>
-            <div>{outputs.식비 ?? 0}원</div>
+            <div style={{ color: "#A585FF", fontWeight: "bold" }}>
+              {outputs.식비 ?? 0}원
+            </div>
           </CategoryItem>
           <CategoryItem>
             <div>카페 </div>
-            <div>{outputs.카페 ?? 0}원</div>
+            <div style={{ color: "#FFEB80", fontWeight: "bold" }}>
+              {outputs.카페 ?? 0}원
+            </div>
           </CategoryItem>
           <CategoryItem>
             <div>생활 </div>
-            <div> {outputs.생활 ?? 0}원</div>
+            <div style={{ color: "#FBA76A", fontWeight: "bold" }}>
+              {outputs.생활 ?? 0}원
+            </div>
           </CategoryItem>
           <CategoryItem>
             <div>교통</div>
-            <div> {outputs.교통 ?? 0}원</div>
+            <div style={{ color: "#DEFF97", fontWeight: "bold" }}>
+              {outputs.교통 ?? 0}원
+            </div>
           </CategoryItem>
           <CategoryItem>
             <div>기타</div>
-            <div> {outputs.기타 ?? 0}원</div>
+            <div style={{ color: "#FF96E2", fontWeight: "bold" }}>
+              {outputs.기타 ?? 0}원
+            </div>
           </CategoryItem>
         </CategoryContainer>
       </DataContainer>
