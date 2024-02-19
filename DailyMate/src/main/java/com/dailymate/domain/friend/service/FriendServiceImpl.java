@@ -130,17 +130,13 @@ public class FriendServiceImpl implements FriendService {
         Long loginUserId = jwtTokenProvider.getUserId(token);
         log.info("[친구 끊기] {}님이 {}님과 친구를 끊으려합니다.", loginUserId, friendId);
 
-        Long toId = isFriendAndReturnToId(loginUserId, friendId);
+        Friend friend = friendRepository.findMyFriendToEntity(loginUserId, friendId);
 
         // 친구인지 체크
-        if(toId == null) {
+        if(friend == null) {
             log.error("[친구 끊기] 친구 상태가 아닙니다.");
             throw new FriendNotFountException(FriendExceptionMessage.YOU_ARE_NOT_FRIEND.getMsg());
         }
-
-        Long fromId = toId == loginUserId ? friendId : loginUserId;
-
-        Friend friend = friendRepository.findByToIdAndFromIdAndStatusIsTrue(toId, fromId);
 
         // 데이터 삭제
         friendRepository.delete(friend);
@@ -160,21 +156,7 @@ public class FriendServiceImpl implements FriendService {
         Long loginUserId = jwtTokenProvider.getUserId(token);
         log.info("[친구 상세 조회] {}님이 {}님의 정보를 조회 요청", loginUserId, friendId);
 
-        return friendRepository.findMyFriend(loginUserId, friendId);
+        return friendRepository.findMyFriendToDto(loginUserId, friendId);
     }
 
-    /**
-     * 둘이 친구인치 확인합니다.
-     * 친구일 경우 toId를 반환 / 친구가 아닐경우 null을 반환
-     */
-    private Long isFriendAndReturnToId(Long loginUserId, Long friendId) {
-        Long toId = null;
-
-        if(friendRepository.existsByToIdAndFromIdAndStatusIsTrue(loginUserId, friendId))
-            toId = loginUserId;
-        else if(friendRepository.existsByToIdAndFromIdAndStatusIsTrue(friendId, loginUserId))
-            toId = friendId;
-
-        return toId;
-    }
 }
