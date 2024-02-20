@@ -41,16 +41,22 @@ public class Users extends BaseTime {
     private String providerId; // 소셜 타입의 식별자값(일반 로그인일 경우 null)
 
     @Builder
-    public Users(String email, String password, String nickname, String type) {
+    public Users(String email, String password, String nickname, String type, String image, String providerId) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.type = UserType.getUserType(type);
+        this.image = image;
+        this.providerId = providerId;
     }
 
     public void updateUser(String nickname, String profile) {
         this.nickname = nickname == null ? this.nickname : nickname;
         this.profile = profile == null ? this.profile : profile;
+    }
+
+    public void updateImage(String image) {
+        this.image = image;
     }
 
     public void updatePassword(String password) {
