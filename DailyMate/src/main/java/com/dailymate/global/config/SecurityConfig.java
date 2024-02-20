@@ -1,13 +1,15 @@
 package com.dailymate.global.config;
 
+import com.dailymate.domain.user.service.OAuth2UserServiceImpl;
 import com.dailymate.global.common.jwt.JwtAuthenticationFilter;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
 import com.dailymate.global.common.jwt.exception.JwtAccessDeniedHandler;
 import com.dailymate.global.common.jwt.exception.JwtAuthenticationEntryPoint;
+import com.dailymate.global.common.oauth.OAuth2FailureHandler;
+import com.dailymate.global.common.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,7 +17,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Spring Security의 설정을 담당
@@ -35,6 +36,9 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
+    private final OAuth2UserServiceImpl oAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -71,6 +75,13 @@ public class SecurityConfig {
                 // UsernamePasswordAuthenticationFilter 전에 실행
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 
+                // OAuth2 설정 추가
+                .oauth2Login()
+                .userInfoEndpoint().userService(oAuth2UserService).and()
+                .successHandler(oAuth2SuccessHandler)
+                .failureHandler(oAuth2FailureHandler)
+
+                .and()
                 .build();
     }
 
