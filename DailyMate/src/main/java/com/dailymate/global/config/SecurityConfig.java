@@ -84,12 +84,10 @@ public class SecurityConfig {
             "/api-docs/**",
 
             // user
-            "/user/sign-up",
-            "/user/login",
+            "/user/sign-up/**",
+            "/user/login/**",
             "/user/check/**",
             "/user/reissue-token",
-
-            // social
 
             // h2-console
             "/h2-console/**",
