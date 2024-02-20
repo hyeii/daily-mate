@@ -13,7 +13,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<Users, Long> {
 
     Optional<Users> findByEmail(String email);
-    Optional<Users> findByUserId(Long userId); 
+    Optional<Users> findByUserId(Long userId);
+
+    Optional<Users> findByEmailAndProviderId(String email, String providerId); // OAuth2용
 
     List<Users> findByNicknameContainingAndTypeNot(String nickname, UserType type);
     List<Users> findByTypeNot(UserType type);
@@ -27,6 +29,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
      * 유저 객체는 DB에 있지만 추가 정보가 빠진 상태.
      * 
      * 따라서 추가 정보를 입력받아 회원가입을 진행할 때 소셜 타입, 식별자로 해당 회원을 찾기 위한 메서드
+     * -> 저는 일단 구글만해서 소셜타입 따로없음여
      */
     Optional<Users> findByProviderId(String providerId);
 
