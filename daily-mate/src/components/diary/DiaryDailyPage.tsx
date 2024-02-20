@@ -31,35 +31,18 @@ const DiaryDailyPage = () => {
   const deleteDiaryNow = () => {
     deleteDiary(diaryDetail.diaryId);
   };
+
   useEffect(() => {
-    if (id !== undefined && parseInt(id) === userInfo.userId) {
-      setIsMyDiary(true);
-    } else if (id !== undefined && parseInt(id) !== userInfo.userId) {
-      setIsMyDiary(false);
-    }
-
     const fetchData = async () => {
-      // 해당 경로값이 존재하지 않으면 undefined가 될 수 있음
-
-      // 본인인지 친구인지 여부
       if (date !== undefined && id !== undefined) {
-        if (parseInt(id) === userInfo.userId) {
-          // 본인일 시
-          const diaryByDateData: diaryByDateResponse | null =
-            await getDiaryByDate(date);
-          if (diaryByDateData !== null) {
-            setDiaryDetail(diaryByDateData);
-          }
+        const isMyDiary: boolean = parseInt(id) === userInfo.userId;
+        const diaryByDateData: diaryByDateResponse | null = isMyDiary
+          ? await getDiaryByDate(date)
+          : await getOtherDiaryByDate(date, userInfo.userId);
+        if (diaryByDateData !== null) {
+          setDiaryDetail(diaryByDateData);
         }
-
-        if (parseInt(id) !== userInfo.userId) {
-          // 다른사람일 시
-          const diaryByDateData: diaryByDateResponse | null =
-            await getOtherDiaryByDate(date, userInfo.userId);
-          if (diaryByDateData !== null) {
-            setDiaryDetail(diaryByDateData);
-          }
-        }
+        setIsMyDiary(isMyDiary);
       }
     };
     fetchData();
@@ -71,7 +54,9 @@ const DiaryDailyPage = () => {
       <div>{date}</div>
       <div>{diaryDetail.feeling}</div>
       <DiaryComment diaryId={diaryDetail.diaryId} />
-      <button onClick={deleteDiaryNow}>다이어리 삭제</button>
+      {isMyDiary ? (
+        <button onClick={deleteDiaryNow}>다이어리 삭제</button>
+      ) : null}
     </div>
   );
 };

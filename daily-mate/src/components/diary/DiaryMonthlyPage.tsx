@@ -17,7 +17,6 @@ const DiaryMonthlyPage = () => {
 
   return (
     <div>
-      <h3>다이어리 먼슬리</h3>
       {/* useParams : id => 내 아이디이면 내 일기, 내 아이디가 아니라면 다른 사람의 일기 */}
       {id !== undefined && parseInt(id) === userInfo.userId ? (
         <Calendar isMini="not" calendarType="myDiary" />
