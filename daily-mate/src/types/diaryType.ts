@@ -28,8 +28,8 @@ export interface diaryByDateResponse {
   weather: string;
   feeling: string;
   openType: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   likeNum: number;
   isLike: boolean;
 }
