@@ -8,13 +8,15 @@ import {
 } from "date-fns";
 import styled from "styled-components";
 import { accountByMonthResponse } from "../../types/accountType";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 import { diaryByMonthResponse } from "../../types/diaryType";
 import { useNavigate } from "react-router-dom";
 import AccountCell from "./cell/AccountCell";
 import MyDiaryCell from "./cell/MyDiaryCell";
 import OtherDiaryCell from "./cell/OtherDiaryCell";
+import { userInfoState } from "../../atoms/authAtom";
+import { whoseDiaryState } from "../../atoms/diaryAtom";
 
 interface props {
   currentMonth: Date;
@@ -40,6 +42,8 @@ const CalendarCells = ({
 }: props) => {
   const setAccountTab = useSetRecoilState(accountTabState);
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
+  const userInfo = useRecoilValue(userInfoState);
+  const otherDiaryUserId = useRecoilValue(whoseDiaryState);
 
   const navigate = useNavigate();
 
@@ -52,15 +56,24 @@ const CalendarCells = ({
   const rows = [];
 
   const handleSelectDate = (day: Date, isThisMonth: string) => {
-    if (isThisMonth === "otherMonth") {
-      return;
-    }
-    setSelectedDate(format(day, "yyyy-MM-dd"));
-    console.log(format(day, "yyyy-MM-dd"));
+    if (isThisMonth === "otherMonth") return;
 
-    if (calendarType === "account") setAccountTab("daily");
-    if (calendarType === "diary") {
-      navigate(`/diary/daily/id/${format(day, "yyyy-MM-dd")}`);
+    const formattedDate = format(day, "yyyy-MM-dd");
+    setSelectedDate(formattedDate);
+    console.log(formattedDate);
+
+    switch (calendarType) {
+      case "account":
+        setAccountTab("daily");
+        break;
+      case "myDiary":
+        navigate(`/diary/daily/${userInfo.userId}/${formattedDate}`);
+        break;
+      case "otherDiary":
+        navigate(`/diary/daily/${otherDiaryUserId}/${formattedDate}`);
+        break;
+      default:
+        break;
     }
   };
 

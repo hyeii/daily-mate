@@ -44,7 +44,7 @@ const SideBar = () => {
   };
 
   const moveDiary = () => {
-    navigate("/diary/monthly/1");
+    navigate(`/diary/monthly/${userInfo.userId}`);
   };
   const moveAccount = () => {
     navigate("/account");
