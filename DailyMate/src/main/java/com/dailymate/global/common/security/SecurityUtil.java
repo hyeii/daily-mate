@@ -1,6 +1,5 @@
-package com.dailymate.global.common;
+package com.dailymate.global.common.security;
 
-import com.dailymate.global.common.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

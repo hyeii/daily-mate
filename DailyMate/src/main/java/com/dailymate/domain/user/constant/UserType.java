@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum UserType {
 
-    ROLE_USER("일반"),
-    ROLE_SOCIAL("소셜"),
-    ROLE_ADMIN("관리자");
+    ROLE_USER("USER"),
+    ROLE_SOCIAL("SOCIAL"),
+    ROLE_ADMIN("ADMIN");
 
     private String role;
 
@@ -16,10 +16,10 @@ public enum UserType {
     }
 
     public static UserType getUserType(String role) {
-        if(role.contains("관리자"))
+        if(role.contains("ADMIN"))
             return ROLE_ADMIN;
 
-        if(role.contains("소셜"))
+        if(role.contains("SOCIAL"))
             return ROLE_SOCIAL;
 
         return ROLE_USER;
