@@ -94,6 +94,7 @@ public class TodoController {
 	)
 	@PatchMapping("/success/{todoId}")
 	public ResponseEntity<MessageDto> checkTodo(@PathVariable Long todoId, @RequestHeader String token){
+		todoService.checkTodo(todoId, token);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(MessageDto.message("TOGGLE SUCCESS"));
 	}
