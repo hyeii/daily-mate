@@ -3,13 +3,14 @@ import { commentBody, commentListResponse } from "../../types/diaryType";
 import {
   deleteComment,
   getCommentList,
+  likeComment,
   updateComment,
 } from "../../apis/diaryApi";
 import AddComment from "./AddComment";
 import { useRecoilValue } from "recoil";
 import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { userInfoState } from "../../atoms/authAtom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { format } from "date-fns";
 
 interface props {
@@ -94,6 +95,12 @@ const DiaryComment = ({ diaryId }: props) => {
     setOpenButtons(commentId);
   };
 
+  const handleLikeComment = (commentId: number) => {
+    if (likeComment(commentId) !== null) {
+      // 새로고침
+    }
+  };
+
   return (
     <div>
       <AddComment diaryId={diaryId} />
@@ -120,7 +127,7 @@ const DiaryComment = ({ diaryId }: props) => {
           </CommentMiddle>
           <CommentBottom>
             <div>
-              {comment.isLiked ? <HiHeart /> : <HiOutlineHeart />}{" "}
+              {comment.isLiked ? <FullHeart /> : <OutLineHeart />}{" "}
               {comment.likeNum}
             </div>
             {comment.nickname === userInfo.nickname &&
@@ -183,7 +190,7 @@ const NicknameBox = styled.div`
 `;
 
 const ContentBox = styled.div`
-  font-size: 1.1rem;
+  font-size: 1.1em;
 `;
 
 const ControlButtons = styled.span`
@@ -192,4 +199,15 @@ const ControlButtons = styled.span`
   &:hover {
     font-weight: bold;
   }
+`;
+
+const LikeHeart = css`
+  cursor: pointer;
+`;
+
+const FullHeart = styled(HiHeart)`
+  ${LikeHeart}
+`;
+const OutLineHeart = styled(HiOutlineHeart)`
+  ${LikeHeart}
 `;

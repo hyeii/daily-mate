@@ -171,7 +171,9 @@ export const likeComment = async (commentId: number) => {
       `/comment/like/${commentId}`
     );
     console.log(res.data.message);
+    return res.data.message;
   } catch (error) {
     console.error("댓글 좋아요 오류 : ", error);
+    return null;
   }
 };

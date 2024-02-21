@@ -27,7 +27,7 @@ const AddComment = ({ diaryId }: props) => {
     <AddCommentWrapper>
       <AddInput type="text" onChange={handleComment} />
       <ButtonBox>
-        <SubmitButton onClick={submitComment}>작성</SubmitButton>
+        <SubmitButton onClick={submitComment} />
       </ButtonBox>
     </AddCommentWrapper>
   );
@@ -52,6 +52,7 @@ const AddInput = styled.input`
 
 const SubmitButton = styled(IoArrowRedo)`
   font-size: 1.5rem;
+  cursor: pointer;
 `;
 
 const ButtonBox = styled.div`
