@@ -30,13 +30,14 @@ public class TodoServiceImpl implements TodoService {
 
 	@Override
 	public void addTodo(AddTodoReqDto addTodoReqDto, String token) {
+		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 등록] 할일 등록 요청");
 
 		LocalDate today = LocalDate.now();
 		for(int i = 0; i < addTodoReqDto.getRepeat(); i++){
 			String todayString = today.plusDays(i).toString();
 			Todo todo = Todo.builder()
-					.userId(jwtTokenProvider.getUserId(token))
+					.userId(USERID)
 					.content(addTodoReqDto.getContent())
 					.date(todayString)
 					.todoOrder(0)
@@ -53,8 +54,8 @@ public class TodoServiceImpl implements TodoService {
 
 	@Override
 	public TodoResDto updateTodo(Long todoId, UpdateTodoReqDto updateTodoReqDto, String token) {
-		Long userId = jwtTokenProvider.getUserId(token);
-		log.info("[할일 수정] 할일 수정 요청. userId : {}", userId);
+		Long USERID = jwtTokenProvider.getUserId(token);
+		log.info("[할일 수정] 할일 수정 요청. userId : {}", USERID);
 		// 1. 존재하는 할일인지 체크
 		Todo todo = todoRepository.findById(todoId)
 				.orElseThrow(()->{
@@ -69,7 +70,7 @@ public class TodoServiceImpl implements TodoService {
 		}
 
 		// 3. 로그인 사용자의 할일인지 체크
-		if(todo.getUserId() != userId){
+		if(todo.getUserId() != USERID){
 			log.error("[할일 수정] 권한이 없는 할일입니다.");
 			throw new TodoForbiddenException("[UPDATE_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}
@@ -87,7 +88,9 @@ public class TodoServiceImpl implements TodoService {
 
 	@Transactional
 	@Override
-	public void deleteTodo(Long todoId, Long userId) {
+	public void deleteTodo(Long todoId, String token) {
+		Long USERID = jwtTokenProvider.getUserId(token);
+
 		log.info("[할일 삭제] 할일 삭제 요청. todoId : {}", todoId);
 
 		// 1. 존재하는 할일인지 체크
@@ -104,7 +107,7 @@ public class TodoServiceImpl implements TodoService {
 		}
 
 		// 3. 로그인 사용자의 할일인지 체크
-		if(todo.getUserId() != userId){
+		if(todo.getUserId() != USERID){
 			log.error("[할일 수정] 권한이 없는 할일입니다.");
 			throw new TodoForbiddenException("[UPDATE_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}
@@ -116,7 +119,8 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public void postponeTodo(Long todoId, Long userId) {
+	public String postponeTodo(Long todoId, String token) {
+		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 미루기] 할일 미루기 요청. todoId : {}", todoId);
 
 		// 1. 존재하는 할일인지 체크
@@ -127,7 +131,7 @@ public class TodoServiceImpl implements TodoService {
 				});
 
 		// 2. 로그인 사용자의 할일인지 체크
-		if(todo.getUserId() != userId){
+		if(todo.getUserId() != USERID){
 			log.error("[할일 수정] 권한이 없는 할일입니다.");
 			throw new TodoForbiddenException("[UPDATE_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}
@@ -146,20 +150,22 @@ public class TodoServiceImpl implements TodoService {
 				.build();
 
 		todoRepository.save(postponedTodo);
-		deleteTodo(todoId, userId);
+		deleteTodo(todoId, token);
 
 		log.info("[할일 미루기] 할일 미루기 완료");
+		return postponedDate.toString();
 	}
 
 	@Override
-	public List<String> findTodoListByDay(String date, Long userId) {
+	public List<String> findTodoListByDay(String date, String token) {
+		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 일별 조회] 할일 일별 조회 요청. date : {}", date);
 
 		// 1. 해당 날짜에 해당하는 사용자의 할일 목록을 조회
-		List<Todo> todoList = todoRepository.findByUserIdAndDate(userId, date);
+		List<Todo> todoList = todoRepository.findByUserIdAndDate(USERID, date);
 
 		if (todoList.isEmpty()) {
-			log.info("[할일 일별 조회] 해당 날짜에 할일이 없습니다. date : {}, userId : {}", date, userId);
+			log.info("[할일 일별 조회] 해당 날짜에 할일이 없습니다. date : {}, userId : {}", date, USERID);
 			return Collections.emptyList(); // 비어 있는 리스트 반환
 		}
 
@@ -168,13 +174,14 @@ public class TodoServiceImpl implements TodoService {
 				.map(Todo::getContent)
 				.collect(Collectors.toList());
 
-		log.info("[할일 일별 조회] 할일 내용 조회 완료. date : {}, userId : {}", date, userId);
+		log.info("[할일 일별 조회] 할일 내용 조회 완료. date : {}, userId : {}", date, USERID);
 		return contentList;
 	}
 
 
 	@Override
-	public TodoResDto findTodo(Long todoId, Long userId) {
+	public TodoResDto findTodo(Long todoId, String token) {
+		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 상세] 할일 상세 요청. todoId : {}", todoId);
 
 		// 1. 존재하는 할일인지 체크
@@ -185,7 +192,7 @@ public class TodoServiceImpl implements TodoService {
 				});
 
 		// 2. 로그인 사용자의 할일인지 체크
-		if (!todo.getUserId().equals(userId)) {
+		if (!todo.getUserId().equals(USERID)) {
 			log.error("[할일 상세] 권한이 없는 할일입니다.");
 			throw new TodoForbiddenException("[FIND_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}
@@ -198,10 +205,11 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public Integer getSuccessRate(Long userId, String date) {
-		log.info("[할일 일간 달성도 조회] 달성도 조회 요청. userId : {}", userId);
+	public Integer getSuccessRate(String token, String date) {
+		Long USERID = jwtTokenProvider.getUserId(token);
+		log.info("[할일 일간 달성도 조회] 달성도 조회 요청. userId : {}", USERID);
 
-		List<Todo> todoList = todoRepository.findByUserIdAndDate(userId, date);
+		List<Todo> todoList = todoRepository.findByUserIdAndDate(USERID, date);
 
 		int totalTodos = todoList.size();
 
@@ -209,14 +217,15 @@ public class TodoServiceImpl implements TodoService {
 
 		double successRate = totalTodos == 0 ? 0 : ((double) completedTodos / totalTodos) * 100;
 
-		log.info("[할일 일간 달성도 조회] 달성도 조회 완료. userId : {}, date : {}, successRate : {}", userId, date, successRate);
+		log.info("[할일 일간 달성도 조회] 달성도 조회 완료. userId : {}, date : {}, successRate : {}", USERID, date, successRate);
 
 		return (int)successRate;
 
 	}
 
 	@Override
-	public void checkTodo(Long todoId, Long userId) {
+	public void checkTodo(Long todoId, String token) {
+		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 완료 체크] 완료 체크 요청. todoId : {}", todoId);
 
 		// 1. 존재하는 할일인지 체크
@@ -227,7 +236,7 @@ public class TodoServiceImpl implements TodoService {
 				});
 
 		// 2. 로그인 사용자의 할일인지 체크
-		if(todo.getUserId() != userId){
+		if(todo.getUserId() != USERID){
 			log.error("[할일 수정] 권한이 없는 할일입니다.");
 			throw new TodoForbiddenException("[UPDATE_TODO] " + TodoExceptionMessage.TODO_FORBIDDEN.getMsg());
 		}

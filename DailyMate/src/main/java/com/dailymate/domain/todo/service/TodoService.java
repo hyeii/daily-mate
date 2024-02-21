@@ -11,15 +11,15 @@ public interface TodoService {
 
 	void addTodo(AddTodoReqDto addTodoReqDto, String token);
 	TodoResDto updateTodo(Long todoId, UpdateTodoReqDto updateTodoReqDto, String token);
-	void deleteTodo(Long todoId, Long userId);
+	void deleteTodo(Long todoId, String token);
 
-	void postponeTodo(Long todoId, Long userId);
+	String postponeTodo(Long todoId, String token);
 
-	List<String> findTodoListByDay(String date, Long userId);
+	List<String> findTodoListByDay(String date, String token);
 
-	TodoResDto findTodo(Long todoId, Long userId);
+	TodoResDto findTodo(Long todoId, String token);
 
-	Integer getSuccessRate(Long userId, String date);
+	Integer getSuccessRate(String token, String date);
 
-	void checkTodo(Long todoId, Long userId);
+	void checkTodo(Long todoId, String token);
 }
