@@ -22,8 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -71,11 +73,6 @@ public class AccountServiceImpl implements AccountService{
                    throw new AccountNotFoundException(AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
                 });
 
-        // 이미 삭제된 가계부인지 확인하자.
-        if(account.getDeletedAt() != null) {
-            throw new AccountNotFoundException(AccountExceptionMessage.ACCOUNT_ALREADY_DELETED.getMsg());
-        }
-
         // 작성자가 일치하는지 확인하자.
         String email = jwtTokenProvider.getAuthentication(token).getName();
         Users loginUser = userRepository.findByEmail(email)
@@ -106,11 +103,6 @@ public class AccountServiceImpl implements AccountService{
                 .orElseThrow(() -> {
                    return new AccountNotFoundException(AccountExceptionMessage.ACCOUNT_NOT_FOUND.getMsg());
                 });
-
-        // 이미 삭제된 가계부인지 확인하자.
-        if(account.getDeletedAt() != null) {
-            throw new AccountNotFoundException(AccountExceptionMessage.ACCOUNT_ALREADY_DELETED.getMsg());
-        }
 
         // 작성자가 일치하는지 확인하자.
         String email = jwtTokenProvider.getAuthentication(token).getName();
@@ -193,20 +185,27 @@ public class AccountServiceImpl implements AccountService{
     public List<AmountResDto> findAmountByMonth(String token, String date) {
         Long userId = jwtTokenProvider.getUserId(token);
 
-        List<Account> accountList = accountRepository.findByUserIdAndDateStartsWithAndDeletedAtIsNull(userId, date);
+        List<Account> accountList = accountRepository.findByUserIdAndDateStartsWith(userId, date);
         List<AmountResDto> amountResDtoList = new ArrayList<>();
 
+        // 변수와 배열을 초기화하자.
         Long totalInput = 0L;
         Long totalOutput = 0L;
         Long[] inputs = new Long[32];
         Long[] outputs = new Long[32];
+        // Long은 초기값이 null이기 때문에, fill메서드를 통해 0L로 일괄 초기화하자.
+        Arrays.fill(inputs, 0L);
+        Arrays.fill(outputs, 0L);
 
         for(Account account : accountList) {
+            // 가계부의 타입이 수입이라면?
             if(account.getType().getValue().equals("수입")) {
+                // 해당 값을 총수입에 더해주고
                 totalInput += account.getAmount();
+                // 날짜와 배열의 인덱스값을 맞춰 해당 배열에 더해주자.
                 inputs[Integer.parseInt(account.getDate().substring(8))] += account.getAmount();
             }
-            else {
+            else { // 지출인 경우에도 마찬가지.
                 totalOutput += account.getAmount();
                 outputs[Integer.parseInt(account.getDate().substring(8))] += account.getAmount();
             }
@@ -225,14 +224,14 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public List<OutputResDto> findOutputByCategory(String token, String date) {
         Long userId = jwtTokenProvider.getUserId(token);
-        return accountRepository.findByUserIdAndDateStartsWith(userId, date);
+        return accountRepository.findOutputAsList(userId, date);
     }
 
     @Transactional
     @Override
     public Map<String, Long> findOutputByCategoryAsMap(String token, String date) {
         Long userId = jwtTokenProvider.getUserId(token);
-        return accountRepository.findByUserIdAndDateStartsWithAsMap(userId, date);
+        return accountRepository.findOutputAsList(userId, date).stream()
+                .collect(Collectors.toMap(outputResDto -> outputResDto.getCategory().toString(), OutputResDto::getAmountSum));
     }
-
 }
