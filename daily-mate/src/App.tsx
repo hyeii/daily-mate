@@ -81,6 +81,14 @@ const MainContainer = styled.div<SidebarProps>`
 const MainBox = styled.div`
   width: auto;
   margin: 3rem 15rem;
+
+  @media screen and (min-width: 992px) {
+    margin: 3rem 15rem;
+  }
+
+  @media screen and (max-width: 991px) {
+    margin: 3rem 5rem;
+  }
 `;
 
 const Wrapper = styled.div`
