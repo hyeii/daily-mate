@@ -16,12 +16,12 @@ import AccountCell from "./cell/AccountCell";
 import MyDiaryCell from "./cell/MyDiaryCell";
 import OtherDiaryCell from "./cell/OtherDiaryCell";
 import { userInfoState } from "../../atoms/authAtom";
-import { whoseDiaryState } from "../../atoms/diaryAtom";
+import { whoseDiaryState, writeDate } from "../../atoms/diaryAtom";
 
 interface props {
   currentMonth: Date;
   accountByMonth: accountByMonthResponse;
-  diaryByMonth: diaryByMonthResponse[];
+  diaryByMonth: (diaryByMonthResponse | null)[];
   calendarType: string;
   isMini: string;
 }
@@ -44,6 +44,7 @@ const CalendarCells = ({
   const [selectedDate, setSelectedDate] = useRecoilState(selectedDateState);
   const userInfo = useRecoilValue(userInfoState);
   const otherDiaryUserId = useRecoilValue(whoseDiaryState);
+  const setWriteDate = useSetRecoilState(writeDate);
 
   const navigate = useNavigate();
 
@@ -59,6 +60,7 @@ const CalendarCells = ({
     if (isThisMonth === "otherMonth") return;
 
     const formattedDate = format(day, "yyyy-MM-dd");
+    const formatLast = parseInt(format(day, "d"));
     setSelectedDate(formattedDate);
     console.log(formattedDate);
 
@@ -67,6 +69,16 @@ const CalendarCells = ({
         setAccountTab("daily");
         break;
       case "myDiary":
+        if (diaryByMonth[formatLast] === null) {
+          if (
+            window.confirm(
+              "해당 일자의 일기가 없습니다. 새로운 일기를 작성할까요?"
+            )
+          ) {
+            setWriteDate(formattedDate);
+            navigate("/diary/daily/write");
+          }
+        }
         navigate(`/diary/daily/${userInfo.userId}/${formattedDate}`);
         break;
       case "otherDiary":
@@ -117,36 +129,30 @@ const CalendarCells = ({
           {isThisMonth === "thisMonth" &&
           calendarType === "account" &&
           isMini === "not" ? (
-            <div>
-              <AccountCell
-                date={format(day, "yyyy-MM-dd")}
-                input={accountByMonth.inputs[parseInt(format(day, "d"))]}
-                output={accountByMonth.outputs[parseInt(format(day, "d"))]}
-              />
-            </div>
+            <AccountCell
+              date={format(day, "yyyy-MM-dd")}
+              input={accountByMonth.inputs[parseInt(format(day, "d"))]}
+              output={accountByMonth.outputs[parseInt(format(day, "d"))]}
+            />
           ) : isThisMonth === "thisMonth" && calendarType === "myDiary" ? (
             <div>
               {/* length 조건 삼항연산자 건 이유 : 
               더미데이터로 넣은 값이 30,31일만큼 채운 값이 아닌 확인용 짧은 배열이라 배열의 길이를 넘어가는 날짜에서는 오류가 발생함. 
               실제 데이터 받아오면 필요 X */}
               {diaryByMonth.length > parseInt(format(day, "d")) ? (
-                <div>
-                  <MyDiaryCell
-                    date={format(day, "yyyy-MM-dd")}
-                    diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
-                  />
-                </div>
+                <MyDiaryCell
+                  date={format(day, "yyyy-MM-dd")}
+                  diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
+                />
               ) : null}
             </div>
           ) : isThisMonth === "thisMonth" && calendarType === "otherDiary" ? (
             <div>
               {diaryByMonth.length > parseInt(format(day, "d")) ? (
-                <div>
-                  <OtherDiaryCell
-                    date={format(day, "yyyy-MM-dd")}
-                    diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
-                  />
-                </div>
+                <OtherDiaryCell
+                  date={format(day, "yyyy-MM-dd")}
+                  diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
+                />
               ) : null}
             </div>
           ) : null}

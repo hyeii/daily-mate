@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { diaryByMonthResponse } from "../../../types/diaryType";
 import { userInfoState } from "../../../atoms/authAtom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { writeDate } from "../../../atoms/diaryAtom";
 
 interface props {
   date: string;
-  diaryInfo: diaryByMonthResponse;
+  diaryInfo: diaryByMonthResponse | null;
 }
 
 const MyDiaryCell = ({ date, diaryInfo }: props) => {
@@ -14,12 +15,14 @@ const MyDiaryCell = ({ date, diaryInfo }: props) => {
   // 해당 일자
   const navigate = useNavigate();
   const userInfo = useRecoilValue(userInfoState);
+  const setWriteDate = useSetRecoilState(writeDate);
   const handleDiary = () => {
     console.log("handleDiary");
-    if (diaryInfo.diaryId === null) {
+    if (diaryInfo !== null && diaryInfo.diaryId === null) {
       if (
         window.confirm("해당 일자의 일기가 없습니다. 새로운 일기를 작성할까요?")
       ) {
+        setWriteDate(date);
         navigate("/diary/daily/write");
       }
     }
@@ -27,12 +30,7 @@ const MyDiaryCell = ({ date, diaryInfo }: props) => {
     // 일기 있는 날 => 해당 일기 페이지
     navigate(`/diary/daily/${userInfo.userId}/${date}`);
   };
-  return (
-    <div>
-      <div>캘린더 내 다이어리 셀</div>
-      <div onClick={handleDiary}>{diaryInfo.title}</div>
-    </div>
-  );
+  return <div onClick={handleDiary}>{diaryInfo && diaryInfo.title}</div>;
 };
 
 export default MyDiaryCell;

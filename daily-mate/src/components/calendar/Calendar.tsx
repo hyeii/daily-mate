@@ -28,7 +28,9 @@ const Calendar = ({ isMini, calendarType }: props) => {
     inputs: [],
     outputs: [],
   });
-  const [diaryByMonth, setDiaryByMonth] = useState<diaryByMonthResponse[]>([
+  const [diaryByMonth, setDiaryByMonth] = useState<
+    (diaryByMonthResponse | null)[]
+  >([
     {
       diaryId: 123,
       title: "제목0",
@@ -86,7 +88,7 @@ const Calendar = ({ isMini, calendarType }: props) => {
       // 월별 일기 조회 (내 일기)
       if (calendarType === "myDiary") {
         console.log("내 다이어리 캘린더 렌더링");
-        const diaryMonthlyData: diaryByMonthResponse[] | null =
+        const diaryMonthlyData: (diaryByMonthResponse | null)[] | null =
           await getDiaryByMonth(format(currentMonth, "yyyy-MM"));
         // userInfo id
         if (diaryMonthlyData !== null) {
