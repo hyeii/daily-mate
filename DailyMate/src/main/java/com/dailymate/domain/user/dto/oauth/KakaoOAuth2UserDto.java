@@ -9,8 +9,13 @@ public class KakaoOAuth2UserDto extends OAuth2UserDto {
     }
 
     @Override
-    public String getEmail() {
+    public String getId() {
         return String.valueOf(attributes.get("id"));
+    }
+
+    @Override
+    public String getEmail() {
+        return String.valueOf(attributes.get("email"));
     }
 
     @Override
