@@ -1,15 +1,14 @@
 package com.dailymate.domain.user.service;
 
 import com.dailymate.domain.user.dao.UserRepository;
-import com.dailymate.domain.user.domain.CustomOAuth2User;
 import com.dailymate.domain.user.domain.Users;
 import com.dailymate.domain.user.dto.oauth.OAuth2UserDto;
 import com.dailymate.domain.user.dto.oauth.OAuthAttributes;
 import com.dailymate.domain.user.exception.UserBadRequestException;
 import com.dailymate.domain.user.exception.UserExceptionMessage;
+import com.dailymate.global.common.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -18,7 +17,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
@@ -56,16 +54,16 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
 
         // 데이터를 담는 dto
         OAuthAttributes oAuthAttributes = OAuthAttributes.of(providerId, userNameAttributeName, attributes);
-        log.info("{}", oAuthAttributes);
 
         Users createdUser = getUser(oAuthAttributes, providerId);
 
-        return new CustomOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(createdUser.getType().getRole())),
-                attributes, oAuthAttributes.getNameAttributeKey(), createdUser.getEmail(), createdUser.getType().getRole());
         // 리턴 후 OAuth2User 객체로 정의됨.
         // OAuth2LoginAuthenticationFilter를 거치면서 Authentication에 저장을 해준다.
         // 그래서 handler에서 꺼내쓸 수 있다.
+        return UserDetailsImpl.builder()
+                .user(createdUser)
+                .attributes(attributes)
+                .build();
     }
 
     @Transactional
@@ -95,6 +93,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
                 return createUserWithNewNickname(oAuthAttributes, providerId, nickname);
             }
 
+            log.info("[소셜 회원가입] {}님의 회원가입을 시작합니다.", oAuth2UserDto.getEmail());
             return createUser(oAuthAttributes, providerId);
         }
 
@@ -103,6 +102,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
             user.updateImage(oAuth2UserDto.getImage());
         }
 
+        log.info("[소셜 로그인] {}님의 로그인을 요청합니다.", oAuth2UserDto.getEmail());
         return user;
     }
 
