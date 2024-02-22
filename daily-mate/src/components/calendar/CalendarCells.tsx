@@ -77,9 +77,8 @@ const CalendarCells = ({
           ) {
             setWriteDate(formattedDate);
             navigate("/diary/daily/write");
-          }
-        }
-        navigate(`/diary/daily/${userInfo.userId}/${formattedDate}`);
+          } else return;
+        } else navigate(`/diary/daily/${userInfo.userId}/${formattedDate}`);
         break;
       case "otherDiary":
         navigate(`/diary/daily/${otherDiaryUserId}/${formattedDate}`);
