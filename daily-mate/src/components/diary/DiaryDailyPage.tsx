@@ -46,9 +46,8 @@ const DiaryDailyPage = () => {
         } else {
           setDiaryDetail({
             diaryId: 100,
-            title: "제목",
-            content:
-              "오늘 비가 하루종일 와서 기분 개별루 우우 오늘 저녁은 무엇을 먹을까? 맛있는거 먹고싶다 냠냠",
+            title: titleExample,
+            content: contentExample,
             date: "날짜",
             image: "이미지",
             weather: "맑음",
@@ -70,7 +69,7 @@ const DiaryDailyPage = () => {
     if (date !== undefined) {
       const newDate = new Date(date);
       const year = newDate.getFullYear();
-      const month = newDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+      const month = newDate.getMonth() + 1;
       const day = newDate.getDate();
       return `${year}년 ${month}월 ${day}일`;
     } else return "";
@@ -106,8 +105,7 @@ const DiaryDailyPage = () => {
           <div>{formatDate(date)}</div>
         </DateBox>
         <TitleBox>
-          {/* <div>{diaryDetail.title}</div> */}
-          <div>{titleExample}</div>
+          <div>{diaryDetail.title}</div>
         </TitleBox>
         <DiaryTop>
           <FeelingBox>
@@ -131,8 +129,7 @@ const DiaryDailyPage = () => {
             />
           </ContentImageContainer>
           <ContentBox>
-            {/* <ContentInside>{diaryDetail.content}</ContentInside> */}
-            <ContentInside>{contentExample}</ContentInside>
+            <ContentInside>{diaryDetail.content}</ContentInside>
           </ContentBox>
           {isMyDiary ? <TrashCan onClick={deleteDiaryNow} /> : null}
         </DiaryBottom>
