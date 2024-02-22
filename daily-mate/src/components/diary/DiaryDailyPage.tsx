@@ -11,6 +11,7 @@ import { useRecoilValue } from "recoil";
 import { userInfoState } from "../../atoms/authAtom";
 import { LuTrash2 } from "react-icons/lu";
 import styled from "styled-components";
+import { formatDate } from "../common/FormatDate";
 
 const DiaryDailyPage = () => {
   const { id, date } = useParams<diaryDailyParams>();
@@ -64,16 +65,6 @@ const DiaryDailyPage = () => {
     };
     fetchData();
   }, [date, id, userInfo.userId]);
-
-  const formatDate = (date: string | undefined) => {
-    if (date !== undefined) {
-      const newDate = new Date(date);
-      const year = newDate.getFullYear();
-      const month = newDate.getMonth() + 1;
-      const day = newDate.getDate();
-      return `${year}년 ${month}월 ${day}일`;
-    } else return "";
-  };
 
   const weatherIcon = (weather: string) => {
     let weatherNow = "";
