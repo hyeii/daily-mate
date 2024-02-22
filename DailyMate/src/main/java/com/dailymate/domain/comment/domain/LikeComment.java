@@ -1,4 +1,4 @@
-package com.dailymate.domain.diary.domain;
+package com.dailymate.domain.comment.domain;
 
 import com.dailymate.domain.user.domain.Users;
 import lombok.AllArgsConstructor;
@@ -8,23 +8,21 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@IdClass(LikeDiaryKey.class)
-@Table(name = "like_diary")
+@IdClass(LikeCommentKey.class)
+@Table(name = "like_comment")
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LikeDiary {
-
+public class LikeComment {
     @Id
-    @JoinColumn(name = "diary_id")
+    @JoinColumn(name = "comment_Id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Diary diary;
+    private Comment comment;
 
     @Id
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Users user;
-
 }
