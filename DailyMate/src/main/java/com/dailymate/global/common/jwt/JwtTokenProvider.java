@@ -1,5 +1,6 @@
 package com.dailymate.global.common.jwt;
 
+import com.dailymate.domain.user.domain.CustomOAuth2User;
 import com.dailymate.global.common.jwt.constant.JwtTokenExpiration;
 import com.dailymate.global.common.redis.RedisUtil;
 import com.dailymate.global.common.security.UserDetailsImpl;
@@ -110,6 +111,34 @@ public class JwtTokenProvider {
                 .setSubject(authentication.getName())                       // payload "sub": "name"
                 .claim("userId", userPrincipal.getUserId())           // userId를 뽑아오기 위해 저장 추가!!!!
                 .claim(AUTHORITIES_KEY, authorities)                        // payload "auth": "ROLE_USER"
+                .setExpiration(new Date(now + JwtTokenExpiration.ACCESS_TOKEN_EXPIRATION_TIME.getTime()))    // payload "exp": 151621022(ex)
+                .signWith(key, SignatureAlgorithm.HS256)                    // header "alg": "HS256"
+                .compact();
+
+        // refreshToken 생성 - accessToken의 갱신을 위해 사용 : 갱신용이라 사용자 정보는 아무것도 담지않았음
+        String refreshToken = Jwts.builder()
+                .setExpiration(new Date(now + JwtTokenExpiration.REFRESH_TOKEN_EXPIRATION_TIME.getTime()))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        return JwtTokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public JwtTokenDto generateTokenOfSocial(Authentication authentication) {
+        log.info("[generateTokenOfSocial] 토큰 생성 입장 : {}", authentication.getName());
+
+        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+
+        long now = (new Date()).getTime();
+
+        // accessToken 생성 - 인증된 사용자의 권한 정보와 만료 시간을 담고 있음
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())                       // payload "sub": "name"
+//                .claim("userId", authentication.getName())           // userId를 뽑아오기 위해 저장 추가!!!!
+                .claim(AUTHORITIES_KEY, "SOCIAL")                        // payload "auth": "ROLE_USER"
                 .setExpiration(new Date(now + JwtTokenExpiration.ACCESS_TOKEN_EXPIRATION_TIME.getTime()))    // payload "exp": 151621022(ex)
                 .signWith(key, SignatureAlgorithm.HS256)                    // header "alg": "HS256"
                 .compact();
