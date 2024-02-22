@@ -13,8 +13,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<Users, Long> {
 
     Optional<Users> findByEmail(String email);
+    Optional<Users> findByUserId(Long userId);
 
-    Optional<Users> findByUserId(Long userId); // 관리자체크는 서비스에서 할거니까
+    Optional<Users> findByEmailAndProviderId(String email, String providerId); // OAuth2용
 
     List<Users> findByNicknameContainingAndTypeNot(String nickname, UserType type);
     List<Users> findByTypeNot(UserType type);
@@ -22,16 +23,20 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     Boolean existsByEmail(String email); // 이메일 중복검사
     Boolean existsByNickname(String nickname); // 닉네임 중복검사
 
+    /**
+     * 소셜 타입과 소셜의 식별값으로 회원을 찾는 메서드
+     * 정보 제공을 동의한 순간 DB에 저장해야 하지만, 아직 추가 정보(프로필, 이미지)는 입력받지 않았으므로
+     * 유저 객체는 DB에 있지만 추가 정보가 빠진 상태.
+     * 
+     * 따라서 추가 정보를 입력받아 회원가입을 진행할 때 소셜 타입, 식별자로 해당 회원을 찾기 위한 메서드
+     * -> 저는 일단 구글만해서 소셜타입 따로없음여
+     */
+    Optional<Users> findByProviderId(String providerId);
+
+
 
     // 친구 신청 메서드에서 탈퇴한 회원인지 체크하기 위함
     Boolean existsByUserId(Long userId);
-
-    // 나랑 친구거나 대기중인 회원의 정보 조회
-//    @Query(value = "SELECT new com.dailymate.domain.user.dto.response.UserSearchInfoDto(u.userId, u.email, u.nickname, u.image, u.profile, f.status, f.requestDate)" +
-//            "FROM Users u " +
-//            "JOIN Friend f ON (u.userId = f.fromId AND f.toId = :userId) OR (u.userId = f.toId AND f.fromId = :userId) " +
-//            "WHERE u.userId = :friendId")
-//    Optional<UserSearchInfoDto> checkFriendStatus(@Param("userId") Long userId, @Param("friendId") Long friendId);
 
     // 검색한 friendId의 정보를 추출하되
     // friend 데이터가 있으면 데이터, 없으면 null을 반환해준다.

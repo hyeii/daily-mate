@@ -30,10 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException(UserExceptionMessage.USER_NOT_FOUND.getMsg()));
 
         return UserDetailsImpl.builder()
-                .userId(user.getUserId())
-                .email(user.getEmail())
-                .authority(user.getType().getRole())
-                .password(user.getPassword())
+                .user(user)
                 .build();
     }
 
