@@ -31,7 +31,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         try {
             CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
-            JwtTokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+            log.info("email : {}", oAuth2User.getEmail());
+            log.info("oAuth2User : {}", oAuth2User);
+            JwtTokenDto tokenDto = jwtTokenProvider.generateTokenOfSocial(authentication);
 
             RefreshToken refreshToken = RefreshToken.builder()
                     .email(oAuth2User.getEmail())
