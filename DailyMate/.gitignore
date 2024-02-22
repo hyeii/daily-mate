@@ -22,9 +22,6 @@ application-s3.yml
 application-mariaDb.yml
 application-jwt.yml
 application-oauth.yml
-#!**/resources/main/application-jwt.yml
-#!**/resources/main/application-oauth.yml
-### 유녕도 추가함
 
 .idea
 *.iws

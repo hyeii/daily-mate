@@ -12,7 +12,6 @@ import java.util.List;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @RequiredArgsConstructor
 public class DiaryMonthlyResDto {
 
@@ -22,5 +21,14 @@ public class DiaryMonthlyResDto {
         private Weather weather;
         private Feeling feeling;
         private String date;
+
+        public DiaryMonthlyResDto(Long diaryId, String title, String image, Weather weather, Feeling feeling, String date) {
+                this.diaryId = diaryId;
+                this.title = title;
+                this.image = image;
+                this.weather = weather;
+                this.feeling = feeling;
+                this.date = date;
+        }
 
 }
