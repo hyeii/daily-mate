@@ -30,7 +30,7 @@ const MyDiaryCell = ({ date, diaryInfo }: props) => {
     // 일기 있는 날 => 해당 일기 페이지
     navigate(`/diary/daily/${userInfo.userId}/${date}`);
   };
-  return <div onClick={handleDiary}>{diaryInfo && diaryInfo.title}</div>;
+  return <div>{diaryInfo && diaryInfo.title}</div>;
 };
 
 export default MyDiaryCell;
