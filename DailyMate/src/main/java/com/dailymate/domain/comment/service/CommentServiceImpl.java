@@ -6,6 +6,7 @@ import com.dailymate.domain.comment.domain.Comment;
 import com.dailymate.domain.comment.domain.LikeComment;
 import com.dailymate.domain.comment.domain.LikeCommentKey;
 import com.dailymate.domain.comment.dto.CommentReqDto;
+import com.dailymate.domain.comment.dto.CommentResDto;
 import com.dailymate.domain.comment.exception.CommentBadRequestException;
 import com.dailymate.domain.comment.exception.CommentExceptionMessage;
 import com.dailymate.domain.comment.exception.CommentForbiddenException;
@@ -27,6 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -145,7 +148,13 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    /**
+     * 댓글 좋아요
+     * @param accessToken String
+     * @param commentId Long
+     */
     @Override
+    @Transactional
     public void likeComment(String accessToken, Long commentId) {
 
         // 입력값 확인
@@ -175,5 +184,44 @@ public class CommentServiceImpl implements CommentService {
                     .comment(comment)
                     .build());
         }
+    }
+
+    /**
+     * 댓글 전체 조회
+     * @param accesstoken String
+     * @param diaryId Long
+     * @return List<CommentResDto>
+     */
+    @Override
+    @Transactional
+    public List<CommentResDto> findCommentList(String accesstoken, Long diaryId) {
+
+        // 입력값 검증
+        if(accesstoken == null || diaryId == null) {
+            throw new CommentBadRequestException("[FIND_COMMENT_LIST] " + CommentExceptionMessage.COMMENT_BAD_REQUEST.getMsg());
+        }
+
+        // 일기 확인
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new DiaryNotFoundException("FIND_COMMENT_LIST " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
+
+        // 사용자 확인
+        Users user = userRepository.findById(jwtTokenProvider.getUserId(accesstoken))
+                .orElseThrow(() -> new UserNotFoundException("FIND_COMMENT_LIST " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
+
+        // 댓글
+        List<Object[]> result = commentRepository.findCommentsAndLikesByDiaryId(diary, user);
+
+        List<CommentResDto> comments = new ArrayList<>();
+
+        for(Object[] obj : result) {
+
+            Comment comment = (Comment) obj[0];
+            Long likeNum = (Long) obj[1];
+            Boolean isLiked = (Boolean) obj[2];
+
+            comments.add(CommentResDto.createDto(comment, likeNum, isLiked));
+        }
+        return comments;
     }
 }

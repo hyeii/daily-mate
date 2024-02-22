@@ -1,6 +1,7 @@
 package com.dailymate.domain.comment.api;
 
 import com.dailymate.domain.comment.dto.CommentReqDto;
+import com.dailymate.domain.comment.dto.CommentResDto;
 import com.dailymate.domain.comment.service.CommentService;
 import com.dailymate.global.dto.MessageDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Comment", description = "댓글 API Document")
 @RestController
@@ -81,5 +84,18 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MessageDto.message("댓글 좋아요 상태를 변경했습니다."));
+    }
+
+    @Operation(
+            summary = "댓글 전체 조회",
+            description = "일기의 댓글을 전체 조회합니다."
+    )
+    @GetMapping("/{diaryId}")
+    public ResponseEntity<List<CommentResDto>> findCommentList(
+            @RequestHeader(ACCESS_TOKEN) String accessToken,
+            @PathVariable Long diaryId) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(commentService.findCommentList(accessToken, diaryId));
     }
 }
