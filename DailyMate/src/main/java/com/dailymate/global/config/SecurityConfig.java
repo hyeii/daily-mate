@@ -80,6 +80,7 @@ public class SecurityConfig {
                 .userInfoEndpoint().userService(oAuth2UserService).and()
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(oAuth2FailureHandler)
+//                .defaultSuccessUrl("/oauth/loginInfo") // OAuth2 성공시 redirect
 
                 .and()
                 .build();
@@ -95,8 +96,8 @@ public class SecurityConfig {
             "/api-docs/**",
 
             // user
-            "/user/sign-up/**",
-            "/user/login/**",
+            "/user/sign-up",
+            "/user/login",
             "/user/check/**",
             "/user/reissue-token",
 
