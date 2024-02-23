@@ -134,26 +134,19 @@ const CalendarCells = ({
               output={accountByMonth.outputs[parseInt(format(day, "d"))]}
             />
           ) : isThisMonth === "thisMonth" && calendarType === "myDiary" ? (
-            <div>
-              {/* length 조건 삼항연산자 건 이유 : 
-              더미데이터로 넣은 값이 30,31일만큼 채운 값이 아닌 확인용 짧은 배열이라 배열의 길이를 넘어가는 날짜에서는 오류가 발생함. 
-              실제 데이터 받아오면 필요 X */}
-              {diaryByMonth.length > parseInt(format(day, "d")) ? (
-                <MyDiaryCell
-                  date={format(day, "yyyy-MM-dd")}
-                  diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
-                />
-              ) : null}
-            </div>
+            <DiaryDayBox>
+              <MyDiaryCell
+                date={format(day, "yyyy-MM-dd")}
+                diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
+              />
+            </DiaryDayBox>
           ) : isThisMonth === "thisMonth" && calendarType === "otherDiary" ? (
-            <div>
-              {diaryByMonth.length > parseInt(format(day, "d")) ? (
-                <OtherDiaryCell
-                  date={format(day, "yyyy-MM-dd")}
-                  diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
-                />
-              ) : null}
-            </div>
+            <DiaryDayBox>
+              <OtherDiaryCell
+                date={format(day, "yyyy-MM-dd")}
+                diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
+              />
+            </DiaryDayBox>
           ) : null}
         </DayCover>
       );
@@ -213,6 +206,13 @@ const DayInside = styled.span<dayDivProps>`
       ? "bold"
       : "normal"};
   // color: ${({ istoday }) => (istoday === "today" ? "#ec9b9b" : "inherit")};
+`;
+
+const DiaryDayBox = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const RowInside = styled.div`
