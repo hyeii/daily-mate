@@ -1,15 +1,16 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import {
   myInfoResponse,
   signUpRequest,
   updatePasswordInput,
   userResponse,
 } from "../types/authType";
+import { axios } from "./api";
 
 export const checkNickname = async (nickname: string) => {
   try {
     const res: AxiosResponse<{ check: boolean }> = await axios.get(
-      "/api/user/check-nickname",
+      "/user/check-nickname",
       {
         params: {
           nickname: nickname,
@@ -26,7 +27,7 @@ export const checkNickname = async (nickname: string) => {
 export const checkEmail = async (email: string) => {
   try {
     const res: AxiosResponse<{ check: boolean }> = await axios.get(
-      "/api/user/email/check",
+      "/user/email/check",
       {
         params: {
           email: email,
@@ -43,7 +44,7 @@ export const checkEmail = async (email: string) => {
 export const signUp = async (body: signUpRequest) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.post(
-      "/api/user/sign-up",
+      "/user/sign-up",
       body
     );
     console.log(res.data.message);
@@ -56,39 +57,32 @@ export const signUp = async (body: signUpRequest) => {
   }
 };
 
-export const signIn = async (email: string, password: string) => {
-  try {
-    const res: AxiosResponse<userResponse> = await axios.post(
-      "/api/user/login",
-      {
+export const useSignIn = () => {
+  const signIn = async (email: string, password: string) => {
+    try {
+      const res: AxiosResponse<userResponse> = await axios.post("/user/login", {
         email: email,
         password: password,
-      }
-    );
-    const signInResult = res.data;
-    axios.interceptors.request.use(
-      (config) => {
-        config.headers.Authorization = `Bearer ${signInResult.accessToken}`;
-        return config;
-      },
-      (error) => {
-        // TODO :  토큰 만료 가능성
-      }
-    );
-    return signInResult;
-  } catch (error) {
-    console.error("로그인 오류 : ", error);
-    alert();
-    return null;
-  }
+      });
+      const signInResult = res.data;
+      window.localStorage.setItem("accessToken", signInResult.accessToken);
+      return signInResult;
+    } catch (error) {
+      console.error("로그인 오류 : ", error);
+      return null;
+    }
+  };
+
+  return signIn;
 };
 
 export const logOut = async () => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.post(
-      "/api/user/logout"
+      "/user/logout"
     );
     console.log(res.data.message);
+    window.localStorage.removeItem("accessToken");
     return res.data;
   } catch (error) {
     console.error("로그아웃 오류 : ", error);
@@ -102,19 +96,14 @@ export const updateUserInfo = async (
   newProfile: string
 ) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.put(
-      "/api/user",
-      {
-        nickname: newNickname,
-        profile: newProfile,
-      }
-    );
+    const res: AxiosResponse<{ message: string }> = await axios.put("/user", {
+      nickname: newNickname,
+      profile: newProfile,
+    });
     console.log(res.data);
 
     try {
-      const re_res: AxiosResponse<myInfoResponse> = await axios.get(
-        "/api/user"
-      );
+      const re_res: AxiosResponse<myInfoResponse> = await axios.get("/user");
       const result = re_res.data;
       console.log(result);
       return result;
@@ -134,7 +123,7 @@ export const updateUserPassword = async (
 ) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.patch(
-      "/api/user/password",
+      "/user/password",
       passwordInput
     );
     const result = res.data;

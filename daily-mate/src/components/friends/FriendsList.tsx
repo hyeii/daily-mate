@@ -14,20 +14,20 @@ const FriendsList = () => {
       } else {
         setFriendsList([
           {
-            fromId: 10,
+            userId: 10,
             email: "1232@123.com",
             nickname: "김더미",
             image: "url",
             profile: "졸려",
-            requestDate: new Date(),
+            requestDate: "2024-02-10",
           },
           {
-            fromId: 11,
+            userId: 11,
             email: "1232@123.com",
             nickname: "최더미",
             image: "url",
             profile: "배고파",
-            requestDate: new Date(),
+            requestDate: "2024-02-10",
           },
         ]);
       }
@@ -36,19 +36,17 @@ const FriendsList = () => {
   }, []);
   return (
     <div>
-      <div>
-        {friendsList.map((friend) => (
-          <div key={friend.fromId}>
-            <UserDataInfo
-              id={friend.fromId}
-              nickname={friend.nickname}
-              profile={friend.profile}
-              image={friend.image}
-              status="friendsList"
-            />
-          </div>
-        ))}
-      </div>
+      {friendsList.map((friend) => (
+        <div key={friend.userId}>
+          <UserDataInfo
+            id={friend.userId}
+            nickname={friend.nickname}
+            profile={friend.profile}
+            image={friend.image}
+            status="friendList"
+          />
+        </div>
+      ))}
     </div>
   );
 };

@@ -7,6 +7,9 @@ import {
   denyFriend,
   registFriend,
 } from "../../apis/friendApi";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "../../atoms/authAtom";
 
 interface props {
   id: number;
@@ -17,9 +20,14 @@ interface props {
 }
 
 const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
+  // status : friendList, waitingList, bothWaitingList, search
+
   const [etcClicked, setEtcClicked] = useState<boolean>(false);
+  const userInfo = useRecoilValue(userInfoState);
 
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (
@@ -75,6 +83,10 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
       alert("다시 시도해 주세요");
     }
   };
+
+  const handleUserDiary = (id: number) => {
+    navigate(`/diary/monthly/${id}`);
+  };
   return (
     <FriendInfoWrapper>
       <ImageProfileContainer>
@@ -91,7 +103,7 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
         <EtcIcon onClick={handleEtc} size={24} />
         {etcClicked ? (
           <EtcModalWrapper>
-            {status === "friendsList" ? (
+            {status === "friendList" ? (
               <EtcModalBox onClick={() => handleDeleteFriend(id)}>
                 친구 취소
               </EtcModalBox>
@@ -104,11 +116,18 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
                   친구 거절
                 </EtcModalBox>
               </div>
-            ) : (
+            ) : status === "search" ? (
               <EtcModalBox onClick={() => handleRegistFriend(id, nickname)}>
                 친구 신청
               </EtcModalBox>
+            ) : (
+              <EtcModalBoxWaiting>친구 대기중</EtcModalBoxWaiting>
             )}
+            {id !== userInfo.userId ? (
+              <EtcModalBox onClick={() => handleUserDiary(id)}>
+                다이어리 놀러가기
+              </EtcModalBox>
+            ) : null}
           </EtcModalWrapper>
         ) : null}
       </div>
@@ -156,7 +175,8 @@ const EtcIcon = styled(RxDotsHorizontal)`
 
 const EtcModalWrapper = styled.div`
   position: absolute;
-  width: 100px;
+  z-index: 999;
+  width: 130px;
   top: 24px;
   right: 0px;
   background: #ffffff;
@@ -171,4 +191,8 @@ const EtcModalBox = styled.div`
   &: hover {
     font-weight: bold;
   }
+`;
+
+const EtcModalBoxWaiting = styled.div`
+  margin: 0.5rem 0;
 `;

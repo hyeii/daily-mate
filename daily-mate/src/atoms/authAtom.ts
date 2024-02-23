@@ -43,23 +43,3 @@ export const refreshTokenState = atom({
   key: "refreshToken",
   default: "",
 });
-
-// export const userNicknameState = atom({
-//   key: "nickname",
-//   default: "감자",
-// });
-
-// export const userFriendsCountState = atom({
-//   key: "friendsCount",
-//   default: 10,
-// });
-
-// export const userEmailState = atom({
-//   key: "email",
-//   default: "hyehye@dailymate.com",
-// });
-
-// export const userProfileMessageState = atom({
-//   key: "profileMessage",
-//   default: "한줄소개입니다",
-// });

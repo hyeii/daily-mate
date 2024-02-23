@@ -1,10 +1,11 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import { axios } from "./api";
 import { notifyResponse } from "../types/notificationType";
 
 export const getNotify = async () => {
   try {
     const res: AxiosResponse<{ data: notifyResponse[] }> = await axios.get(
-      "/api/alert"
+      "/alert"
     );
     console.log(res.data.data);
     return res.data.data;
@@ -17,7 +18,7 @@ export const getNotify = async () => {
 export const deleteNofity = async (alertId: number) => {
   try {
     const res: AxiosResponse<{ message: string }> = await axios.delete(
-      `/api/alert/${alertId}`
+      `/alert/${alertId}`
     );
 
     console.log(res.data.message);

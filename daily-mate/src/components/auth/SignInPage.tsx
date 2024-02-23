@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from "axios";
 import { ChangeEvent, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import {
@@ -8,8 +7,8 @@ import {
   userInfoState,
 } from "../../atoms/authAtom";
 import { useNavigate } from "react-router-dom";
-import { userInfo, userResponse } from "../../types/authType";
-import { signIn } from "../../apis/authApis";
+import { userInfo } from "../../types/authType";
+import { useSignIn } from "../../apis/authApis";
 
 const SignInPage = () => {
   // TODO : api 요청 분리
@@ -29,6 +28,7 @@ const SignInPage = () => {
   const handlePassword = (event: ChangeEvent<HTMLInputElement>) => {
     setInputPassword(event.target.value);
   };
+  const signIn = useSignIn();
 
   const handleSubmit = async () => {
     if (inputEmail === "") {

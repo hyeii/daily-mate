@@ -52,12 +52,12 @@ export enum diaryOpenType {
 }
 
 export interface friendResponse {
-  fromId: number;
+  userId: number;
   email: string;
   nickname: string;
   image: string;
   profile: string;
-  requestDate: Date;
+  requestDate: string;
 }
 
 export interface searchResponse {
@@ -66,5 +66,6 @@ export interface searchResponse {
   nickname: string;
   image: string;
   profile: string;
-  status: string;
+  status: boolean;
+  requestDate: string | null;
 }

@@ -8,3 +8,9 @@ export const whoseDiaryState = atom<number>({
   default: 0,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const writeDate = atom<string>({
+  key: "writeDiaryWhen",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

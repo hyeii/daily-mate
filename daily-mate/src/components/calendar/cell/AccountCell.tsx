@@ -20,7 +20,7 @@ const AccountCell = ({ date, input, output }: props) => {
       {output === 0 || output === null || output === undefined ? (
         <div> </div>
       ) : (
-        <AmountNumber textType="out">-{output}</AmountNumber>
+        <AmountNumber textType="out">{output}</AmountNumber>
       )}
     </AccountCellWrapper>
   );

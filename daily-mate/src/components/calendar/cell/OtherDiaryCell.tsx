@@ -5,7 +5,7 @@ import { whoseDiaryState } from "../../../atoms/diaryAtom";
 
 interface props {
   date: string;
-  diaryInfo: diaryByMonthResponse;
+  diaryInfo: diaryByMonthResponse | null;
 }
 
 const OtherDiaryCell = ({ date, diaryInfo }: props) => {
@@ -16,14 +16,13 @@ const OtherDiaryCell = ({ date, diaryInfo }: props) => {
   const whoseDiary = useRecoilValue(whoseDiaryState);
   const handleDiary = () => {
     // 일기 있는 날만 클릭 허용
-    if (diaryInfo.diaryId === null) return;
+    if (diaryInfo !== null && diaryInfo.diaryId === null) return;
 
     navigate(`/diary/daily/${whoseDiary}/${date}`);
   };
   return (
     <div>
-      <div>캘린더 다른 다이어리 셀</div>
-      <div onClick={handleDiary}>{diaryInfo.title}</div>
+      <div onClick={handleDiary}>{diaryInfo && diaryInfo.title}</div>
     </div>
   );
 };

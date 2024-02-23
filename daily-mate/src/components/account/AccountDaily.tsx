@@ -50,7 +50,7 @@ const AccountDaily = ({ currentDay }: props) => {
         const idx = cate.indexOf(account.category);
         if (idx !== -1) {
           // 없는 카테고리일땐 -1 반환해서
-          dailyOutputResult[idx] += account.amount;
+          dailyOutputResult[idx] += Math.abs(account.amount);
         }
       });
       setDailyOutput(dailyOutputResult);
@@ -67,23 +67,33 @@ const AccountDaily = ({ currentDay }: props) => {
           <CategoryContainer>
             <CategoryItem>
               <div>식비</div>
-              <div>{dailyOutput[0]}원</div>
+              <div style={{ color: "#A585FF", fontWeight: "bold" }}>
+                -{dailyOutput[0]}원
+              </div>
             </CategoryItem>
             <CategoryItem>
               <div>카페 </div>
-              <div>{dailyOutput[1]}원</div>
+              <div style={{ color: "#FFEB80", fontWeight: "bold" }}>
+                -{dailyOutput[1]}원
+              </div>
             </CategoryItem>
             <CategoryItem>
               <div>생활 </div>
-              <div>{dailyOutput[2]}원</div>
+              <div style={{ color: "#FBA76A", fontWeight: "bold" }}>
+                -{dailyOutput[2]}원
+              </div>
             </CategoryItem>
             <CategoryItem>
               <div>교통</div>
-              <div>{dailyOutput[3]}원</div>
+              <div style={{ color: "#DEFF97", fontWeight: "bold" }}>
+                -{dailyOutput[3]}원
+              </div>
             </CategoryItem>
             <CategoryItem>
               <div>기타</div>
-              <div>{dailyOutput[4]}원</div>
+              <div style={{ color: "#FF96E2", fontWeight: "bold" }}>
+                -{dailyOutput[4]}원
+              </div>
             </CategoryItem>
           </CategoryContainer>
         </ChartContainer>

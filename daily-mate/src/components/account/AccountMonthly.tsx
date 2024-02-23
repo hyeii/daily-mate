@@ -17,11 +17,11 @@ const AccountMonthly = () => {
   const currentDate = format(currentMonth, "M");
   const formatDate = format(currentMonth, "yyyy-MM");
   const [outputByMonth, setOutputByMonth] = useState<CategoryByMonthMap>({
-    식비: 100000,
-    카페: 200000,
-    생활: 159800,
-    교통: 80000,
-    기타: 130000,
+    식비: -100000,
+    카페: -200000,
+    생활: -159800,
+    교통: -80000,
+    기타: -130000,
   });
   const [inOutByMonth, setInOutByMonth] = useState<number[]>([50000, 30000]);
 
@@ -33,7 +33,7 @@ const AccountMonthly = () => {
   };
 
   const extractInOutValue = (object: accountByMonthResponse): number[] => {
-    return [object.totalInput ?? 0, object.totalOutput ?? 0];
+    return [object.totalInput ?? 0, Math.abs(object.totalOutput ?? 0)];
   };
 
   useEffect(() => {
