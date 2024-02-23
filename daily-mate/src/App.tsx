@@ -37,7 +37,7 @@ function App() {
       <MainContainer isopen={isOpen ? "open" : "close"}>
         {isLogin ? <button onClick={handleOpen}>버튼</button> : null}
         <button onClick={handleOpen}>버튼</button>
-        <MainBox>
+        <MainBox isopen={isOpen ? "open" : "close"}>
           <Routes>
             {/* 라우팅 추후 수정 예정 */}
             <Route path="/" element={<MainPage />} />
@@ -78,16 +78,17 @@ const MainContainer = styled.div<SidebarProps>`
   transition: width 0.3s ease, left 0.3s ease;
 `;
 
-const MainBox = styled.div`
+const MainBox = styled.div<SidebarProps>`
   width: auto;
-  margin: 3rem 15rem;
 
   @media screen and (min-width: 992px) {
-    margin: 3rem 15rem;
+    margin: ${({ isopen }) =>
+      isopen === "open" ? "3rem 10rem" : "3rem 20rem"};
   }
 
   @media screen and (max-width: 991px) {
     margin: 3rem 5rem;
+    margin: ${({ isopen }) => (isopen === "open" ? "3rem 3rem" : "3rem 5rem")};
   }
 `;
 
