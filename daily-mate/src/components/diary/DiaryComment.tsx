@@ -8,10 +8,10 @@ import {
 } from "../../apis/diaryApi";
 import AddComment from "./AddComment";
 import { useRecoilValue } from "recoil";
-import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import { userInfoState } from "../../atoms/authAtom";
 import styled, { css } from "styled-components";
 import { format } from "date-fns";
+import { FullHeart, OutLineHeart } from "../common/CommonStyledComponents";
 
 interface props {
   diaryId: number;
@@ -199,15 +199,4 @@ const ControlButtons = styled.span`
   &:hover {
     font-weight: bold;
   }
-`;
-
-const LikeHeart = css`
-  cursor: pointer;
-`;
-
-const FullHeart = styled(HiHeart)`
-  ${LikeHeart}
-`;
-const OutLineHeart = styled(HiOutlineHeart)`
-  ${LikeHeart}
 `;

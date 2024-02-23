@@ -1,4 +1,5 @@
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { HiHeart, HiOutlineHeart } from "react-icons/hi";
 import styled, { css } from "styled-components";
 
 export const arrowIconStyle = css`
@@ -40,4 +41,15 @@ export const TabText = styled.h3`
     cursor: pointer;
     font-weight: bold;
   }
+`;
+
+export const LikeHeart = css`
+  cursor: pointer;
+`;
+
+export const FullHeart = styled(HiHeart)`
+  ${LikeHeart}
+`;
+export const OutLineHeart = styled(HiOutlineHeart)`
+  ${LikeHeart}
 `;
