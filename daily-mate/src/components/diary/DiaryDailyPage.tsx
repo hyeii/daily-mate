@@ -5,6 +5,7 @@ import {
   deleteDiary,
   getDiaryByDate,
   getOtherDiaryByDate,
+  likeDiary,
 } from "../../apis/diaryApi";
 import DiaryComment from "./DiaryComment";
 import { useRecoilValue } from "recoil";
@@ -12,6 +13,7 @@ import { userInfoState } from "../../atoms/authAtom";
 import { LuTrash2 } from "react-icons/lu";
 import styled from "styled-components";
 import { formatDate } from "../common/FormatDate";
+import { FullHeart, OutLineHeart } from "../common/CommonStyledComponents";
 
 const DiaryDailyPage = () => {
   const { id, date } = useParams<diaryDailyParams>();
@@ -65,6 +67,21 @@ const DiaryDailyPage = () => {
     };
     fetchData();
   }, [date, id, userInfo.userId]);
+
+  // 수정할 수 있다면 수정하기
+  const handleLikeDiary = async (diaryId: number) => {
+    if (likeDiary(diaryId) !== null) {
+      if (date !== undefined && id !== undefined) {
+        const isMyDiary: boolean = parseInt(id) === userInfo.userId;
+        const diaryByDateData: diaryByDateResponse | null = isMyDiary
+          ? await getDiaryByDate(date)
+          : await getOtherDiaryByDate(date, userInfo.userId);
+        if (diaryByDateData !== null) {
+          setDiaryDetail(diaryByDateData);
+        }
+      }
+    }
+  };
 
   const weatherIcon = (weather: string) => {
     let weatherNow = "";
@@ -122,7 +139,20 @@ const DiaryDailyPage = () => {
           <ContentBox>
             <ContentInside>{diaryDetail.content}</ContentInside>
           </ContentBox>
-          {isMyDiary ? <TrashCan onClick={deleteDiaryNow} /> : null}
+          <DiaryIconBox>
+            {isMyDiary ? (
+              <TrashCan onClick={deleteDiaryNow} />
+            ) : (
+              <div style={{ opacity: "0" }}>숨김</div>
+            )}
+            {diaryDetail.isLike ? (
+              <FullHeart onClick={() => handleLikeDiary(diaryDetail.diaryId)} />
+            ) : (
+              <OutLineHeart
+                onClick={() => handleLikeDiary(diaryDetail.diaryId)}
+              />
+            )}
+          </DiaryIconBox>
         </DiaryBottom>
       </DiaryContainer>
       <CommentContainer>
@@ -229,6 +259,11 @@ const TrashCan = styled(LuTrash2)`
   &:hover {
     color: #9b9b9b;
   }
+`;
+
+const DiaryIconBox = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const titleExample: string = "아주 희미한 빛으로도 : 최은영";

@@ -110,8 +110,10 @@ export const likeDiary = async (diaryId: number) => {
       `/diary/like/${diaryId}`
     );
     console.log(res.data.message);
+    return res.data;
   } catch (error) {
     console.error("일기 좋아요 오류 : ", error);
+    return null;
   }
 };
 

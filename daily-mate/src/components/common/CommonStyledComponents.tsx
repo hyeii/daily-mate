@@ -45,6 +45,10 @@ export const TabText = styled.h3`
 
 export const LikeHeart = css`
   cursor: pointer;
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
 
 export const FullHeart = styled(HiHeart)`
