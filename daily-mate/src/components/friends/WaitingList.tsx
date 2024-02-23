@@ -44,19 +44,17 @@ const WaitingList = () => {
   }, []);
   return (
     <div>
-      <div>
-        {waitingList.map((friend) => (
-          <div key={friend.userId}>
-            <UserDataInfo
-              id={friend.userId}
-              nickname={friend.nickname}
-              profile={friend.profile}
-              image={friend.image}
-              status="waitingList"
-            />
-          </div>
-        ))}
-      </div>
+      {waitingList.map((friend) => (
+        <div key={friend.userId}>
+          <UserDataInfo
+            id={friend.userId}
+            nickname={friend.nickname}
+            profile={friend.profile}
+            image={friend.image}
+            status="waitingList"
+          />
+        </div>
+      ))}
     </div>
   );
 };

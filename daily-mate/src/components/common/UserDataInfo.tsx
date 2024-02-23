@@ -7,6 +7,9 @@ import {
   denyFriend,
   registFriend,
 } from "../../apis/friendApi";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "../../atoms/authAtom";
 
 interface props {
   id: number;
@@ -20,8 +23,11 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
   // status : friendList, waitingList, bothWaitingList, search
 
   const [etcClicked, setEtcClicked] = useState<boolean>(false);
+  const userInfo = useRecoilValue(userInfoState);
 
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (
@@ -77,6 +83,10 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
       alert("다시 시도해 주세요");
     }
   };
+
+  const handleUserDiary = (id: number) => {
+    navigate(`/diary/monthly/${id}`);
+  };
   return (
     <FriendInfoWrapper>
       <ImageProfileContainer>
@@ -113,6 +123,11 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
             ) : (
               <EtcModalBoxWaiting>친구 대기중</EtcModalBoxWaiting>
             )}
+            {id !== userInfo.userId ? (
+              <EtcModalBox onClick={() => handleUserDiary(id)}>
+                다이어리 놀러가기
+              </EtcModalBox>
+            ) : null}
           </EtcModalWrapper>
         ) : null}
       </div>
@@ -160,7 +175,8 @@ const EtcIcon = styled(RxDotsHorizontal)`
 
 const EtcModalWrapper = styled.div`
   position: absolute;
-  width: 100px;
+  z-index: 999;
+  width: 130px;
   top: 24px;
   right: 0px;
   background: #ffffff;

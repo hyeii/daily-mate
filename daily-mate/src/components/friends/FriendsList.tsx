@@ -36,19 +36,17 @@ const FriendsList = () => {
   }, []);
   return (
     <div>
-      <div>
-        {friendsList.map((friend) => (
-          <div key={friend.userId}>
-            <UserDataInfo
-              id={friend.userId}
-              nickname={friend.nickname}
-              profile={friend.profile}
-              image={friend.image}
-              status="friendsList"
-            />
-          </div>
-        ))}
-      </div>
+      {friendsList.map((friend) => (
+        <div key={friend.userId}>
+          <UserDataInfo
+            id={friend.userId}
+            nickname={friend.nickname}
+            profile={friend.profile}
+            image={friend.image}
+            status="friendList"
+          />
+        </div>
+      ))}
     </div>
   );
 };
