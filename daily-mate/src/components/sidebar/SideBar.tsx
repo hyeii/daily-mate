@@ -63,9 +63,9 @@ const SideBar = () => {
   return (
     <SidebarWrapper isopen={isOpen ? "open" : "close"}>
       <SidebarContainer>
-        <SidebarBtnBox>
+        {/* <SidebarBtnBox>
           <SidebarBtn onClick={handleOpen} />
-        </SidebarBtnBox>
+        </SidebarBtnBox> */}
         <UserProfileBox>
           <ImageBox
             src={process.env.PUBLIC_URL + "/defaultImg.png"}

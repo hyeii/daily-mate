@@ -21,6 +21,7 @@ import {
 } from "./components/index";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { sideBarOpenState } from "./atoms/sideBarAtom";
+import { RxDoubleArrowRight } from "react-icons/rx";
 import styled from "styled-components";
 import { isLoginState } from "./atoms/authAtom";
 
@@ -35,9 +36,19 @@ function App() {
       {isLogin ? <SideBar /> : null}
       <SideBar />
       <MainContainer isopen={isOpen ? "open" : "close"}>
-        {isLogin ? <button onClick={handleOpen}>버튼</button> : null}
-        <button onClick={handleOpen}>버튼</button>
         <MainBox isopen={isOpen ? "open" : "close"}>
+          {isLogin ? (
+            <OpenBtn
+              isopen={isOpen ? "open" : "close"}
+              onClick={handleOpen}
+              size={30}
+            />
+          ) : null}
+          <OpenBtn
+            isopen={isOpen ? "open" : "close"}
+            onClick={handleOpen}
+            size={30}
+          />
           <Routes>
             {/* 라우팅 추후 수정 예정 */}
             <Route path="/" element={<MainPage />} />
@@ -94,4 +105,17 @@ const MainBox = styled.div<SidebarProps>`
 
 const Wrapper = styled.div`
   overflow-x: hidden;
+`;
+
+const OpenBtn = styled(RxDoubleArrowRight)<SidebarProps>`
+  position: fixed;
+  color: #5e5e5e;
+  top: 50%;
+  left: ${({ isopen }) => (isopen === "open" ? "303px" : "3px")};
+  transform: ${({ isopen }) => (isopen === "open" ? "scaleX(-1)" : "none")};
+  transition: width 0.3s ease, left 0.3s ease;
+  cursor: pointer;
+  &: hover {
+    color: #919191;
+  }
 `;

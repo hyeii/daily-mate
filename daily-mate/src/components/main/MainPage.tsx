@@ -1,6 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { isLoginState } from "../../atoms/authAtom";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const MainPage = () => {
   const loginState = useRecoilValue(isLoginState);
@@ -16,12 +17,14 @@ const MainPage = () => {
   };
 
   return (
-    <div>
-      <h3>메인화면</h3>
+    <Wrapper>
+      <TitleBox>
+        <h3>일정을 관리하세요</h3>
+      </TitleBox>
       <div>
-        <span>로그인 여부 : </span>
-        {loginState ? <span>로그인 중</span> : <span>로그아웃 상태</span>}
+        <p>J가 되고싶은 당신에게!</p>
       </div>
+
       {loginState ? (
         <button onClick={handleLogOut}>로그아웃</button>
       ) : (
@@ -30,8 +33,20 @@ const MainPage = () => {
           <button onClick={handleSignUp}>회원가입</button>
         </div>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
 export default MainPage;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const TitleBox = styled.div`
+  align-items: center;
+  font-family: "LeeSeoyun";
+  font-size: 2rem;
+`;
