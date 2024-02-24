@@ -50,6 +50,9 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .csrf().disable()
 
+                // cors
+                .cors().disable()
+
                 // JWT를 사용하기 때문에 세션을 사용하지 않음
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
