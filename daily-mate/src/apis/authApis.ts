@@ -97,7 +97,7 @@ export const updateUserInfo = async (
   newProfile: string
 ) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await API.put("/user", {
+    const res: AxiosResponse<{ message: string }> = await API.patch("/user", {
       nickname: newNickname,
       profile: newProfile,
     });
