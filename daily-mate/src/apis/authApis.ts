@@ -5,29 +5,27 @@ import {
   updatePasswordInput,
   userResponse,
 } from "../types/authType";
-import { axios } from "./api";
+import { axios, foreAxios } from "./api";
 
 export const checkNickname = async (nickname: string) => {
   try {
-    const res: AxiosResponse<{ check: boolean }> = await axios.get(
-      "/user/check-nickname",
-      {
-        params: {
-          nickname: nickname,
-        },
-      }
-    );
-    return res.data.check;
+    const res = await foreAxios.get<boolean>("/user/check/nickname", {
+      params: {
+        nickname: nickname,
+      },
+    });
+    console.log(res.data);
+    return res.data;
   } catch (error) {
     console.error("닉네임 중복 확인 오류 : ", error);
-    return error;
+    return null;
   }
 };
 
 export const checkEmail = async (email: string) => {
   try {
-    const res: AxiosResponse<{ check: boolean }> = await axios.get(
-      "/user/email/check",
+    const res: AxiosResponse<{ check: boolean }> = await foreAxios.get(
+      "/user/check/email",
       {
         params: {
           email: email,
@@ -43,7 +41,7 @@ export const checkEmail = async (email: string) => {
 
 export const signUp = async (body: signUpRequest) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.post(
+    const res: AxiosResponse<{ message: string }> = await foreAxios.post(
       "/user/sign-up",
       body
     );
@@ -52,6 +50,7 @@ export const signUp = async (body: signUpRequest) => {
     return true;
   } catch (error) {
     console.error("회원가입 오류:", error);
+
     alert("오류가 발생했습니다.");
     return false;
   }
@@ -60,11 +59,15 @@ export const signUp = async (body: signUpRequest) => {
 export const useSignIn = () => {
   const signIn = async (email: string, password: string) => {
     try {
-      const res: AxiosResponse<userResponse> = await axios.post("/user/login", {
-        email: email,
-        password: password,
-      });
+      const res: AxiosResponse<userResponse> = await foreAxios.post(
+        "/user/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
       const signInResult = res.data;
+      console.log(res.data);
       window.localStorage.setItem("accessToken", signInResult.accessToken);
       return signInResult;
     } catch (error) {
