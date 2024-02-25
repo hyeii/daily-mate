@@ -34,12 +34,14 @@ const SignUpPage = () => {
       alert("닉네임을 입력해주세요");
     } else {
       const checkResult = await checkNickname(inputNickname);
-      if (checkResult) {
+      if (!checkResult) {
         alert("사용 가능한 닉네임입니다");
         setValidateNickname(true);
-      } else {
+      } else if (checkResult) {
         alert("중복된 닉네임입니다.");
         setValidateNickname(false);
+      } else {
+        console.log("error");
       }
     }
   };
@@ -60,12 +62,14 @@ const SignUpPage = () => {
       alert("이메일을 입력해주세요");
     } else {
       const checkResult = await checkEmail(inputEmail);
-      if (checkResult) {
+      if (!checkResult) {
         alert("사용 가능한 이메일입니다");
         setValidateEmail(true);
-      } else {
+      } else if (checkResult) {
         alert("중복된 이메일입니다.");
         setValidateEmail(false);
+      } else {
+        console.log("error");
       }
     }
   };
@@ -147,6 +151,7 @@ const SignUpPage = () => {
       nickname: inputNickname,
     };
 
+    console.log(signUpBody);
     const signUpResult = await signUp(signUpBody);
     if (signUpResult) {
       navigate("/signin");
