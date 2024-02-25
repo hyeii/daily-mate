@@ -1,10 +1,10 @@
 import { AxiosResponse } from "axios";
-import { axios } from "./api";
+import { API } from "./api";
 import { searchResponse } from "../types/authType";
 
 export const searchUser = async (nickname: string) => {
   try {
-    const res: AxiosResponse<{ data: searchResponse[] }> = await axios.get(
+    const res: AxiosResponse<{ data: searchResponse[] }> = await API.get(
       "/user/search",
       {
         params: {

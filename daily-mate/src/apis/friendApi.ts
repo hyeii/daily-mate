@@ -1,10 +1,10 @@
 import { AxiosResponse } from "axios";
-import { axios } from "./api";
+import { API } from "./api";
 import { friendResponse } from "../types/authType";
 
 export const getFriendList = async () => {
   try {
-    const res: AxiosResponse<{ data: friendResponse[] }> = await axios.get(
+    const res: AxiosResponse<{ data: friendResponse[] }> = await API.get(
       "/friend/all"
     );
     return res.data.data;
@@ -16,7 +16,7 @@ export const getFriendList = async () => {
 
 export const getWaitingList = async () => {
   try {
-    const res: AxiosResponse<{ data: friendResponse[] }> = await axios.get(
+    const res: AxiosResponse<{ data: friendResponse[] }> = await API.get(
       "/friend/request/all"
     );
     return res.data.data;
@@ -28,7 +28,7 @@ export const getWaitingList = async () => {
 
 export const deleteFriend = async (friendId: number) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.delete(
+    const res: AxiosResponse<{ message: string }> = await API.delete(
       `/friend/${friendId}`
     );
     alert("친구가 해제되었습니다");
@@ -41,7 +41,7 @@ export const deleteFriend = async (friendId: number) => {
 
 export const confirmFriend = async (friendId: number, nickname: string) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.put(
+    const res: AxiosResponse<{ message: string }> = await API.put(
       `/friend/request/${friendId}`
     );
     alert(`${nickname}님과 친구가 되었습니다`);
@@ -54,7 +54,7 @@ export const confirmFriend = async (friendId: number, nickname: string) => {
 
 export const denyFriend = async (friendId: number, nickname: string) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.delete(
+    const res: AxiosResponse<{ message: string }> = await API.delete(
       `/friend/request/${friendId}`
     );
     alert(`${nickname}님의 친구 신청이 거절되었습니다`);
@@ -67,7 +67,7 @@ export const denyFriend = async (friendId: number, nickname: string) => {
 
 export const registFriend = async (toId: number, nickname: string) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.post(
+    const res: AxiosResponse<{ message: string }> = await API.post(
       `/friend/request/${toId}`
     );
     alert(`${nickname}님에게 친구를 신청했습니다`);

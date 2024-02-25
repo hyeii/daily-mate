@@ -37,6 +37,7 @@ const SideBar = () => {
       setIsLogin(false);
       setImageURL("");
       setRefreshToken("");
+      window.localStorage.removeItem("accessToken");
       // 인터셉터 초기화
       alert("로그아웃 완료");
       navigate("/");

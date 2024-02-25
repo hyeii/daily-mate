@@ -5,11 +5,11 @@ import {
   updatePasswordInput,
   userResponse,
 } from "../types/authType";
-import { axios, foreAxios } from "./api";
+import { API, foreAPI } from "./api";
 
 export const checkNickname = async (nickname: string) => {
   try {
-    const res = await foreAxios.get<boolean>("/user/check/nickname", {
+    const res = await foreAPI.get<boolean>("/user/check/nickname", {
       params: {
         nickname: nickname,
       },
@@ -24,7 +24,7 @@ export const checkNickname = async (nickname: string) => {
 
 export const checkEmail = async (email: string) => {
   try {
-    const res: AxiosResponse<{ check: boolean }> = await foreAxios.get(
+    const res: AxiosResponse<{ check: boolean }> = await foreAPI.get(
       "/user/check/email",
       {
         params: {
@@ -41,7 +41,7 @@ export const checkEmail = async (email: string) => {
 
 export const signUp = async (body: signUpRequest) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await foreAxios.post(
+    const res: AxiosResponse<{ message: string }> = await foreAPI.post(
       "/user/sign-up",
       body
     );
@@ -59,7 +59,7 @@ export const signUp = async (body: signUpRequest) => {
 export const useSignIn = () => {
   const signIn = async (email: string, password: string) => {
     try {
-      const res: AxiosResponse<userResponse> = await foreAxios.post(
+      const res: AxiosResponse<userResponse> = await foreAPI.post(
         "/user/login",
         {
           email: email,
@@ -81,11 +81,9 @@ export const useSignIn = () => {
 
 export const logOut = async () => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.post(
-      "/user/logout"
+    const res: AxiosResponse<{ message: string }> = await API.post(
+      "user/logout"
     );
-    console.log(res.data.message);
-    window.localStorage.removeItem("accessToken");
     return res.data;
   } catch (error) {
     console.error("로그아웃 오류 : ", error);
@@ -99,14 +97,14 @@ export const updateUserInfo = async (
   newProfile: string
 ) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.put("/user", {
+    const res: AxiosResponse<{ message: string }> = await API.put("/user", {
       nickname: newNickname,
       profile: newProfile,
     });
     console.log(res.data);
 
     try {
-      const re_res: AxiosResponse<myInfoResponse> = await axios.get("/user");
+      const re_res: AxiosResponse<myInfoResponse> = await API.get("/user");
       const result = re_res.data;
       console.log(result);
       return result;
@@ -125,7 +123,7 @@ export const updateUserPassword = async (
   passwordInput: updatePasswordInput
 ) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.patch(
+    const res: AxiosResponse<{ message: string }> = await API.patch(
       "/user/password",
       passwordInput
     );

@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { axios } from "./api";
+import { API } from "./api";
 import {
   CategoryByMonthMap,
   accountByDateResponse,
@@ -10,7 +10,7 @@ import {
 export const addAccount = async (body: accountRequest) => {
   console.log(body);
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.post(
+    const res: AxiosResponse<{ message: string }> = await API.post(
       "/account",
       body
     );
@@ -28,7 +28,7 @@ export const modifyAccount = async (
 ) => {
   console.log(accountId, body);
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.patch(
+    const res: AxiosResponse<{ message: string }> = await API.patch(
       `/account/${accountId}`,
       body
     );
@@ -42,7 +42,7 @@ export const modifyAccount = async (
 
 export const deleteAccount = async (accountId: number) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.delete(
+    const res: AxiosResponse<{ message: string }> = await API.delete(
       `/account/${accountId}`
     );
     console.log(res.data.message);
@@ -55,12 +55,14 @@ export const deleteAccount = async (accountId: number) => {
 
 export const getAccountMonthly = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: accountByMonthResponse }> =
-      await axios.get("/account/month", {
+    const res: AxiosResponse<{ data: accountByMonthResponse }> = await API.get(
+      "/account/month",
+      {
         params: {
           date: date,
         },
-      });
+      }
+    );
     return res.data.data;
   } catch (error) {
     console.error("월별 거래 금액 조회 오류 : ", error);
@@ -70,7 +72,7 @@ export const getAccountMonthly = async (date: string) => {
 
 export const getAccountByCategory = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: CategoryByMonthMap }> = await axios.get(
+    const res: AxiosResponse<{ data: CategoryByMonthMap }> = await API.get(
       `/account/category/map`,
       {
         params: {
@@ -87,12 +89,14 @@ export const getAccountByCategory = async (date: string) => {
 
 export const getAccountByDate = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: accountByDateResponse[] }> =
-      await axios.get(`/account`, {
+    const res: AxiosResponse<{ data: accountByDateResponse[] }> = await API.get(
+      `/account`,
+      {
         params: {
           date: date,
         },
-      });
+      }
+    );
     return res.data.data;
   } catch (error) {
     console.error("날짜별 거래 내역조회 오류 : ", error);
