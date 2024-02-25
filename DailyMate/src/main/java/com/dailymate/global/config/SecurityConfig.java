@@ -17,6 +17,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 /**
  * Spring Security의 설정을 담당
@@ -39,6 +40,7 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final OAuth2FailureHandler oAuth2FailureHandler;
     private final OAuth2UserServiceImpl oAuth2UserService;
+    private final CorsFilter corsFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -64,6 +66,7 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeHttpRequests()
+//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // CORS 에러 임시용
                 // 해당 API에 대해서는 모든 요청을 허가
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
 
@@ -76,6 +79,7 @@ public class SecurityConfig {
 
                 // JWT 인증을 위하여 직접 구현한 필터를
                 // UsernamePasswordAuthenticationFilter 전에 실행
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 
                 // OAuth2 설정 추가
