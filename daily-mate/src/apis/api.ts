@@ -1,13 +1,13 @@
-import baseAxios from "axios";
+import axios from "axios";
 
-export const foreAxios = baseAxios.create({
+export const foreAPI = axios.create({
   baseURL: process.env.REACT_APP_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-export const axios = baseAxios.create({
+export const API = axios.create({
   baseURL: process.env.REACT_APP_URL,
   // withCredentials: true,
   headers: {
@@ -15,7 +15,7 @@ export const axios = baseAxios.create({
   },
 });
 
-axios.interceptors.request.use((config) => {
+API.interceptors.request.use((config) => {
   const accessToken = window.localStorage.getItem("accessToken");
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

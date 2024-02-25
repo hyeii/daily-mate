@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { axios } from "./api";
+import { API } from "./api";
 import {
   commentBody,
   commentListResponse,
@@ -10,7 +10,7 @@ import {
 
 export const getDiaryByDate = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: diaryByDateResponse }> = await axios.get(
+    const res: AxiosResponse<{ data: diaryByDateResponse }> = await API.get(
       "/diary/date",
       {
         params: {
@@ -27,12 +27,14 @@ export const getDiaryByDate = async (date: string) => {
 
 export const getDiaryByMonth = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> =
-      await axios.get("/diary/month", {
+    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> = await API.get(
+      "/diary/month",
+      {
         params: {
           date: date,
         },
-      });
+      }
+    );
     return res.data.data;
   } catch (error) {
     console.error("월별 일기 조회 오류 : ", error);
@@ -42,7 +44,7 @@ export const getDiaryByMonth = async (date: string) => {
 
 export const getOtherDiaryByDate = async (date: string, diaryId: number) => {
   try {
-    const res: AxiosResponse<{ data: diaryByDateResponse }> = await axios.get(
+    const res: AxiosResponse<{ data: diaryByDateResponse }> = await API.get(
       `/diary/friend/${diaryId}`,
       {
         params: {
@@ -59,12 +61,14 @@ export const getOtherDiaryByDate = async (date: string, diaryId: number) => {
 
 export const getOtherDiaryByMonth = async (date: string, userId: number) => {
   try {
-    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> =
-      await axios.get(`/diary/friend/${userId}/month`, {
+    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> = await API.get(
+      `/diary/friend/${userId}/month`,
+      {
         params: {
           date: date,
         },
-      });
+      }
+    );
     return res.data.data;
   } catch (error) {
     console.log("다른 사람 월별 일기 조회 오류 : ", error);
@@ -80,7 +84,7 @@ export const addDiary = async (diaryData: diaryRequest, image: File | null) => {
       formData.append("image", image);
     }
 
-    const res: AxiosResponse<{ message: string }> = await axios.post("/diary", {
+    const res: AxiosResponse<{ message: string }> = await API.post("/diary", {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -94,7 +98,7 @@ export const addDiary = async (diaryData: diaryRequest, image: File | null) => {
 
 export const deleteDiary = async (diaryId: number) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.delete(
+    const res: AxiosResponse<{ message: string }> = await API.delete(
       `/diary/${diaryId}`
     );
     console.log(res.data.message);
@@ -106,7 +110,7 @@ export const deleteDiary = async (diaryId: number) => {
 
 export const likeDiary = async (diaryId: number) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.post(
+    const res: AxiosResponse<{ message: string }> = await API.post(
       `/diary/like/${diaryId}`
     );
     console.log(res.data.message);
@@ -119,7 +123,7 @@ export const likeDiary = async (diaryId: number) => {
 
 export const getCommentList = async (diaryId: number) => {
   try {
-    const res: AxiosResponse<{ data: commentListResponse[] }> = await axios.get(
+    const res: AxiosResponse<{ data: commentListResponse[] }> = await API.get(
       `/comment/${diaryId}`
     );
     return res.data.data;
@@ -131,7 +135,7 @@ export const getCommentList = async (diaryId: number) => {
 
 export const addComment = async (diaryId: number, body: commentBody) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.post(
+    const res: AxiosResponse<{ message: string }> = await API.post(
       `/comment/${diaryId}`,
       body
     );
@@ -144,7 +148,7 @@ export const addComment = async (diaryId: number, body: commentBody) => {
 
 export const updateComment = async (commentId: number, body: commentBody) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.put(
+    const res: AxiosResponse<{ message: string }> = await API.put(
       `/comment/${commentId}`,
       body
     );
@@ -157,7 +161,7 @@ export const updateComment = async (commentId: number, body: commentBody) => {
 
 export const deleteComment = async (commentId: number) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.delete(
+    const res: AxiosResponse<{ message: string }> = await API.delete(
       `/comment/${commentId}`
     );
     alert("댓글 삭제 완료");
@@ -169,7 +173,7 @@ export const deleteComment = async (commentId: number) => {
 
 export const likeComment = async (commentId: number) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await axios.post(
+    const res: AxiosResponse<{ message: string }> = await API.post(
       `/comment/like/${commentId}`
     );
     console.log(res.data.message);
