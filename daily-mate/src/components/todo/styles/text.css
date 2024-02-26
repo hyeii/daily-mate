@@ -1,0 +1,12 @@
+.text {
+  width: 100%;
+  box-sizing: border-box;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 10px;
+}
+.completedText {
+  text-decoration: line-through;
+}

@@ -115,7 +115,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/User/Desktop/DailyMate/DailyMate",
+    "last_opened_file_path": "D:/User/Desktop/Test/DailyMate/DailyMate",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -185,6 +185,7 @@
       <workItem from="1705850780090" duration="44000" />
       <workItem from="1706514180274" duration="62586000" />
       <workItem from="1707796548664" duration="26366000" />
+      <workItem from="1708878830492" duration="27000" />
     </task>
     <task id="LOCAL-00001" summary="feat todo - 할일 추가/수정/삭제 메서드 추가(미완성)">
       <created>1706523322132</created>
