@@ -12,27 +12,8 @@ interface props {
 
 const AccountDaily = ({ currentDay }: props) => {
   const [accountListByDate, setAccountListByDate] = useState<
-    accountByDateResponse[]
-  >([
-    {
-      accountId: 1,
-      amount: -500,
-      category: "카페",
-      content: "막대사탕",
-      date: "2024-02-03",
-      type: "지출",
-      userId: 321,
-    },
-    {
-      accountId: 2,
-      amount: -4500,
-      category: "식비",
-      content: "군것질",
-      date: "2024-01-23",
-      type: "지출",
-      userId: 321,
-    },
-  ]);
+    accountByDateResponse[] | null
+  >(null);
   const [dailyOutput, setDailyOutput] = useState<number[]>([]);
 
   useEffect(() => {
@@ -42,22 +23,22 @@ const AccountDaily = ({ currentDay }: props) => {
         await getAccountByDate(currentDay);
       if (accountByDateData !== null) {
         setAccountListByDate(accountByDateData);
-      }
-      const cate = ["식비", "카페", "생활", "교통", "기타"];
+        const cate = ["식비", "카페", "생활", "교통", "기타"];
 
-      const dailyOutputResult: number[] = Array(5).fill(0);
-      accountListByDate.forEach((account) => {
-        const idx = cate.indexOf(account.category);
-        if (idx !== -1) {
-          // 없는 카테고리일땐 -1 반환해서
-          dailyOutputResult[idx] += Math.abs(account.amount);
-        }
-      });
-      setDailyOutput(dailyOutputResult);
+        const dailyOutputResult: number[] = Array(5).fill(0);
+        accountByDateData.forEach((account) => {
+          const idx = cate.indexOf(account.category);
+          if (idx !== -1) {
+            // 없는 카테고리일땐 -1 반환해서
+            dailyOutputResult[idx] += Math.abs(account.amount);
+          }
+        });
+        setDailyOutput(dailyOutputResult);
+      }
     };
 
     fetchData();
-  }, [accountListByDate, currentDay]);
+  }, [currentDay]);
   return (
     <AccountDailyWrapper>
       <DailytContainer>

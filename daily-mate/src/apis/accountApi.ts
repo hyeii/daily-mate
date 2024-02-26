@@ -14,6 +14,7 @@ export const addAccount = async (body: accountRequest) => {
       "/account",
       body
     );
+    console.log("수입 카테고리 테스트 : ", body);
     console.log(res.data.message);
     alert("등록 완료");
   } catch (error) {
@@ -70,15 +71,12 @@ export const getAccountMonthly = async (date: string) => {
 
 export const getAccountByCategory = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: CategoryByMonthMap }> = await API.get(
-      `/account/category/map`,
-      {
-        params: {
-          date: date,
-        },
-      }
-    );
-    return res.data.data;
+    const res = await API.get<CategoryByMonthMap>(`/account/category/map`, {
+      params: {
+        date: date,
+      },
+    });
+    return res.data;
   } catch (error) {
     console.error("월별 지출 카테고리별 조회 오류 : ", error);
     return null;
@@ -87,15 +85,12 @@ export const getAccountByCategory = async (date: string) => {
 
 export const getAccountByDate = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: accountByDateResponse[] }> = await API.get(
-      `/account`,
-      {
-        params: {
-          date: date,
-        },
-      }
-    );
-    return res.data.data;
+    const res = await API.get<accountByDateResponse[]>(`/account`, {
+      params: {
+        date: date,
+      },
+    });
+    return res.data;
   } catch (error) {
     console.error("날짜별 거래 내역조회 오류 : ", error);
     return null;
