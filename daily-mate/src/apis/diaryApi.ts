@@ -10,15 +10,12 @@ import {
 
 export const getDiaryByDate = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: diaryByDateResponse }> = await API.get(
-      "/diary/date",
-      {
-        params: {
-          date: date,
-        },
-      }
-    );
-    return res.data.data;
+    const res = await API.get<diaryByDateResponse>("/diary/date", {
+      params: {
+        date: date,
+      },
+    });
+    return res.data;
   } catch (error) {
     console.error("일별 일기 조회 오류 : ", error);
     return null;
@@ -27,15 +24,12 @@ export const getDiaryByDate = async (date: string) => {
 
 export const getDiaryByMonth = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> = await API.get(
-      "/diary/month",
-      {
-        params: {
-          date: date,
-        },
-      }
-    );
-    return res.data.data;
+    const res = await API.get<diaryByMonthResponse[]>("/diary/month", {
+      params: {
+        date: date,
+      },
+    });
+    return res.data;
   } catch (error) {
     console.error("월별 일기 조회 오류 : ", error);
     return null;
@@ -44,15 +38,12 @@ export const getDiaryByMonth = async (date: string) => {
 
 export const getOtherDiaryByDate = async (date: string, diaryId: number) => {
   try {
-    const res: AxiosResponse<{ data: diaryByDateResponse }> = await API.get(
-      `/diary/friend/${diaryId}`,
-      {
-        params: {
-          date: date,
-        },
-      }
-    );
-    return res.data.data;
+    const res = await API.get<diaryByDateResponse>(`/diary/friend/${diaryId}`, {
+      params: {
+        date: date,
+      },
+    });
+    return res.data;
   } catch (error) {
     console.error("다른 사람 일별 일기 조회 오류 : ", error);
     return null;
@@ -61,7 +52,7 @@ export const getOtherDiaryByDate = async (date: string, diaryId: number) => {
 
 export const getOtherDiaryByMonth = async (date: string, userId: number) => {
   try {
-    const res: AxiosResponse<{ data: diaryByMonthResponse[] }> = await API.get(
+    const res = await API.get<diaryByMonthResponse[]>(
       `/diary/friend/${userId}/month`,
       {
         params: {
@@ -69,7 +60,7 @@ export const getOtherDiaryByMonth = async (date: string, userId: number) => {
         },
       }
     );
-    return res.data.data;
+    return res.data;
   } catch (error) {
     console.log("다른 사람 월별 일기 조회 오류 : ", error);
     return null;
@@ -123,10 +114,8 @@ export const likeDiary = async (diaryId: number) => {
 
 export const getCommentList = async (diaryId: number) => {
   try {
-    const res: AxiosResponse<{ data: commentListResponse[] }> = await API.get(
-      `/comment/${diaryId}`
-    );
-    return res.data.data;
+    const res = await API.get<commentListResponse[]>(`/comment/${diaryId}`);
+    return res.data;
   } catch (error) {
     console.error("댓글 전체 조회 오류 : ", error);
     return null;

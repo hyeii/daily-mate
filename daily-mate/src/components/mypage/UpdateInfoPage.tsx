@@ -33,7 +33,7 @@ const UpdateInfoPage = () => {
       setUserInfo((prev) => ({
         ...prev,
         nickname: updateResult.nickname,
-        profileMessage: updateResult.profile,
+        profile: updateResult.profile,
       }));
       alert("내 정보가 수정되었습니다");
     }

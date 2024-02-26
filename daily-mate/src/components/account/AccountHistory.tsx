@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { useState } from "react";
 
 interface props {
-  accountList: accountByDateResponse[];
+  accountList: accountByDateResponse[] | null;
 }
 
 const AccountHistory = ({ accountList }: props) => {
@@ -48,29 +48,30 @@ const AccountHistory = ({ accountList }: props) => {
             </tr>
           </thead>
           <tbody>
-            {accountList.map((item) => (
-              <tr
-                key={item.accountId}
-                onMouseEnter={() => setOpenIcon(item.accountId)}
-                onMouseLeave={() => setOpenIcon(0)}
-              >
-                <TableCell>{item.category}</TableCell>
-                <TableCell>{item.content}</TableCell>
-                <TableCell>
-                  <AmountCell>
-                    <div>{item.amount}</div>
-                    <IconStyles
-                      style={{ opacity: openIcon === item.accountId ? 1 : 0 }}
-                    >
-                      <LuPencil onClick={() => handleUpdateAccount(item)} />
-                      <LuX
-                        onClick={() => handleDeleteAccount(item.accountId)}
-                      />
-                    </IconStyles>
-                  </AmountCell>
-                </TableCell>
-              </tr>
-            ))}
+            {accountList &&
+              accountList.map((item) => (
+                <tr
+                  key={item.accountId}
+                  onMouseEnter={() => setOpenIcon(item.accountId)}
+                  onMouseLeave={() => setOpenIcon(0)}
+                >
+                  <TableCell>{item.category}</TableCell>
+                  <TableCell>{item.content}</TableCell>
+                  <TableCell>
+                    <AmountCell>
+                      <div>{item.amount}</div>
+                      <IconStyles
+                        style={{ opacity: openIcon === item.accountId ? 1 : 0 }}
+                      >
+                        <LuPencil onClick={() => handleUpdateAccount(item)} />
+                        <LuX
+                          onClick={() => handleDeleteAccount(item.accountId)}
+                        />
+                      </IconStyles>
+                    </AmountCell>
+                  </TableCell>
+                </tr>
+              ))}
           </tbody>
         </Table>
       </TableContainer>

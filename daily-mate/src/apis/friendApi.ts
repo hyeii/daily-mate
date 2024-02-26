@@ -4,10 +4,8 @@ import { friendResponse } from "../types/authType";
 
 export const getFriendList = async () => {
   try {
-    const res: AxiosResponse<{ data: friendResponse[] }> = await API.get(
-      "/friend/all"
-    );
-    return res.data.data;
+    const res = await API.get<friendResponse[]>("/friend/all");
+    return res.data;
   } catch (error) {
     console.error("친구 목록 조회 오류 : ", error);
     return null;
@@ -16,10 +14,8 @@ export const getFriendList = async () => {
 
 export const getWaitingList = async () => {
   try {
-    const res: AxiosResponse<{ data: friendResponse[] }> = await API.get(
-      "/friend/request/all"
-    );
-    return res.data.data;
+    const res = await API.get<friendResponse[]>("/friend/request/all");
+    return res.data;
   } catch (error) {
     console.error("대기중 목록 조회 오류 : ", error);
     return null;

@@ -55,17 +55,13 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
     // add일때 modify일때 다르게 처리
     // openType="add" :  /account api POST 요청
     // openType="modify" :  /account/{accountId} api PATCH 요청
-    const ammountData = () => {
-      if (addType === "in") {
-        return Math.abs(ammount);
-      } else {
-        return Math.abs(ammount) * -1;
-      }
-    };
+    const ammountData = () =>
+      addType === "in" ? Math.abs(ammount) : -Math.abs(ammount);
+
     const newAccount: accountRequest = {
       content: content,
       date: date,
-      ammount: ammountData(),
+      amount: ammountData(),
       category: category,
     };
     console.log(newAccount);

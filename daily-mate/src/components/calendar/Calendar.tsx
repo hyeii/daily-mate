@@ -20,12 +20,8 @@ export interface props {
 const Calendar = ({ isMini, calendarType }: props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const whoseDiary = useRecoilValue(whoseDiaryState);
-  const [accountByMonth, setAccountByMonth] = useState<accountByMonthResponse>({
-    totalInput: 100,
-    totalOutput: 300,
-    inputs: [],
-    outputs: [],
-  });
+  const [accountByMonth, setAccountByMonth] =
+    useState<accountByMonthResponse | null>(null);
   const [diaryByMonth, setDiaryByMonth] = useState<
     (diaryByMonthResponse | null)[]
   >([]);
@@ -46,17 +42,15 @@ const Calendar = ({ isMini, calendarType }: props) => {
     const fetchData = async () => {
       // 월별 거래 금액 조회 account/month
       if (calendarType === "account") {
-        console.log("가계부 캘린더 렌더링");
-        const accountMonthlyData: accountByMonthResponse | null =
+        const accountMonthlyData: accountByMonthResponse[] | null =
           await getAccountMonthly(format(currentMonth, "yyyy-MM"));
         if (accountMonthlyData !== null) {
-          setAccountByMonth(accountMonthlyData);
+          setAccountByMonth(accountMonthlyData[0]);
         }
       }
 
       // 월별 일기 조회 (내 일기)
       if (calendarType === "myDiary") {
-        console.log("내 다이어리 캘린더 렌더링");
         const diaryMonthlyData: (diaryByMonthResponse | null)[] | null =
           await getDiaryByMonth(format(currentMonth, "yyyy-MM"));
         // userInfo id
@@ -67,7 +61,6 @@ const Calendar = ({ isMini, calendarType }: props) => {
 
       // 이외 월별 일기 조회
       if (calendarType === "otherDiary") {
-        console.log("타인 다이어리 캘린더 렌더링");
         const otherDiaryMonthlyData: diaryByMonthResponse[] | null =
           await getOtherDiaryByMonth(
             format(currentMonth, "yyyy-MM"),
@@ -92,24 +85,29 @@ const Calendar = ({ isMini, calendarType }: props) => {
         setToday={setToday}
         isMini={isMini}
       />
-      {/* <Spacer /> */}
       {isMini === "not" && calendarType === "account" ? (
         <div>
-          <InOutMonthly
-            totalInput={accountByMonth.totalInput}
-            totalOutput={accountByMonth.totalOutput}
-          />
+          {accountByMonth !== null ? (
+            <InOutMonthly
+              totalInput={accountByMonth.totalInput}
+              totalOutput={accountByMonth.totalOutput}
+            />
+          ) : (
+            <div>loading</div>
+          )}
           <Spacer />
         </div>
       ) : null}
       <CalendarDays isMini={isMini} />
-      <CalendarCells
-        currentMonth={currentMonth}
-        accountByMonth={accountByMonth}
-        diaryByMonth={diaryByMonth}
-        calendarType={calendarType}
-        isMini={isMini}
-      />
+      {accountByMonth && (
+        <CalendarCells
+          currentMonth={currentMonth}
+          accountByMonth={accountByMonth}
+          diaryByMonth={diaryByMonth}
+          calendarType={calendarType}
+          isMini={isMini}
+        />
+      )}
     </CalendarWrapper>
   );
 };
