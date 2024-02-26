@@ -39,10 +39,10 @@ const AccountMonthly = () => {
   useEffect(() => {
     const fetchData = async () => {
       // 월별 거래 금액 조회 account/month
-      const accountMonthlyData: accountByMonthResponse | null =
+      const accountMonthlyData: accountByMonthResponse[] | null =
         await getAccountMonthly(format(currentMonth, "yyyy-MM"));
       if (accountMonthlyData !== null) {
-        setInOutByMonth(extractInOutValue(accountMonthlyData));
+        setInOutByMonth(extractInOutValue(accountMonthlyData[0]));
       }
 
       // 월별 지출 카테고리별 금액 조회

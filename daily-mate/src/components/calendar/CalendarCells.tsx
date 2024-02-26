@@ -125,7 +125,8 @@ const CalendarCells = ({
           >
             {format(day, "d")}
           </DayInside>
-          {isThisMonth === "thisMonth" &&
+          {accountByMonth !== null &&
+          isThisMonth === "thisMonth" &&
           calendarType === "account" &&
           isMini === "not" ? (
             <AccountCell

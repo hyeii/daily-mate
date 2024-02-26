@@ -55,15 +55,13 @@ export const deleteAccount = async (accountId: number) => {
 
 export const getAccountMonthly = async (date: string) => {
   try {
-    const res: AxiosResponse<{ data: accountByMonthResponse }> = await API.get(
-      "/account/month",
-      {
-        params: {
-          date: date,
-        },
-      }
-    );
-    return res.data.data;
+    const res = await API.get<accountByMonthResponse[]>("/account/month", {
+      params: {
+        date: date,
+      },
+    });
+    console.log(res.data);
+    return res.data;
   } catch (error) {
     console.error("월별 거래 금액 조회 오류 : ", error);
     return null;

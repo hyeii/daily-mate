@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import { AmountNumber } from "../common/CommonStyledComponents";
+import { useEffect } from "react";
 
 interface props {
-  totalInput: number | null;
-  totalOutput: number | null;
+  totalInput: number;
+  totalOutput: number;
 }
 
 const InOutMonthly = ({ totalInput, totalOutput }: props) => {
+  useEffect(() => {
+    console.log(totalInput);
+  }, [totalInput]);
   return (
     <InOutWrapper>
       <InOutContainer>

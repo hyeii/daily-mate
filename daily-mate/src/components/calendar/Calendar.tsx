@@ -20,12 +20,8 @@ export interface props {
 const Calendar = ({ isMini, calendarType }: props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const whoseDiary = useRecoilValue(whoseDiaryState);
-  const [accountByMonth, setAccountByMonth] = useState<accountByMonthResponse>({
-    totalInput: 100,
-    totalOutput: 300,
-    inputs: [],
-    outputs: [],
-  });
+  const [accountByMonth, setAccountByMonth] =
+    useState<accountByMonthResponse | null>(null);
   const [diaryByMonth, setDiaryByMonth] = useState<
     (diaryByMonthResponse | null)[]
   >([]);
@@ -47,10 +43,11 @@ const Calendar = ({ isMini, calendarType }: props) => {
       // 월별 거래 금액 조회 account/month
       if (calendarType === "account") {
         console.log("가계부 캘린더 렌더링");
-        const accountMonthlyData: accountByMonthResponse | null =
+        const accountMonthlyData: accountByMonthResponse[] | null =
           await getAccountMonthly(format(currentMonth, "yyyy-MM"));
         if (accountMonthlyData !== null) {
-          setAccountByMonth(accountMonthlyData);
+          console.log("Calendar.tsx : ", accountMonthlyData);
+          setAccountByMonth(accountMonthlyData[0]);
         }
       }
 
@@ -92,24 +89,29 @@ const Calendar = ({ isMini, calendarType }: props) => {
         setToday={setToday}
         isMini={isMini}
       />
-      {/* <Spacer /> */}
       {isMini === "not" && calendarType === "account" ? (
         <div>
-          <InOutMonthly
-            totalInput={accountByMonth.totalInput}
-            totalOutput={accountByMonth.totalOutput}
-          />
+          {accountByMonth !== null ? (
+            <InOutMonthly
+              totalInput={accountByMonth.totalInput}
+              totalOutput={accountByMonth.totalOutput}
+            />
+          ) : (
+            <div>loading</div>
+          )}
           <Spacer />
         </div>
       ) : null}
       <CalendarDays isMini={isMini} />
-      <CalendarCells
-        currentMonth={currentMonth}
-        accountByMonth={accountByMonth}
-        diaryByMonth={diaryByMonth}
-        calendarType={calendarType}
-        isMini={isMini}
-      />
+      {accountByMonth && (
+        <CalendarCells
+          currentMonth={currentMonth}
+          accountByMonth={accountByMonth}
+          diaryByMonth={diaryByMonth}
+          calendarType={calendarType}
+          isMini={isMini}
+        />
+      )}
     </CalendarWrapper>
   );
 };
