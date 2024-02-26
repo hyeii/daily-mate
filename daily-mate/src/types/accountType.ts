@@ -1,8 +1,8 @@
 export interface accountByMonthResponse {
-  totalInput: number | null;
-  totalOutput: number | null;
-  inputs: (number | null)[];
-  outputs: (number | null)[];
+  totalInput: number;
+  totalOutput: number;
+  inputs: number[];
+  outputs: number[];
 }
 
 export interface CategoryByMonthMap {
@@ -34,6 +34,6 @@ export interface accountByDateResponse {
 export interface accountRequest {
   content: string;
   date: string;
-  ammount: number;
+  amount: number;
   category: string;
 }
