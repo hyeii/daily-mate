@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 interface props {
   date: string;
-  input: number | null;
-  output: number | null;
+  input: number;
+  output: number;
 }
 
 const AccountCell = ({ date, input, output }: props) => {
@@ -12,15 +12,15 @@ const AccountCell = ({ date, input, output }: props) => {
   // 해당 일자
   return (
     <AccountCellWrapper>
-      {input === 0 || input === null || input === undefined ? (
+      {input === 0 ? (
         <div> </div>
       ) : (
-        <AmountNumber textType="in">+{input}</AmountNumber>
+        <AmountNumber texttype="in">+{input}</AmountNumber>
       )}
-      {output === 0 || output === null || output === undefined ? (
+      {output === 0 ? (
         <div> </div>
       ) : (
-        <AmountNumber textType="out">{output}</AmountNumber>
+        <AmountNumber texttype="out">{output}</AmountNumber>
       )}
     </AccountCellWrapper>
   );
@@ -35,11 +35,11 @@ const AccountCellWrapper = styled.div`
 `;
 
 interface ammountProps {
-  textType: string;
+  texttype: string;
 }
 
 const AmountNumber = styled.div<ammountProps>`
   font-size: 1rem;
-  color: ${({ textType }) =>
-    textType === "in" ? "#478FFA" : textType === "out" ? "#FF4242" : "black"};
+  color: ${({ texttype }) =>
+    texttype === "in" ? "#478FFA" : texttype === "out" ? "#FF4242" : "black"};
 `;

@@ -42,18 +42,15 @@ const Calendar = ({ isMini, calendarType }: props) => {
     const fetchData = async () => {
       // 월별 거래 금액 조회 account/month
       if (calendarType === "account") {
-        console.log("가계부 캘린더 렌더링");
         const accountMonthlyData: accountByMonthResponse[] | null =
           await getAccountMonthly(format(currentMonth, "yyyy-MM"));
         if (accountMonthlyData !== null) {
-          console.log("Calendar.tsx : ", accountMonthlyData);
           setAccountByMonth(accountMonthlyData[0]);
         }
       }
 
       // 월별 일기 조회 (내 일기)
       if (calendarType === "myDiary") {
-        console.log("내 다이어리 캘린더 렌더링");
         const diaryMonthlyData: (diaryByMonthResponse | null)[] | null =
           await getDiaryByMonth(format(currentMonth, "yyyy-MM"));
         // userInfo id
@@ -64,7 +61,6 @@ const Calendar = ({ isMini, calendarType }: props) => {
 
       // 이외 월별 일기 조회
       if (calendarType === "otherDiary") {
-        console.log("타인 다이어리 캘린더 렌더링");
         const otherDiaryMonthlyData: diaryByMonthResponse[] | null =
           await getOtherDiaryByMonth(
             format(currentMonth, "yyyy-MM"),
