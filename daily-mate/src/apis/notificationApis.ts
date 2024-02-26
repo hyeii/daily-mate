@@ -4,11 +4,9 @@ import { notifyResponse } from "../types/notificationType";
 
 export const getNotify = async () => {
   try {
-    const res: AxiosResponse<{ data: notifyResponse[] }> = await API.get(
-      "/alert"
-    );
-    console.log(res.data.data);
-    return res.data.data;
+    const res = await API.get<notifyResponse[]>("/alert");
+    console.log(res.data);
+    return res.data;
   } catch (error) {
     console.error("알림 목록 조회 오류 : ", error);
     return null;
