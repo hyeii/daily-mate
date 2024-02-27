@@ -1,5 +1,8 @@
 package com.dailymate.domain.friend.service;
 
+import com.dailymate.domain.alert.constant.AlertType;
+import com.dailymate.domain.alert.dto.AlertReqDto;
+import com.dailymate.domain.alert.service.AlertService;
 import com.dailymate.domain.friend.dao.FriendRepository;
 import com.dailymate.domain.friend.domain.Friend;
 import com.dailymate.domain.friend.dto.FriendInfoDto;
@@ -24,6 +27,8 @@ public class FriendServiceImpl implements FriendService {
     private final FriendRepository friendRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+
+    private final AlertService alertService;
 
     @Transactional
     @Override
@@ -58,6 +63,11 @@ public class FriendServiceImpl implements FriendService {
 
         friendRepository.save(requestFriend);
         log.info("[친구 신청] 친구 신청 완료.");
+
+        log.info("[친구 신청] 친구 신청 알림 전송합니다.");
+        AlertReqDto reqDto = new AlertReqDto(toId, loginUserId, null, "친구요청");
+        alertService.addAlert(reqDto);
+        log.info("[친구 신청] 알림 전송 완료. 메서드 종료함당 ");
     }
 
     @Override
