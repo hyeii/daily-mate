@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import {
   isLoginState,
-  refreshTokenState,
   userImageURLState,
   userInfoState,
 } from "../../atoms/authAtom";
@@ -18,7 +17,6 @@ const SignInPage = () => {
   const setIsLogged = useSetRecoilState(isLoginState);
   const setUserInfo = useSetRecoilState(userInfoState);
   const setUserImage = useSetRecoilState(userImageURLState);
-  const setRefreshToken = useSetRecoilState(refreshTokenState);
 
   const navigate = useNavigate();
 
@@ -43,6 +41,7 @@ const SignInPage = () => {
 
     const signInResult = await signIn(inputEmail, inputPassword);
     if (signInResult !== null) {
+      console.log("로그인 유저 정보 : ", signInResult);
       const logInUserInfo: userInfo = {
         userId: signInResult.userId,
         nickname: signInResult.nickName,
@@ -53,7 +52,7 @@ const SignInPage = () => {
 
       setUserInfo(logInUserInfo);
       setUserImage(signInResult.image);
-      setRefreshToken(signInResult.refreshToken);
+      // setRefreshToken(signInResult.refreshToken);
 
       setIsLogged(true);
       navigate("/");

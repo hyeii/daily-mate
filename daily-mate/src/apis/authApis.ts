@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import {
   myInfoResponse,
+  reIssueTokenResponse,
   signUpRequest,
   updatePasswordInput,
   userResponse,
@@ -24,15 +25,12 @@ export const checkNickname = async (nickname: string) => {
 
 export const checkEmail = async (email: string) => {
   try {
-    const res: AxiosResponse<{ check: boolean }> = await foreAPI.get(
-      "/user/check/email",
-      {
-        params: {
-          email: email,
-        },
-      }
-    );
-    return res.data.check;
+    const res = await foreAPI.get<boolean>("/user/check/email", {
+      params: {
+        email: email,
+      },
+    });
+    return res.data;
   } catch (error) {
     console.error("이메일 중복 확인 오류 : ", error);
     return error;
@@ -69,6 +67,7 @@ export const useSignIn = () => {
       const signInResult = res.data;
       console.log(res.data);
       window.localStorage.setItem("accessToken", signInResult.accessToken);
+      window.localStorage.setItem("refreshToken", signInResult.refreshToken);
       return signInResult;
     } catch (error) {
       console.error("로그인 오류 : ", error);
@@ -77,6 +76,26 @@ export const useSignIn = () => {
   };
 
   return signIn;
+};
+
+export const getReissueToken = async () => {
+  try {
+    const headers = {
+      "refresh-token": window.localStorage.getItem("refreshToken"),
+    };
+    const res = await API.post<reIssueTokenResponse>(
+      "user/reissue-token",
+      null,
+      {
+        headers,
+      }
+    );
+    console.log("토큰 재발급 데이터 : ", res.data);
+    return res;
+  } catch (error) {
+    console.error("토큰 재발급 오류 : ", error);
+    return null;
+  }
 };
 
 export const logOut = async () => {
