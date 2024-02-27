@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="modify : 할일 완료 컨트롤러 수정" />
+    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="modify : repeat -&gt; repeatition 변수명 변경" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -281,7 +281,8 @@
     <MESSAGE value="modify : addTodo, updateTodo 구현완료" />
     <MESSAGE value="feat : 완료, 달성도 조회, 상세 조회 컨트롤러 구현 완료" />
     <MESSAGE value="modify : 할일 완료 컨트롤러 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="modify : 할일 완료 컨트롤러 수정" />
+    <MESSAGE value="modify : repeat -&gt; repeatition 변수명 변경" />
+    <option name="LAST_COMMIT_MESSAGE" value="modify : repeat -&gt; repeatition 변수명 변경" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
