@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddTodoReqDto {
 	private String content;
-	private Integer repeat;
+	private Integer repeatition;
 }

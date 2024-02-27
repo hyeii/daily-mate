@@ -34,7 +34,7 @@ public class TodoServiceImpl implements TodoService {
 		log.info("[할일 등록] 할일 등록 요청");
 
 		LocalDate today = LocalDate.now();
-		for(int i = 0; i < addTodoReqDto.getRepeat(); i++){
+		for(int i = 0; i < addTodoReqDto.getRepeatition(); i++){
 			String todayString = today.plusDays(i).toString();
 			Todo todo = Todo.builder()
 					.userId(USERID)
@@ -42,7 +42,7 @@ public class TodoServiceImpl implements TodoService {
 					.date(todayString)
 					.todoOrder(0)
 					.done(false)
-					.repeat(addTodoReqDto.getRepeat())
+					.repeatition(addTodoReqDto.getRepeatition())
 					.build();
 
 			todoRepository.save(todo);
