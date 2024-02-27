@@ -6,7 +6,7 @@ import com.dailymate.domain.alert.dto.AlertResDto;
 import java.util.List;
 
 public interface AlertService {
-    void addAlert(String token, AlertReqDto alertReqDto);
+    void addAlert(AlertReqDto alertReqDto);
 
     void deleteAlert(String token, Long alertId);
 

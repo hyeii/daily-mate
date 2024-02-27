@@ -24,8 +24,8 @@ public class AlertController {
             summary = "알림 전송"
     )
     @PostMapping
-    public ResponseEntity<MessageDto> addAlert(@RequestHeader(ACCESS_TOKEN)String token, @RequestBody AlertReqDto alertReqDto) {
-        alertService.addAlert(token, alertReqDto);
+    public ResponseEntity<MessageDto> addAlert(@RequestBody AlertReqDto alertReqDto) {
+        alertService.addAlert(alertReqDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(MessageDto.message("CREATED SUCCESS"));
     }

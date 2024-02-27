@@ -30,12 +30,13 @@ public class AlertServiceImpl implements AlertService{
 
     @Override
     @Transactional
-    public void addAlert(String token, AlertReqDto alertReqDto) {
-        Long userId = jwtTokenProvider.getUserId(token);
+    public void addAlert(AlertReqDto alertReqDto) {
+        log.info("[ADD_ALERT] 알림 전송.");
 
         Alert alert = Alert.builder()
                 .toId(alertReqDto.getToId())
                 .fromId(alertReqDto.getFromId())
+                .diaryId(alertReqDto.getDiaryId()) // null일때 널에러 테스트
                 .type(AlertType.getAlertType(alertReqDto.getType()))
                 .url(alertReqDto.getUrl())
                 .build();
@@ -96,19 +97,5 @@ public class AlertServiceImpl implements AlertService{
         return alertRepository.findUrl(userId, alertId);
     }
 
-    private String findUrl(AlertType alertType) {
-        if(alertType.equals(AlertType.친구요청))
-            return "/friend/request/all";
 
-        if(alertType.equals(AlertType.친구승낙))
-            return "/friend/all";
-
-        if (alertType.equals(AlertType.일기좋아요))
-            return "/diary/date";
-
-        if (alertType.equals(AlertType.댓글))
-            return "/comment/{diaryId}";
-
-        return "/comment/{diaryId}";
-    }
 }
