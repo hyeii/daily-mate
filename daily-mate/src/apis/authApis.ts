@@ -78,9 +78,11 @@ export const useSignIn = () => {
   return signIn;
 };
 
-export const getReissueToken = async (refreshToken: string) => {
+export const getReissueToken = async () => {
   try {
-    const headers = { "refresh-token": refreshToken };
+    const headers = {
+      "refresh-token": window.localStorage.getItem("refreshToken"),
+    };
     const res = await API.post<reIssueTokenResponse>(
       "user/reissue-token",
       null,
@@ -89,7 +91,7 @@ export const getReissueToken = async (refreshToken: string) => {
       }
     );
     console.log("토큰 재발급 데이터 : ", res.data);
-    return res.data;
+    return res;
   } catch (error) {
     console.error("토큰 재발급 오류 : ", error);
     return null;
