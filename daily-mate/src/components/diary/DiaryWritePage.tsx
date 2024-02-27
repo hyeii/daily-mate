@@ -18,8 +18,8 @@ const DiaryWritePage = () => {
 
   const [inputTitle, setInputTitle] = useState<string>("");
   const [inputContent, setInputContent] = useState<string>("");
-  const [inputFeeling, setInputFeeling] = useState<string>("");
-  const [inputWeather, setInputWeather] = useState<string>("");
+  const [inputFeeling, setInputFeeling] = useState<string>("행복");
+  const [inputWeather, setInputWeather] = useState<string>("맑음");
   const [inputOpenType, setInputOpenType] = useState<string>("");
   const [inputImage, setInputImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -72,8 +72,13 @@ const DiaryWritePage = () => {
       feeling: inputFeeling,
       openType: inputOpenType,
     };
-
-    addDiary(diaryData, inputImage);
+    const formData = new FormData();
+    formData.append(
+      "diaryReqDto",
+      new Blob([JSON.stringify(diaryData)], { type: "application/json" })
+    );
+    if (inputImage) formData.append("image", inputImage);
+    addDiary(formData);
   };
   return (
     // 이하 select, radio 추후 컴포넌트 처리
