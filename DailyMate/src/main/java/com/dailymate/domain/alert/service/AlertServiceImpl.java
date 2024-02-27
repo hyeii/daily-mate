@@ -64,7 +64,7 @@ public class AlertServiceImpl implements AlertService{
         }
 
         // 알림 삭제
-        alert.delete();
+        alertRepository.delete(alert);
     }
 
     @Transactional
@@ -72,7 +72,7 @@ public class AlertServiceImpl implements AlertService{
     public List<AlertResDto> findAlertList(String token) {
 
         Long userId = jwtTokenProvider.getUserId(token);
-        List<Alert> alertList = alertRepository.findByUserId(userId);
+        List<Alert> alertList = alertRepository.findByToId(userId);
         List<AlertResDto> alertResDtoList = new ArrayList<>();
 
         for(Alert alert : alertList) {
@@ -94,5 +94,21 @@ public class AlertServiceImpl implements AlertService{
     public String findAlertUrl(String token, Long alertId) {
         Long userId = jwtTokenProvider.getUserId(token);
         return alertRepository.findUrl(userId, alertId);
+    }
+
+    private String findUrl(AlertType alertType) {
+        if(alertType.equals(AlertType.친구요청))
+            return "/friend/request/all";
+
+        if(alertType.equals(AlertType.친구승낙))
+            return "/friend/all";
+
+        if (alertType.equals(AlertType.일기좋아요))
+            return "/diary/date";
+
+        if (alertType.equals(AlertType.댓글))
+            return "/comment/{diaryId}";
+
+        return "/comment/{diaryId}";
     }
 }
