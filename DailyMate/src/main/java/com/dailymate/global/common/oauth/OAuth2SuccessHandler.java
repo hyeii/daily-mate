@@ -51,6 +51,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             LogInResDto logInResDto = LogInResDto.builder()
                     .accessToken(tokenDto.getAccessToken())
                     .refreshToken(tokenDto.getRefreshToken())
+                    .userId(oAuth2User.getUserId())
                     .email(oAuth2User.getUsername())
                     .nickName(oAuth2User.getName())
                     .image(oAuth2User.getUser().getImage())
