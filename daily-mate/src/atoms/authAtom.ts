@@ -37,9 +37,5 @@ export const userInfoState = atom<userInfo>({
 export const userImageURLState = atom({
   key: "imageURL",
   default: "url",
-});
-
-export const refreshTokenState = atom({
-  key: "refreshToken",
-  default: "",
+  effects_UNSTABLE: [persistAtom],
 });

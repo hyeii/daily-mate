@@ -69,3 +69,8 @@ export interface searchResponse {
   status: boolean;
   requestDate: string | null;
 }
+
+export interface reIssueTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
