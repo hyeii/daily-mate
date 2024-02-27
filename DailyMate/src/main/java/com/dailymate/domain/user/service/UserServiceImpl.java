@@ -144,6 +144,7 @@ public class UserServiceImpl implements UserService {
         return LogInResDto.builder()
                 .accessToken(jwtToken.getAccessToken())
                 .refreshToken(jwtToken.getRefreshToken())
+                .userId(user.getUserId())
                 .email(email)
                 .nickName(user.getNickname())
                 .image(user.getImage())
