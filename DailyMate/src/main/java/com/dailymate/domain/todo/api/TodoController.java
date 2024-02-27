@@ -1,5 +1,6 @@
 package com.dailymate.domain.todo.api;
 
+import com.dailymate.domain.todo.domain.Todo;
 import com.dailymate.domain.todo.dto.*;
 import com.dailymate.domain.todo.service.TodoService;
 import com.dailymate.global.dto.MessageDto;
@@ -67,7 +68,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일 리스트를 전체 조회합니다."
 	)
 	@GetMapping("/all")
-	public ResponseEntity<List<String>> findTodoLisByDay(@RequestParam String date, @RequestHeader(ACCESS_TOKEN) String token){
+	public ResponseEntity<List<Todo>> findTodoLisByDay(@RequestParam String date, @RequestHeader(ACCESS_TOKEN) String token){
 		return ResponseEntity.ok(todoService.findTodoListByDay(date, token));
 	}
 
