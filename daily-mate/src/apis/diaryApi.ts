@@ -1,5 +1,5 @@
-import { AxiosResponse } from "axios";
-import { API } from "./api";
+import axios, { AxiosResponse } from "axios";
+import { API, diaryAPI } from "./api";
 import {
   commentBody,
   commentListResponse,
@@ -67,19 +67,32 @@ export const getOtherDiaryByMonth = async (date: string, userId: number) => {
   }
 };
 
-export const addDiary = async (diaryData: diaryRequest, image: File | null) => {
-  try {
-    const formData = new FormData();
-    formData.append("diaryReqDto", JSON.stringify(diaryData));
-    if (image) {
-      formData.append("image", image);
-    }
+// diaryAPI 분리 이전 자체 axios 호출 코드
 
-    const res: AxiosResponse<{ message: string }> = await API.post("/diary", {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+// export const addDiary = async (formData: FormData) => {
+//   try {
+//     const res: AxiosResponse<{ message: string }> = await axios.post(
+//       "http://localhost:8080/diary",
+//       formData,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+//         },
+//       }
+//     );
+//     console.log(res.data.message);
+//     alert("일기 작성 완료");
+//   } catch (error) {
+//     console.error("일기 작성 오류 : ", error);
+//   }
+// };
+
+export const addDiary = async (formData: FormData) => {
+  try {
+    const res: AxiosResponse<{ message: string }> = await diaryAPI.post(
+      "/diary",
+      formData
+    );
     console.log(res.data.message);
     alert("일기 작성 완료");
   } catch (error) {

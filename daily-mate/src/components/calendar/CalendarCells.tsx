@@ -20,7 +20,7 @@ import { whoseDiaryState, writeDate } from "../../atoms/diaryAtom";
 
 interface props {
   currentMonth: Date;
-  accountByMonth: accountByMonthResponse;
+  accountByMonth: accountByMonthResponse | null;
   diaryByMonth: (diaryByMonthResponse | null)[];
   calendarType: string;
   isMini: string;

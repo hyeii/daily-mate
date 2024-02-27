@@ -130,9 +130,7 @@ const DiaryDailyPage = () => {
         <DiaryBottom>
           <ContentImageContainer>
             <ContentImageBox
-              src={
-                process.env.PUBLIC_URL + "/tony-lee-8IKf54pc3qk-unsplash.jpg"
-              }
+              src={`https://dailymate.s3.ap-northeast-2.amazonaws.com/${diaryDetail.image}`}
               alt="example"
             />
           </ContentImageContainer>

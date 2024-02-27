@@ -99,15 +99,15 @@ const Calendar = ({ isMini, calendarType }: props) => {
         </div>
       ) : null}
       <CalendarDays isMini={isMini} />
-      {accountByMonth && (
-        <CalendarCells
-          currentMonth={currentMonth}
-          accountByMonth={accountByMonth}
-          diaryByMonth={diaryByMonth}
-          calendarType={calendarType}
-          isMini={isMini}
-        />
-      )}
+      {/* {accountByMonth ? ( */}
+      <CalendarCells
+        currentMonth={currentMonth}
+        accountByMonth={accountByMonth}
+        diaryByMonth={diaryByMonth}
+        calendarType={calendarType}
+        isMini={isMini}
+      />
+      {/* ) : } */}
     </CalendarWrapper>
   );
 };
