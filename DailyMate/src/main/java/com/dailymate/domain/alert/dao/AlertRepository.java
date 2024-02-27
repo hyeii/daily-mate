@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AlertRepository extends JpaRepository<Alert, Long> {
 
-    List<Alert> findByUserId(Long userId);
+    List<Alert> findByToId(Long toId);
 
     @Query(value = "SELECT NEW com.dailymate.domain.alert.dto.UrlResDto(a.url) " +
     "FROM Alert a " +
