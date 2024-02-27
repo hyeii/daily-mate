@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { sideBarOpenState } from "../../atoms/sideBarAtom";
 import {
   isLoginState,
-  refreshTokenState,
   userImageURLState,
   userInfoState,
 } from "../../atoms/authAtom";
@@ -17,7 +16,6 @@ const SideBar = () => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const setIsLogin = useSetRecoilState(isLoginState);
   const setImageURL = useSetRecoilState(userImageURLState);
-  const setRefreshToken = useSetRecoilState(refreshTokenState);
   const navigate = useNavigate();
 
   const handleOpen = () => {
@@ -36,7 +34,7 @@ const SideBar = () => {
       });
       setIsLogin(false);
       setImageURL("");
-      setRefreshToken("");
+      window.localStorage.removeItem("refreshToken");
       window.localStorage.removeItem("accessToken");
       // 인터셉터 초기화
       alert("로그아웃 완료");
