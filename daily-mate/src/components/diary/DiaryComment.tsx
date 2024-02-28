@@ -109,7 +109,15 @@ const DiaryComment = ({ diaryId }: props) => {
           </CommentMiddle>
           <CommentBottom>
             <div>
-              {comment.isLiked ? <FullHeart /> : <OutLineHeart />}{" "}
+              {comment.isLiked ? (
+                <FullHeart
+                  onClick={() => handleLikeComment(comment.commentId)}
+                />
+              ) : (
+                <OutLineHeart
+                  onClick={() => handleLikeComment(comment.commentId)}
+                />
+              )}
               {comment.likeNum}
             </div>
             {comment.nickname === userInfo.nickname &&
