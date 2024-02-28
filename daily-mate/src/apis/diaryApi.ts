@@ -76,9 +76,10 @@ export const addDiary = async (formData: FormData) => {
       formData
     );
     console.log(res.data.message);
-    alert("일기 작성 완료");
+    return res.data.message;
   } catch (error) {
     console.error("일기 작성 오류 : ", error);
+    return null;
   }
 };
 
@@ -113,6 +114,7 @@ export const getCommentList = async (diaryId: number) => {
     const res = await API.get<commentListResponse[]>(`/comment/${diaryId}`);
     return res.data;
   } catch (error) {
+    console.log(diaryId);
     console.error("댓글 전체 조회 오류 : ", error);
     return null;
   }

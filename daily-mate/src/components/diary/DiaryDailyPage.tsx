@@ -13,21 +13,9 @@ import { useRecoilValue } from "recoil";
 const DiaryDailyPage = () => {
   const userInfo = useRecoilValue(userInfoState);
   const { diaryId } = useParams<diaryDailyParams>();
-  const [diaryDetail, setDiaryDetail] = useState<diaryByDateResponse>({
-    diaryId: -1,
-    title: "",
-    content: "",
-    date: "",
-    image: "",
-    weather: "",
-    feeling: "",
-    openType: "",
-    createdAt: "0000-00-00",
-    updatedAt: "0000-00-00",
-    likeNum: 0,
-    isLike: false,
-    isMine: true,
-  });
+  const [diaryDetail, setDiaryDetail] = useState<diaryByDateResponse | null>(
+    null
+  );
 
   const navigate = useNavigate();
 
@@ -45,9 +33,9 @@ const DiaryDailyPage = () => {
   }, [diaryId]);
 
   const deleteDiaryNow = () => {
-    if (deleteDiary(diaryDetail.diaryId) !== null) {
+    if (diaryDetail && deleteDiary(diaryDetail.diaryId) !== null) {
       alert("일기가 삭제되었습니다.");
-      navigate(`diary/monthly/${userInfo.userId}`);
+      navigate(`/diary/monthly/${userInfo.userId}`);
     }
   };
 
@@ -58,8 +46,7 @@ const DiaryDailyPage = () => {
         const diaryByDateData: diaryByDateResponse | null =
           await getDiaryByDiaryId(diaryId);
         if (diaryByDateData !== null) {
-          console.log("재렌더링 : ", diaryByDateData);
-          setDiaryDetail(diaryByDateData);
+          window.location.reload();
         }
       }
     }
@@ -90,56 +77,62 @@ const DiaryDailyPage = () => {
 
   return (
     <DiaryDailyWrapper>
-      <DiaryContainer>
-        <DateBox>
-          <div>{formatDate(diaryDetail.date)}</div>
-        </DateBox>
-        <TitleBox>
-          <div>{diaryDetail.title}</div>
-        </TitleBox>
-        <DiaryTop>
-          <FeelingBox>
-            <div>오늘의 기분</div>
-            <div style={{ margin: "0 0.5rem" }}></div>
-            <div>{diaryDetail.feeling}</div>
-          </FeelingBox>
-          <WeatherBox>
-            <div>오늘의 날씨</div>
-            <div style={{ margin: "0 0.5rem" }}></div>
-            <div>{weatherIcon(diaryDetail.weather)}</div>
-          </WeatherBox>
-        </DiaryTop>
-        <DiaryBottom>
-          {diaryDetail.image && (
-            <ContentImageContainer>
-              <ContentImageBox
-                src={`https://dailymate.s3.ap-northeast-2.amazonaws.com/${diaryDetail.image}`}
-                alt="example"
-              />
-            </ContentImageContainer>
-          )}
-          <ContentBox>
-            <ContentInside>{diaryDetail.content}</ContentInside>
-          </ContentBox>
-          <DiaryIconBox>
-            {diaryDetail.isMine ? (
-              <TrashCan onClick={deleteDiaryNow} />
-            ) : (
-              <div style={{ opacity: "0" }}>숨김</div>
+      {diaryDetail && (
+        <DiaryContainer>
+          <DateBox>
+            <div>{formatDate(diaryDetail.date)}</div>
+          </DateBox>
+          <TitleBox>
+            <div>{diaryDetail.title}</div>
+          </TitleBox>
+          <DiaryTop>
+            <FeelingBox>
+              <div>오늘의 기분</div>
+              <div style={{ margin: "0 0.5rem" }}></div>
+              <div>{diaryDetail.feeling}</div>
+            </FeelingBox>
+            <WeatherBox>
+              <div>오늘의 날씨</div>
+              <div style={{ margin: "0 0.5rem" }}></div>
+              <div>{weatherIcon(diaryDetail.weather)}</div>
+            </WeatherBox>
+          </DiaryTop>
+          <DiaryBottom>
+            {diaryDetail.image && (
+              <ContentImageContainer>
+                <ContentImageBox
+                  src={`https://dailymate.s3.ap-northeast-2.amazonaws.com/${diaryDetail.image}`}
+                  alt="example"
+                />
+              </ContentImageContainer>
             )}
-            {diaryDetail.isLike ? (
-              <FullHeart onClick={() => handleLikeDiary(diaryDetail.diaryId)} />
-            ) : (
-              <OutLineHeart
-                onClick={() => handleLikeDiary(diaryDetail.diaryId)}
-              />
-            )}
-          </DiaryIconBox>
-        </DiaryBottom>
-      </DiaryContainer>
-      <CommentContainer>
-        <DiaryComment diaryId={diaryDetail.diaryId} />
-      </CommentContainer>
+            <ContentBox>
+              <ContentInside>{diaryDetail.content}</ContentInside>
+            </ContentBox>
+            <DiaryIconBox>
+              {diaryDetail.isMine ? (
+                <TrashCan onClick={deleteDiaryNow} />
+              ) : (
+                <div style={{ opacity: "0" }}>숨김</div>
+              )}
+              {diaryDetail.isLike ? (
+                <FullHeart
+                  onClick={() => handleLikeDiary(diaryDetail.diaryId)}
+                />
+              ) : (
+                <OutLineHeart
+                  onClick={() => handleLikeDiary(diaryDetail.diaryId)}
+                />
+              )}
+            </DiaryIconBox>
+          </DiaryBottom>
+        </DiaryContainer>
+      )}
+      {diaryDetail && (
+        <CommentContainer>
+          <DiaryComment diaryId={diaryDetail.diaryId} />
+        </CommentContainer>
+      )}
     </DiaryDailyWrapper>
   );
 };

@@ -16,10 +16,10 @@ export const addAccount = async (body: accountRequest) => {
     );
     console.log("수입 카테고리 테스트 : ", body);
     console.log(res.data.message);
-    alert("등록 완료");
+    return res.data.message;
   } catch (error) {
     console.error("내역 등록 오류 : ", error);
-    alert("등록 정보를 확인해주세요");
+    return null;
   }
 };
 
@@ -34,10 +34,10 @@ export const modifyAccount = async (
       body
     );
     console.log(res.data.message);
-    alert("수정완료");
+    return res.data.message;
   } catch (error) {
     console.error("내역 수정 오류 : ", error);
-    alert("등록 정보를 확인해주세요");
+    return null;
   }
 };
 
@@ -47,10 +47,10 @@ export const deleteAccount = async (accountId: number) => {
       `/account/${accountId}`
     );
     console.log(res.data.message);
-    alert("삭제완료");
+    return res.data.message;
   } catch (error) {
     console.error("내역 삭제 오류 : ", error);
-    alert("다시 시도해 주세요");
+    return null;
   }
 };
 

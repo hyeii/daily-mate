@@ -37,7 +37,7 @@ export const deleteFriend = async (friendId: number) => {
 
 export const confirmFriend = async (friendId: number, nickname: string) => {
   try {
-    const res: AxiosResponse<{ message: string }> = await API.put(
+    const res: AxiosResponse<{ message: string }> = await API.patch(
       `/friend/request/${friendId}`
     );
     alert(`${nickname}님과 친구가 되었습니다`);
