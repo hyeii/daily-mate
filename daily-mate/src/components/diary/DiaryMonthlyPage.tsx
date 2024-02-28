@@ -7,18 +7,18 @@ import { whoseDiaryState } from "../../atoms/diaryAtom";
 import { userInfoState } from "../../atoms/authAtom";
 
 const DiaryMonthlyPage = () => {
-  const { id } = useParams<diaryMonthlyParams>();
+  const { userId } = useParams<diaryMonthlyParams>();
   const userInfo = useRecoilValue(userInfoState);
   const setWhoseDiary = useSetRecoilState(whoseDiaryState);
 
   useEffect(() => {
-    if (id !== undefined) setWhoseDiary(parseInt(id));
-  }, [id, setWhoseDiary]);
+    if (userId !== undefined) setWhoseDiary(parseInt(userId));
+  }, [userId, setWhoseDiary]);
 
   return (
     <div>
       {/* useParams : id => 내 아이디이면 내 일기, 내 아이디가 아니라면 다른 사람의 일기 */}
-      {id !== undefined && parseInt(id) === userInfo.userId ? (
+      {userId !== undefined && parseInt(userId) === userInfo.userId ? (
         <Calendar isMini="not" calendarType="myDiary" />
       ) : (
         <Calendar isMini="not" calendarType="otherDiary" />

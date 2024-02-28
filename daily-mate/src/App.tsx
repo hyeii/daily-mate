@@ -34,7 +34,6 @@ function App() {
   return (
     <Wrapper>
       {isLogin ? <SideBar /> : null}
-      <SideBar />
       <MainContainer isopen={isOpen ? "open" : "close"}>
         <MainBox isopen={isOpen ? "open" : "close"}>
           {isLogin ? (
@@ -44,11 +43,6 @@ function App() {
               size={30}
             />
           ) : null}
-          <OpenBtn
-            isopen={isOpen ? "open" : "close"}
-            onClick={handleOpen}
-            size={30}
-          />
           <Routes>
             {/* 라우팅 추후 수정 예정 */}
             <Route path="/" element={<MainPage />} />
@@ -59,8 +53,11 @@ function App() {
             <Route path="/mypage/password" element={<UpdatePasswordPage />} />
             <Route path="/friends/list" element={<FriendsListPage />} />
             <Route path="/account" element={<AccountPage />} />
-            <Route path="/diary/monthly/:id" element={<DiaryMonthlyPage />} />
-            <Route path="/diary/daily/:id/:date" element={<DiaryDailyPage />} />
+            <Route
+              path="/diary/monthly/:userId"
+              element={<DiaryMonthlyPage />}
+            />
+            <Route path="/diary/daily/:diaryId" element={<DiaryDailyPage />} />
             <Route path="/diary/daily/write" element={<DiaryWritePage />} />
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/todo" element={<TodoPage />}></Route>

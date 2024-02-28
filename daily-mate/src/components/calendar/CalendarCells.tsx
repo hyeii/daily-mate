@@ -78,10 +78,12 @@ const CalendarCells = ({
             setWriteDate(formattedDate);
             navigate("/diary/daily/write");
           } else return;
-        } else navigate(`/diary/daily/${userInfo.userId}/${formattedDate}`);
+        } else navigate(`/diary/daily/${diaryByMonth[formatLast]?.diaryId}`);
         break;
       case "otherDiary":
-        navigate(`/diary/daily/${otherDiaryUserId}/${formattedDate}`);
+        if (diaryByMonth[formatLast] !== null) {
+          navigate(`/diary/daily/${diaryByMonth[formatLast]?.diaryId}`);
+        } else return;
         break;
       default:
         break;

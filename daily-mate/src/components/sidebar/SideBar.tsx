@@ -12,15 +12,12 @@ import { RxDoubleArrowLeft } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
-  const [isOpen, setIsOpen] = useRecoilState(sideBarOpenState);
+  const isOpen = useRecoilValue(sideBarOpenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const setIsLogin = useSetRecoilState(isLoginState);
+  const setSidebarOpen = useSetRecoilState(sideBarOpenState);
   const setImageURL = useSetRecoilState(userImageURLState);
   const navigate = useNavigate();
-
-  const handleOpen = () => {
-    setIsOpen(!isOpen);
-  };
 
   const handleLogOut = async () => {
     const logOutResult = await logOut();
@@ -33,9 +30,10 @@ const SideBar = () => {
         type: "",
       });
       setIsLogin(false);
+      setSidebarOpen(false);
       setImageURL("");
-      window.localStorage.removeItem("refreshToken");
-      window.localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("accessToken");
       // 인터셉터 초기화
       alert("로그아웃 완료");
       navigate("/");
@@ -62,9 +60,6 @@ const SideBar = () => {
   return (
     <SidebarWrapper isopen={isOpen ? "open" : "close"}>
       <SidebarContainer>
-        {/* <SidebarBtnBox>
-          <SidebarBtn onClick={handleOpen} />
-        </SidebarBtnBox> */}
         <UserProfileBox>
           <ImageBox
             src={process.env.PUBLIC_URL + "/defaultImg.png"}

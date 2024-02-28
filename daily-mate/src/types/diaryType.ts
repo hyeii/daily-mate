@@ -3,12 +3,11 @@
 // "openType" : "공개", "비공개", "친구공개"
 
 export type diaryDailyParams = {
-  id: string;
-  date: string;
+  diaryId: string;
 };
 
 export type diaryMonthlyParams = {
-  id: string;
+  userId: string;
 };
 
 export interface diaryByMonthResponse {
@@ -24,14 +23,15 @@ export interface diaryByDateResponse {
   title: string;
   content: string;
   date: string;
-  image: string;
+  image: string | null;
   weather: string;
   feeling: string;
   openType: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string | null;
   likeNum: number;
   isLike: boolean;
+  isMine: boolean;
 }
 
 export interface diaryRequest {
