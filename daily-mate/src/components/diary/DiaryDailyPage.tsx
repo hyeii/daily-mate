@@ -1,24 +1,18 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { diaryByDateResponse, diaryDailyParams } from "../../types/diaryType";
-import {
-  deleteDiary,
-  getDiaryByDate,
-  getOtherDiaryByDate,
-  likeDiary,
-} from "../../apis/diaryApi";
+import { deleteDiary, getDiaryByDiaryId, likeDiary } from "../../apis/diaryApi";
 import DiaryComment from "./DiaryComment";
-import { useRecoilValue } from "recoil";
-import { userInfoState } from "../../atoms/authAtom";
 import { LuTrash2 } from "react-icons/lu";
 import styled from "styled-components";
 import { formatDate } from "../common/FormatDate";
 import { FullHeart, OutLineHeart } from "../common/CommonStyledComponents";
+import { userInfoState } from "../../atoms/authAtom";
+import { useRecoilValue } from "recoil";
 
 const DiaryDailyPage = () => {
-  const { id, date } = useParams<diaryDailyParams>();
-  const [isMyDiary, setIsMyDiary] = useState<boolean>(false);
   const userInfo = useRecoilValue(userInfoState);
+  const { diaryId } = useParams<diaryDailyParams>();
   const [diaryDetail, setDiaryDetail] = useState<diaryByDateResponse>({
     diaryId: -1,
     title: "",
@@ -32,51 +26,39 @@ const DiaryDailyPage = () => {
     updatedAt: "0000-00-00",
     likeNum: 0,
     isLike: false,
+    isMine: true,
   });
-  const deleteDiaryNow = () => {
-    deleteDiary(diaryDetail.diaryId);
-  };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (date !== undefined && id !== undefined) {
-        const isMyDiary: boolean = parseInt(id) === userInfo.userId;
-        const diaryByDateData: diaryByDateResponse | null = isMyDiary
-          ? await getDiaryByDate(date)
-          : await getOtherDiaryByDate(date, userInfo.userId);
+      if (diaryId !== undefined) {
+        const diaryByDateData: diaryByDateResponse | null =
+          await getDiaryByDiaryId(parseInt(diaryId));
         if (diaryByDateData !== null) {
           setDiaryDetail(diaryByDateData);
-        } else {
-          setDiaryDetail({
-            diaryId: 100,
-            title: titleExample,
-            content: contentExample,
-            date: "날짜",
-            image: "이미지",
-            weather: "맑음",
-            feeling: "행복",
-            openType: "공개",
-            createdAt: "0000-00-00",
-            updatedAt: "0000-00-00",
-            likeNum: 3,
-            isLike: false,
-          });
         }
-        setIsMyDiary(isMyDiary);
       }
     };
     fetchData();
-  }, [date, id, userInfo.userId]);
+  }, [diaryId]);
+
+  const deleteDiaryNow = () => {
+    if (deleteDiary(diaryDetail.diaryId) !== null) {
+      alert("일기가 삭제되었습니다.");
+      navigate(`diary/monthly/${userInfo.userId}`);
+    }
+  };
 
   // 수정할 수 있다면 수정하기
   const handleLikeDiary = async (diaryId: number) => {
     if (likeDiary(diaryId) !== null) {
-      if (date !== undefined && id !== undefined) {
-        const isMyDiary: boolean = parseInt(id) === userInfo.userId;
-        const diaryByDateData: diaryByDateResponse | null = isMyDiary
-          ? await getDiaryByDate(date)
-          : await getOtherDiaryByDate(date, userInfo.userId);
+      if (diaryId !== undefined) {
+        const diaryByDateData: diaryByDateResponse | null =
+          await getDiaryByDiaryId(diaryId);
         if (diaryByDateData !== null) {
+          console.log("재렌더링 : ", diaryByDateData);
           setDiaryDetail(diaryByDateData);
         }
       }
@@ -110,7 +92,7 @@ const DiaryDailyPage = () => {
     <DiaryDailyWrapper>
       <DiaryContainer>
         <DateBox>
-          <div>{formatDate(date)}</div>
+          <div>{formatDate(diaryDetail.date)}</div>
         </DateBox>
         <TitleBox>
           <div>{diaryDetail.title}</div>
@@ -140,7 +122,7 @@ const DiaryDailyPage = () => {
             <ContentInside>{diaryDetail.content}</ContentInside>
           </ContentBox>
           <DiaryIconBox>
-            {isMyDiary ? (
+            {diaryDetail.isMine ? (
               <TrashCan onClick={deleteDiaryNow} />
             ) : (
               <div style={{ opacity: "0" }}>숨김</div>
@@ -265,8 +247,3 @@ const DiaryIconBox = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-
-const titleExample: string = "아주 희미한 빛으로도 : 최은영";
-
-const contentExample: string =
-  "그녀의 수업은 금요일 오후 세시 삼십분에 시작했다. 짧은 커트 머리에 갈색 뿔테안경을 쓴 그녀의 얼굴은 얼핏 보면 강사로 여겨지지 않을 정도로 어려 보였다. 목소리는 낮고 허스키한 편이었다. 영문과 전공수업은 전부 영어 강의여서 그녀는 영어로 수업을 소개했다.";

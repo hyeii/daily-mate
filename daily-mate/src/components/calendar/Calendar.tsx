@@ -56,7 +56,7 @@ const Calendar = ({ isMini, calendarType }: props) => {
         // userInfo id
         if (diaryMonthlyData !== null) {
           setDiaryByMonth(diaryMonthlyData);
-        } else setDiaryByMonth(diaryByMonthExample);
+        }
       }
 
       // 이외 월별 일기 조회
@@ -69,7 +69,7 @@ const Calendar = ({ isMini, calendarType }: props) => {
 
         if (otherDiaryMonthlyData !== null) {
           setDiaryByMonth(otherDiaryMonthlyData);
-        } else setDiaryByMonth(diaryByMonthExample);
+        }
       }
     };
 
@@ -133,148 +133,3 @@ const CalendarWrapper = styled.div<calendarStyleProps>`
 const Spacer = styled.div`
   height: 1rem;
 `;
-
-const diaryByMonthExample: (diaryByMonthResponse | null)[] = [
-  {
-    diaryId: 100,
-    title: "제목0",
-    image: "이미지0",
-    weather: "날씨0",
-    feeling: "기분0",
-  },
-  {
-    diaryId: 101,
-    title: "제목1",
-    image: "이미지1",
-    weather: "날씨1",
-    feeling: "기분1",
-  },
-  {
-    diaryId: 102,
-    title: "제목2",
-    image: "이미지2",
-    weather: "날씨2",
-    feeling: "기분2",
-  },
-  {
-    diaryId: 103,
-    title: "제목3",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  null,
-  null,
-  {
-    diaryId: 107,
-    title: "제목7",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  {
-    diaryId: 108,
-    title: "제목8",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  {
-    diaryId: 109,
-    title: "제목9",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  {
-    diaryId: 110,
-    title: "제목10",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  {
-    diaryId: 112,
-    title: "제목12",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  {
-    diaryId: 1144,
-    title: "제목14",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  {
-    diaryId: 115,
-    title: "제목15",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  null,
-  null,
-  {
-    diaryId: 119,
-    title: "제목19",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  null,
-  {
-    diaryId: 122,
-    title: "제목22",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  {
-    diaryId: 124,
-    title: "제목24",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  {
-    diaryId: 125,
-    title: "제목25",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  null,
-  {
-    diaryId: 128,
-    title: "제목28",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-
-  {
-    diaryId: 129,
-    title: "제목29",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  {
-    diaryId: 130,
-    title: "제목30",
-    image: "이미지3",
-    weather: "날씨3",
-    feeling: "기분3",
-  },
-  null,
-  null,
-];

@@ -8,13 +8,9 @@ import {
   diaryRequest,
 } from "../types/diaryType";
 
-export const getDiaryByDate = async (date: string) => {
+export const getDiaryByDiaryId = async (diaryId: number) => {
   try {
-    const res = await API.get<diaryByDateResponse>("/diary/date", {
-      params: {
-        date: date,
-      },
-    });
+    const res = await API.get<diaryByDateResponse>(`/diary/${diaryId}`);
     return res.data;
   } catch (error) {
     console.error("일별 일기 조회 오류 : ", error);
@@ -32,20 +28,6 @@ export const getDiaryByMonth = async (date: string) => {
     return res.data;
   } catch (error) {
     console.error("월별 일기 조회 오류 : ", error);
-    return null;
-  }
-};
-
-export const getOtherDiaryByDate = async (date: string, diaryId: number) => {
-  try {
-    const res = await API.get<diaryByDateResponse>(`/diary/friend/${diaryId}`, {
-      params: {
-        date: date,
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("다른 사람 일별 일기 조회 오류 : ", error);
     return null;
   }
 };
@@ -106,9 +88,10 @@ export const deleteDiary = async (diaryId: number) => {
       `/diary/${diaryId}`
     );
     console.log(res.data.message);
-    alert("일기 삭제 완료");
+    return res.data.message;
   } catch (error) {
     console.error("일기 삭제 오류 : ", error);
+    return null;
   }
 };
 
