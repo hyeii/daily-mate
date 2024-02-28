@@ -34,7 +34,6 @@ function App() {
   return (
     <Wrapper>
       {isLogin ? <SideBar /> : null}
-      <SideBar />
       <MainContainer isopen={isOpen ? "open" : "close"}>
         <MainBox isopen={isOpen ? "open" : "close"}>
           {isLogin ? (
@@ -44,11 +43,6 @@ function App() {
               size={30}
             />
           ) : null}
-          <OpenBtn
-            isopen={isOpen ? "open" : "close"}
-            onClick={handleOpen}
-            size={30}
-          />
           <Routes>
             {/* 라우팅 추후 수정 예정 */}
             <Route path="/" element={<MainPage />} />
