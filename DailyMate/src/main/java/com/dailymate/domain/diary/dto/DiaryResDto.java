@@ -22,8 +22,9 @@ public class DiaryResDto {
     private String updatedAt;
     private Long likeNum;
     private Boolean isLike;
+    private Boolean isMine;
 
-    public static DiaryResDto createDto(Diary diary, Long likeNum, Boolean isLike) {
+    public static DiaryResDto createDto(Diary diary, Long likeNum, Boolean isLike, Boolean isMine) {
         return DiaryResDto.builder()
                 .diaryId(diary.getDiaryId())
                 .title(diary.getTitle())
@@ -37,6 +38,7 @@ public class DiaryResDto {
                 .updatedAt(diary.getUpdatedAt())
                 .likeNum(likeNum)
                 .isLike(isLike)
+                .isMine(isMine)
                 .build();
     }
 }

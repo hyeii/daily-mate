@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     boolean existsDiaryByDateAndUsers(String date, Users users);
-    Diary findDiaryByDateAndUsers(String date, Users users);
     @Query("SELECT NEW com.dailymate.domain.diary.dto.DiaryMonthlyResDto(d.diaryId, d.title, d.image, d.weather, d.feeling, d.date) " +
             "FROM Diary d " +
             "WHERE d.users = :users " +
