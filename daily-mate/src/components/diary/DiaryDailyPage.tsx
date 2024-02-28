@@ -128,12 +128,14 @@ const DiaryDailyPage = () => {
           </WeatherBox>
         </DiaryTop>
         <DiaryBottom>
-          <ContentImageContainer>
-            <ContentImageBox
-              src={`https://dailymate.s3.ap-northeast-2.amazonaws.com/${diaryDetail.image}`}
-              alt="example"
-            />
-          </ContentImageContainer>
+          {diaryDetail.image && (
+            <ContentImageContainer>
+              <ContentImageBox
+                src={`https://dailymate.s3.ap-northeast-2.amazonaws.com/${diaryDetail.image}`}
+                alt="example"
+              />
+            </ContentImageContainer>
+          )}
           <ContentBox>
             <ContentInside>{diaryDetail.content}</ContentInside>
           </ContentBox>

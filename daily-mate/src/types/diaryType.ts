@@ -24,12 +24,12 @@ export interface diaryByDateResponse {
   title: string;
   content: string;
   date: string;
-  image: string;
+  image: string | null;
   weather: string;
   feeling: string;
   openType: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string | null;
   likeNum: number;
   isLike: boolean;
 }
