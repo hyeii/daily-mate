@@ -108,6 +108,9 @@ public class SecurityConfig {
             "/user/check/**",
             "/user/reissue-token",
 
+            // oauth
+            "/oauth/google",
+
             // h2-console
             "/h2-console/**",
     };

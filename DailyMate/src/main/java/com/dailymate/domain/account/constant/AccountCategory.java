@@ -15,9 +15,6 @@ public enum AccountCategory {
     AccountCategory (String value) {this.value = value;}
 
     public static AccountCategory getAccountCategory (String value) {
-        if(value == null)
-            return null;
-
         if(value.contains("식비"))
             return 식비;
 
@@ -30,6 +27,9 @@ public enum AccountCategory {
         if(value.contains("교통"))
             return 교통;
 
-        return 기타;
+        if (value.contains("기타"))
+            return 기타;
+
+        return null;
     }
 }
