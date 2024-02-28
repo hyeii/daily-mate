@@ -88,12 +88,12 @@ public class DiaryController {
             summary = "일기 조회 (일별)",
             description = "해당 날짜의 일기를 조회합니다."
     )
-    @GetMapping("/date")
+    @GetMapping("/{diaryId}")
     public ResponseEntity<DiaryResDto> findDiary(
             @RequestHeader(ACCESS_TOKEN) String accessToken,
-            @RequestParam("date") String date) {
+            @PathVariable Long diaryId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(diaryService.findDiary(accessToken, date));
+                .body(diaryService.findDiary(accessToken, diaryId));
     }
 
     @Operation(
@@ -106,18 +106,6 @@ public class DiaryController {
             @RequestParam String date) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(diaryService.findDiaryByMonth(accessToken, date));
-    }
-
-    @Operation(
-            summary = "친구 일기 조회 (일별)",
-            description = "친구의 일기를 조회합니다."
-    )
-    @GetMapping("/friend/{diaryId}")
-    public ResponseEntity<DiaryResDto> findFriendDiary(
-            @RequestHeader(ACCESS_TOKEN) String accessToken,
-            @PathVariable("diaryId") Long diaryId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(diaryService.findFriendDiary(accessToken, diaryId));
     }
 
     @Operation(
