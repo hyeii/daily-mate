@@ -157,7 +157,7 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public List<String> findTodoListByDay(String date, String token) {
+	public List<Todo> findTodoListByDay(String date, String token) {
 		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 일별 조회] 할일 일별 조회 요청. date : {}", date);
 
@@ -169,13 +169,8 @@ public class TodoServiceImpl implements TodoService {
 			return Collections.emptyList(); // 비어 있는 리스트 반환
 		}
 
-		// 2. 할일 내용만 추출하여 리스트로 반환
-		List<String> contentList = todoList.stream()
-				.map(Todo::getContent)
-				.collect(Collectors.toList());
-
 		log.info("[할일 일별 조회] 할일 내용 조회 완료. date : {}, userId : {}", date, USERID);
-		return contentList;
+		return todoList; // todoList 반환
 	}
 
 
