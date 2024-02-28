@@ -3,6 +3,7 @@ package com.dailymate.domain.todo.domain;
 import com.dailymate.global.common.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Builder
 @AllArgsConstructor
+@Where(clause = "deleted_at is null")
 public class Todo extends BaseTime {
 
 	@Id
