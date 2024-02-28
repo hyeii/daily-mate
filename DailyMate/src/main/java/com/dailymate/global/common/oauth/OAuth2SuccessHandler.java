@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 @Slf4j
 @Component
@@ -30,6 +31,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        log.info("[OAUTH_SUCCESS_HANDLER] 성공성공");
+
         try {
             UserDetailsImpl oAuth2User = (UserDetailsImpl)authentication.getPrincipal();
 
@@ -64,9 +67,15 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             String userInfo = objectMapper.writeValueAsString(logInResDto);
 
             // 응답 생성
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(userInfo);
+//            response.setContentType("application/json");
+//            response.setCharacterEncoding("UTF-8");
+//            response.getWriter().write(userInfo);
+
+            // 리다이렉트하장
+            // URL 인코딩
+            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
+            response.sendRedirect("/oauth/google/success?userInfo=" + encodeUserInfo);
+//            response.sendRedirect("/oauth/google/success?" + userInfo);
 
             log.info("[SUCCESS_HANDLER] 응답 생성 완료.");
         } catch (AuthenticationException e) {
