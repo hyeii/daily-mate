@@ -31,7 +31,7 @@ public class Todo extends BaseTime {
 	private Boolean done;
 
 	@NotNull
-	private Integer repeat;
+	private Integer repeatition;
 
 
 	public void updateTodo(String content, String date){

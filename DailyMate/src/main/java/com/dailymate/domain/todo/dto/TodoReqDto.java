@@ -12,5 +12,5 @@ public class TodoReqDto {
 	private Integer order;
 	private Boolean done;
 
-	private Integer repeat;
+	private Integer repeatition;
 }

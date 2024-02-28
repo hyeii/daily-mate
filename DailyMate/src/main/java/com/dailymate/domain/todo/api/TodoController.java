@@ -1,5 +1,6 @@
 package com.dailymate.domain.todo.api;
 
+import com.dailymate.domain.todo.domain.Todo;
 import com.dailymate.domain.todo.dto.*;
 import com.dailymate.domain.todo.service.TodoService;
 import com.dailymate.global.dto.MessageDto;
@@ -20,13 +21,14 @@ import java.util.List;
 public class TodoController {
 
 	private final TodoService todoService;
+	private final String ACCESS_TOKEN = "authorization";
 
 	@Operation(
 			summary = "할일 등록",
 			description = "로그인 사용자의 할일을 등록합니다."
 	)
 	@PostMapping
-	public ResponseEntity<MessageDto> addTodo(@RequestBody AddTodoReqDto reqDto, @RequestHeader String token){
+	public ResponseEntity<MessageDto> addTodo(@RequestBody AddTodoReqDto reqDto, @RequestHeader(ACCESS_TOKEN) String token){
 		todoService.addTodo(reqDto, token);
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(MessageDto.message("CREATE SUCCESS"));
@@ -37,7 +39,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일을 수정합니다."
 	)
 	@PatchMapping("/{todoId}")
-	public ResponseEntity<TodoResDto> updateTodo(@PathVariable Long todoId, @RequestBody UpdateTodoReqDto reqDto, @RequestHeader String token){
+	public ResponseEntity<TodoResDto> updateTodo(@PathVariable Long todoId, @RequestBody UpdateTodoReqDto reqDto, @RequestHeader(ACCESS_TOKEN) String token){
 		return ResponseEntity.ok(todoService.updateTodo(todoId, reqDto, token));
 	}
 
@@ -46,7 +48,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일을 삭제합니다."
 	)
 	@DeleteMapping("/{todoId}")
-	public ResponseEntity<MessageDto> deleteTodo(@PathVariable Long todoId, @RequestHeader String token){
+	public ResponseEntity<MessageDto> deleteTodo(@PathVariable Long todoId, @RequestHeader(ACCESS_TOKEN) String token){
 		todoService.deleteTodo(todoId, token);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(MessageDto.message("DELETE SUCCESS"));
@@ -57,7 +59,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일을 하루 미룹니다."
 	)
 	@PatchMapping("/postpone/{todoId}")
-	public ResponseEntity<String> postponeTodo(@PathVariable Long todoId, @RequestHeader String token){
+	public ResponseEntity<String> postponeTodo(@PathVariable Long todoId, @RequestHeader(ACCESS_TOKEN) String token){
 		return ResponseEntity.ok(todoService.postponeTodo(todoId, token));
 	}
 
@@ -66,7 +68,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일 리스트를 전체 조회합니다."
 	)
 	@GetMapping("/all")
-	public ResponseEntity<List<String>> findTodoLisByDay(@RequestParam String date, @RequestHeader String token){
+	public ResponseEntity<List<Todo>> findTodoLisByDay(@RequestParam String date, @RequestHeader(ACCESS_TOKEN) String token){
 		return ResponseEntity.ok(todoService.findTodoListByDay(date, token));
 	}
 
@@ -75,7 +77,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일 상세 조회를 합니다."
 	)
 	@GetMapping("/{todoId}")
-	public ResponseEntity<TodoResDto> findTodo(@PathVariable Long todoId, @RequestHeader String token){
+	public ResponseEntity<TodoResDto> findTodo(@PathVariable Long todoId, @RequestHeader(ACCESS_TOKEN) String token){
 		return ResponseEntity.ok(todoService.findTodo(todoId, token));
 	}
 
@@ -84,7 +86,7 @@ public class TodoController {
 			description = "로그인 사용자의 달성도를 조회합니다."
 	)
 	@GetMapping("/success")
-	public ResponseEntity<Integer> getSuccessRate(@RequestParam String date, @RequestHeader String token){
+	public ResponseEntity<Integer> getSuccessRate(@RequestParam String date, @RequestHeader(ACCESS_TOKEN) String token){
 		return ResponseEntity.ok(todoService.getSuccessRate(date, token));
 	}
 
@@ -93,7 +95,7 @@ public class TodoController {
 			description = "로그인 사용자의 할일을 완료합니다."
 	)
 	@PatchMapping("/success/{todoId}")
-	public ResponseEntity<MessageDto> checkTodo(@PathVariable Long todoId, @RequestHeader String token){
+	public ResponseEntity<MessageDto> checkTodo(@PathVariable Long todoId, @RequestHeader(ACCESS_TOKEN) String token){
 		todoService.checkTodo(todoId, token);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(MessageDto.message("TOGGLE SUCCESS"));

@@ -206,39 +206,53 @@ public class DiaryServiceImpl implements DiaryService {
     /**
      * 일기 조회 (일별)
      * @param accessToken String
-     * @param date String
+     * @param diaryId Long
      * @return DiaryResDto
      */
     @Override
     @Transactional
-    public DiaryResDto findDiary(String accessToken, String date) {
+    public DiaryResDto findDiary(String accessToken, Long diaryId) {
 
         // 사용자 확인
         Users user = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
                 .orElseThrow(() -> new UserNotFoundException("[FIND_DIARY] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
 
-        // 일기 확인
-        Diary diary = diaryRepository.findDiaryByDateAndUsers(date, user);
+        // 일기 정보 조회
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new DiaryNotFoundException("[FIND_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
 
-        // 일기 없으면 null 반환
+        // 일기 확인
         if(diary == null) {
-            return null;
+            throw new DiaryNotFoundException("[FIND_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg());
         }
 
-        // 좋아요 여부
-        Boolean isLike = false;
-
-        LikeDiaryKey key = LikeDiaryKey.createKey(user.getUserId(), diary.getDiaryId());
+        // 좋아요 확인
+        LikeDiaryKey key = LikeDiaryKey.createKey(user.getUserId(), diaryId);
         Optional<LikeDiary> likeDiary = likeDiaryRepository.findById(key);
 
-        if(likeDiary.isPresent()) {
-            isLike = true;
-        }
+        boolean isLike = likeDiary.isPresent() ? true : false;
 
         // 좋아요 개수
-        Long likeNum = likeDiaryRepository.countLikesByDiaryId(diary.getDiaryId());
+        Long likeNum = likeDiaryRepository.countLikesByDiaryId(diaryId);
 
-        return DiaryResDto.createDto(diary, likeNum, isLike);
+        // 내 일기인지 확인
+        boolean isMine = (diary.getUsers() == user) ? true : false;
+
+        // 조회 권한 확인
+        Friend friend = friendRepository.findMyFriendToEntity(user.getUserId(), diary.getUsers().getUserId());
+
+        // 내 일기 아님 + 친구 아님 + 친구공개
+        if(!isMine && friend == null && diary.getOpenType().getValue() == "친구공개"){
+            throw new DiaryForbiddenException("[FIND_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
+        }
+
+        // 내 일기 아님 + 비공개
+        if(!isMine && diary.getOpenType().getValue() == "비공개") {
+            throw new DiaryForbiddenException("[FIND_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
+        }
+
+        // 내 일기 or 친구인데 친구공개 or 공개
+        return DiaryResDto.createDto(diary, likeNum, isLike, isMine);
     }
 
     /**
@@ -271,57 +285,6 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         return monthly;
-    }
-
-    /**
-     * 친구 일기 조회 (일별)
-     * @param accessToken String
-     * @param diaryId Long
-     * @return DiaryResDto
-     */
-    @Override
-    @Transactional
-    public DiaryResDto findFriendDiary(String accessToken, Long diaryId) {
-
-        // 입력값 검증
-        if(diaryId == null || accessToken == null) {
-            throw new DiaryBadRequestException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_BAD_REQUEST.getMsg());
-        }
-
-        // 사용자 확인
-        Users user = userRepository.findById(jwtTokenProvider.getUserId(accessToken))
-                .orElseThrow(() -> new UserNotFoundException("[FIND_FRIEND_DIARY] " + UserExceptionMessage.USER_NOT_FOUND.getMsg()));
-
-        // 다이어리 확인
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new DiaryNotFoundException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_NOT_FOUND.getMsg()));
-
-        // 조회 권한 확인
-        Friend friend = friendRepository.findMyFriendToEntity(user.getUserId(), diary.getUsers().getUserId());
-
-        if(user != diary.getUsers() && friend == null && diary.getOpenType().getValue() == "친구공개") {
-            throw new DiaryForbiddenException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
-        }
-
-        if(user != diary.getUsers() && diary.getOpenType().getValue() == "비공개") {
-            throw new DiaryForbiddenException("[FIND_FRIEND_DIARY] " + DiaryExceptionMessage.DIARY_HANDLE_ACCESS_DENIED.getMsg());
-        }
-
-        // 좋아요 여부
-        Boolean isLike = false;
-
-        LikeDiaryKey key = LikeDiaryKey.createKey(user.getUserId(), diaryId);
-        Optional<LikeDiary> likeDiary = likeDiaryRepository.findById(key);
-
-        if(likeDiary.isPresent()) {
-            isLike = true;
-        }
-
-        // 좋아요 개수
-        Long likeNum = likeDiaryRepository.countLikesByDiaryId(diaryId);
-
-        return DiaryResDto.createDto(diary, likeNum, isLike);
-
     }
 
     /**

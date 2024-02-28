@@ -1,5 +1,6 @@
 package com.dailymate.domain.todo.service;
 
+import com.dailymate.domain.todo.domain.Todo;
 import com.dailymate.domain.todo.dto.AddTodoReqDto;
 import com.dailymate.domain.todo.dto.TodoReqDto;
 import com.dailymate.domain.todo.dto.TodoResDto;
@@ -15,7 +16,7 @@ public interface TodoService {
 
 	String postponeTodo(Long todoId, String token);
 
-	List<String> findTodoListByDay(String date, String token);
+	List<Todo> findTodoListByDay(String date, String token);
 
 	TodoResDto findTodo(Long todoId, String token);
 
