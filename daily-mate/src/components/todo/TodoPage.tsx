@@ -41,6 +41,8 @@ const TodoPage = () => {
     }
   }, [selectedDate]);
 
+  const accessToken = window.localStorage.getItem("accessToken");
+
   const fetchTodoList = async (date: string) => {
     try {
       const response = await axios.get("http://localhost:8080/todo/all", {
@@ -48,7 +50,7 @@ const TodoPage = () => {
           date: date,
         },
         headers: {
-          token: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJ1c2VySWQiOjEwMSwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwODk2MzM5NH0.L6w5O5bsyJZ-6tOIMliMKxRPuudr3doz4vR3L4bRTIo`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       setTodoList(response.data);
@@ -68,7 +70,7 @@ const TodoPage = () => {
         null,
         {
           headers: {
-            token: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MUBuYXZlci5jb20iLCJ1c2VySWQiOjEwMSwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwODk2MzM5NH0.L6w5O5bsyJZ-6tOIMliMKxRPuudr3doz4vR3L4bRTIo`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -83,6 +85,42 @@ const TodoPage = () => {
     }
   };
 
+  const handleDeleteTodo = async (todoId: number) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/todo/${todoId}`, // 엔드포인트 URL
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 헤더 설정
+          },
+        }
+      );
+      // 서버에서 응답이 성공하면 해당 todo의 done 상태를 토글
+      setTodoList((prevTodoList) =>
+        prevTodoList.filter((todo) => todo.todoId !== todoId)
+      ); // 삭제된 항목을 todoList에서 제거
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
+  };
+
+  const handlePostponeTodo = async (todoId: number) => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8080/todo/postpone/${todoId}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      // 서버에서 응답이 성공하면 해당 todo의 done 상태를 토글
+    } catch (error) {
+      console.error("Error toggling todo:", error);
+    }
+  };
+  const handleUpdateTodo = async (todoId: number) => {};
   const handlePreviousDay = () => {
     const currentDate = new Date(selectedDate);
     currentDate.setDate(currentDate.getDate() - 1);
@@ -115,7 +153,13 @@ const TodoPage = () => {
             />
             <button onClick={handleNextDay}>&gt;</button>
           </div>
-          <DailyTodoList todoList={todoList} onToggleTodo={handleToggleTodo} />
+          <DailyTodoList
+            todoList={todoList}
+            onToggleTodo={handleToggleTodo}
+            onDeleteTodo={handleDeleteTodo}
+            onPostponeTodo={handlePostponeTodo}
+            onUpdateTodo={handleUpdateTodo}
+          />
         </div>
       ) : (
         <div>
