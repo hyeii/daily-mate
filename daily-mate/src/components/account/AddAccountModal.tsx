@@ -64,13 +64,20 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
       amount: ammountData(),
       category: category,
     };
-    console.log(newAccount);
     if (openType === "add") {
-      addAccount(newAccount);
+      if (addAccount(newAccount) !== null) {
+        alert("가계부 등록 완료");
+        handleCloseModal();
+        window.location.reload();
+      }
     }
 
     if (openType === "modify") {
-      modifyAccount(newAccount, originAccount.accountId);
+      if (modifyAccount(newAccount, originAccount.accountId) !== null) {
+        alert("가계부 수정 완료");
+        handleCloseModal();
+        window.location.reload();
+      }
     }
   };
   const handleCloseModal = () => {

@@ -2,15 +2,20 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { diaryRequest } from "../../types/diaryType";
 import { addDiary } from "../../apis/diaryApi";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { writeDate } from "../../atoms/diaryAtom";
 import { formatDate } from "../common/FormatDate";
 import PickDateModal from "./PickDateModal";
+import { useNavigate } from "react-router-dom";
+import { userInfoState } from "../../atoms/authAtom";
 
 const DiaryWritePage = () => {
   //  날짜 props를 전달하되, 전달된게 없다면 오늘 기준으로 임의지정 가능하도록
   //  => recoil로 저장
   const [getWriteDate, setGetWriteDate] = useRecoilState(writeDate);
+  const userInfo = useRecoilValue(userInfoState);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("작성할 날짜 : " + getWriteDate);
@@ -78,7 +83,13 @@ const DiaryWritePage = () => {
       new Blob([JSON.stringify(diaryData)], { type: "application/json" })
     );
     if (inputImage) formData.append("image", inputImage);
-    addDiary(formData);
+
+    if (addDiary(formData) !== null) {
+      alert("일기 작성 완료!");
+      setTimeout(() => {
+        navigate(`/diary/monthly/${userInfo.userId}`);
+      }, 500);
+    }
   };
   return (
     // 이하 select, radio 추후 컴포넌트 처리

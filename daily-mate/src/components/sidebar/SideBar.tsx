@@ -10,6 +10,8 @@ import { logOut } from "../../apis/authApis";
 import { IoSearch, IoNotificationsOutline } from "react-icons/io5";
 import { RxDoubleArrowLeft } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
+import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
+import { format } from "date-fns";
 
 const SideBar = () => {
   const isOpen = useRecoilValue(sideBarOpenState);
@@ -17,6 +19,8 @@ const SideBar = () => {
   const setIsLogin = useSetRecoilState(isLoginState);
   const setSidebarOpen = useSetRecoilState(sideBarOpenState);
   const setImageURL = useSetRecoilState(userImageURLState);
+  const setSelectedDate = useSetRecoilState(selectedDateState);
+  const setAccountTab = useSetRecoilState(accountTabState);
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
@@ -44,6 +48,8 @@ const SideBar = () => {
     navigate(`/diary/monthly/${userInfo.userId}`);
   };
   const moveAccount = () => {
+    setSelectedDate(format(new Date(), "yyyy-MM-dd"));
+    setAccountTab("calendar");
     navigate("/account");
   };
   const moveMyPage = () => {

@@ -76,9 +76,10 @@ export const addDiary = async (formData: FormData) => {
       formData
     );
     console.log(res.data.message);
-    alert("일기 작성 완료");
+    return res.data.message;
   } catch (error) {
     console.error("일기 작성 오류 : ", error);
+    return null;
   }
 };
 

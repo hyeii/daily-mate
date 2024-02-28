@@ -32,7 +32,12 @@ const AccountHistory = ({ accountList }: props) => {
   };
 
   const handleDeleteAccount = (accountId: number) => {
-    deleteAccount(accountId);
+    if (window.confirm("해당 내역을 삭제할까요?")) {
+      if (deleteAccount(accountId) !== null) {
+        alert("내역이 삭제되었습니다");
+        window.location.reload();
+      }
+    }
   };
 
   return (
