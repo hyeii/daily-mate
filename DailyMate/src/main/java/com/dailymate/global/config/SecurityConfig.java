@@ -109,7 +109,7 @@ public class SecurityConfig {
             "/user/reissue-token",
 
             // oauth
-            "/oauth/**",
+            "/oauth/google",
 
             // h2-console
             "/h2-console/**",
