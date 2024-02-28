@@ -18,31 +18,13 @@ interface props {
 }
 
 const DiaryComment = ({ diaryId }: props) => {
-  const [commentList, setCommentList] = useState<commentListResponse[]>([
-    {
-      commentId: 12,
-      content: "댓글테스트",
-      nickname: "당근2",
-      isLiked: true,
-      likeNum: 3,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      commentId: 134,
-      content: "댓글테스트2",
-      nickname: "당근",
-      isLiked: false,
-      likeNum: 5,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ]);
+  const [commentList, setCommentList] = useState<commentListResponse[]>([]);
   const [updateState, setUpdateState] = useState<number>(-1);
   const [inputUpdateComment, setInputUpdateComment] = useState<string>("");
   const [openButtons, setOpenButtons] = useState<number>(-1);
 
   const userInfo = useRecoilValue(userInfoState);
+
   useEffect(() => {
     const fetchData = async () => {
       const commentListData: commentListResponse[] | null =
@@ -97,7 +79,7 @@ const DiaryComment = ({ diaryId }: props) => {
 
   const handleLikeComment = (commentId: number) => {
     if (likeComment(commentId) !== null) {
-      // 새로고침
+      window.location.reload();
     }
   };
 

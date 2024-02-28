@@ -113,6 +113,7 @@ export const getCommentList = async (diaryId: number) => {
     const res = await API.get<commentListResponse[]>(`/comment/${diaryId}`);
     return res.data;
   } catch (error) {
+    console.log(diaryId);
     console.error("댓글 전체 조회 오류 : ", error);
     return null;
   }
