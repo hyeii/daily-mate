@@ -108,6 +108,9 @@ const Calendar = ({ isMini, calendarType }: props) => {
         isMini={isMini}
       />
       {/* ) : } */}
+      <TodayBtnContainer>
+        <TodayBtn onClick={setToday}>오늘</TodayBtn>
+      </TodayBtnContainer>
     </CalendarWrapper>
   );
 };
@@ -132,4 +135,27 @@ const CalendarWrapper = styled.div<calendarStyleProps>`
 
 const Spacer = styled.div`
   height: 1rem;
+`;
+
+const TodayBtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const TodayBtn = styled.button`
+  background-color: #ff6161;
+  color: white;
+  border: 0;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 6px 18px;
+  font-family: "LeeSeoyun";
+  transition: transform 0.2s, background-color 0.3s;
+
+  &:hover {
+    background-color: #e45757;
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
 `;
