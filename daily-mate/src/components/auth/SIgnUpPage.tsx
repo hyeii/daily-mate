@@ -1,8 +1,9 @@
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkEmail, checkNickname, signUp } from "../../apis/authApis";
-import { signUpRequest } from "../../types/authType";
+import { signUpRequest, userResponse } from "../../types/authType";
 import styled from "styled-components";
+import axios from "axios";
 
 const SignUpPage = () => {
   const [inputNickname, setInputNickname] = useState<string>("");
@@ -165,6 +166,23 @@ const SignUpPage = () => {
     window.location.href = kakaoURL;
   };
 
+  const handleGoogle = async () => {
+    const googleURL = "http://localhost:8080/oauth2/authorization/google";
+    // const googleURL: string = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
+    // window.location.href = googleURL;
+
+    // try {
+    //   const res = await axios.get<userResponse>(
+    //     "http://localhost:8080/oauth/google"
+    //   );
+    //   console.log(res.data);
+
+    //   navigate("/");
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  };
+
   return (
     <div>
       <h3>회원가입</h3>
@@ -227,6 +245,7 @@ const SignUpPage = () => {
           <span>로그인</span>
         </div>
         <button onClick={handleKakao}>카카오</button>
+        <button onClick={handleGoogle}>구글</button>
       </Container>
     </div>
   );
