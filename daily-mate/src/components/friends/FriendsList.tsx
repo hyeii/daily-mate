@@ -11,25 +11,6 @@ const FriendsList = () => {
       const getFriendResponse = await getFriendList();
       if (getFriendResponse !== null) {
         setFriendsList(getFriendResponse);
-      } else {
-        setFriendsList([
-          {
-            userId: 10,
-            email: "1232@123.com",
-            nickname: "김더미",
-            image: "url",
-            profile: "졸려",
-            requestDate: "2024-02-10",
-          },
-          {
-            userId: 11,
-            email: "1232@123.com",
-            nickname: "최더미",
-            image: "url",
-            profile: "배고파",
-            requestDate: "2024-02-10",
-          },
-        ]);
       }
     };
     fetchData();

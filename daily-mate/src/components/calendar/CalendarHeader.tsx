@@ -22,12 +22,13 @@ const CalendarHeader = ({
 }: props) => {
   return (
     <HeaderWrapper>
-      <BackArrowIcon size="30" onClick={prevMonth} />
-      <DateContainer>
-        {format(currentMonth, "yyyy")}년 {format(currentMonth, "M")}월
-      </DateContainer>
-      <ForwardArrowIcon size="30" onClick={nextMonth} />
-      {/* <button onClick={setToday}>오늘</button> */}
+      <HeaderContainer>
+        <BackArrowIcon size="30" onClick={prevMonth} />
+        <DateContainer>
+          {format(currentMonth, "yyyy")}년 {format(currentMonth, "M")}월
+        </DateContainer>
+        <ForwardArrowIcon size="30" onClick={nextMonth} />
+      </HeaderContainer>
     </HeaderWrapper>
   );
 };
@@ -36,6 +37,12 @@ export default CalendarHeader;
 
 const HeaderWrapper = styled.div`
   width: auto;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1.2rem;
+`;
+
+const HeaderContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

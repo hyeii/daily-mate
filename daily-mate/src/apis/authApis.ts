@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import {
+  getInfoResponse,
   myInfoResponse,
   reIssueTokenResponse,
   signUpRequest,
@@ -15,7 +16,6 @@ export const checkNickname = async (nickname: string) => {
         nickname: nickname,
       },
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error("닉네임 중복 확인 오류 : ", error);
@@ -33,7 +33,7 @@ export const checkEmail = async (email: string) => {
     return res.data;
   } catch (error) {
     console.error("이메일 중복 확인 오류 : ", error);
-    return error;
+    return null;
   }
 };
 
@@ -43,14 +43,11 @@ export const signUp = async (body: signUpRequest) => {
       "/user/sign-up",
       body
     );
-    console.log(res.data.message);
-    alert("회원가입이 완료되었습니다. 로그인 후 이용해주세요");
-    return true;
+
+    return res.data.message;
   } catch (error) {
     console.error("회원가입 오류:", error);
-
-    alert("오류가 발생했습니다.");
-    return false;
+    return null;
   }
 };
 
@@ -153,6 +150,16 @@ export const updateUserPassword = async (
   } catch (error) {
     console.error("비밀번호 변경 오류 : ", error);
     alert("비밀번호를 다시 확인해주세요");
+    return null;
+  }
+};
+
+export const getUserByUserId = async (userId: number) => {
+  try {
+    const res = await API.get<getInfoResponse>(`/user/${userId}`);
+    return res.data;
+  } catch (error) {
+    console.error("userId로 정보 조회 오류 : ", error);
     return null;
   }
 };

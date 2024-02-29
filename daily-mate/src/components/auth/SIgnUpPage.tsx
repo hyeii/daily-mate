@@ -1,8 +1,14 @@
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkEmail, checkNickname, signUp } from "../../apis/authApis";
-import { signUpRequest } from "../../types/authType";
+import { signUpRequest, userResponse } from "../../types/authType";
 import styled from "styled-components";
+import axios from "axios";
+import {
+  Container,
+  SignBtn,
+  SignWrapper,
+} from "../common/CommonStyledComponents";
 
 const SignUpPage = () => {
   const [inputNickname, setInputNickname] = useState<string>("");
@@ -22,6 +28,10 @@ const SignUpPage = () => {
   const [passwordMessage, setPasswordMessage] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    navigate("/signin");
+  };
 
   const handleNickname = (event: ChangeEvent<HTMLInputElement>) => {
     setValidateNickname(false);
@@ -85,7 +95,7 @@ const SignUpPage = () => {
   useEffect(() => {
     // 비밀번호 정규식. 최소 하나 이상의 영문자(대소문자 구분 X), 최소 하나 이상의 숫자 및 특수문자, 8자 이상 16자 이하
     const regPassword =
-      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*?&#/])[A-Za-z\d@$!%*?&#/]{8,16}$/;
     if (regPassword.test(inputPassword)) {
       setRegPasswordMessage("사용 가능한 비밀번호입니다.");
       setRegPasswordValue(true);
@@ -154,9 +164,10 @@ const SignUpPage = () => {
     console.log(signUpBody);
     const signUpResult = await signUp(signUpBody);
     if (signUpResult) {
+      alert("회원가입이 완료되었습니다. 로그인 후 이용해주세요");
       navigate("/signin");
     } else {
-      //  새로고침
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
@@ -165,14 +176,34 @@ const SignUpPage = () => {
     window.location.href = kakaoURL;
   };
 
+  const handleGoogle = async () => {
+    const googleURL = "http://localhost:8080/oauth2/authorization/google";
+    // const googleURL: string = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
+    // window.location.href = googleURL;
+
+    // try {
+    //   const res = await axios.get<userResponse>(
+    //     "http://localhost:8080/oauth/google"
+    //   );
+    //   console.log(res.data);
+
+    //   navigate("/");
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  };
+
   return (
-    <div>
+    <SignWrapper>
       <h3>회원가입</h3>
       <Container>
         <InputDiv>
           <div>닉네임</div>
-          <DataInput setwidth="short" type="text" onChange={handleNickname} />
-          <CheckBtn onClick={handleValidateNickname}>중복확인</CheckBtn>{" "}
+          <InputBox>
+            <DataInput setwidth="short" type="text" onChange={handleNickname} />
+
+            <CheckBtn onClick={handleValidateNickname}>중복확인</CheckBtn>
+          </InputBox>
           {validateNickname ? (
             <CheckText check="true">사용 가능한 닉네임입니다</CheckText>
           ) : (
@@ -181,8 +212,10 @@ const SignUpPage = () => {
         </InputDiv>
         <InputDiv>
           <div>이메일</div>
-          <DataInput setwidth="short" type="email" onChange={handleEmail} />
-          <CheckBtn onClick={handleValidateEmail}>중복확인</CheckBtn>
+          <InputBox>
+            <DataInput setwidth="short" type="email" onChange={handleEmail} />
+            <CheckBtn onClick={handleValidateEmail}>중복확인</CheckBtn>
+          </InputBox>
           {inputEmail !== "" && !regEmailValue ? (
             <CheckText check={regEmailValue ? "true" : "false"}>
               {regEmailMessage}
@@ -191,26 +224,30 @@ const SignUpPage = () => {
             <CheckText check="true">사용 가능한 이메일입니다</CheckText>
           ) : (
             <Hidden>숨김</Hidden>
-          )}{" "}
+          )}
         </InputDiv>
         <InputDiv>
           <div>비밀번호</div>
-          <DataInput
-            setwidth="long"
-            type="password"
-            onChange={handlePassword}
-          />
+          <InputBox>
+            <DataInput
+              setwidth="long"
+              type="password"
+              onChange={handlePassword}
+            />
+          </InputBox>
           <CheckText check={regPasswordValue ? "true" : "false"}>
             {regPasswordMessage}
           </CheckText>
         </InputDiv>
         <InputDiv>
           <div>비밀번호 확인</div>
-          <DataInput
-            setwidth="long"
-            type="password"
-            onChange={handlePasswordCheck}
-          />
+          <InputBox>
+            <DataInput
+              setwidth="long"
+              type="password"
+              onChange={handlePasswordCheck}
+            />
+          </InputBox>
           {passwordMessage === "" ? (
             <Hidden>숨김</Hidden>
           ) : (
@@ -220,29 +257,26 @@ const SignUpPage = () => {
           )}
         </InputDiv>
         <div>
-          <SignUpBtn onClick={submitSignUp}>회원가입</SignUpBtn>
+          <SignBtn onClick={submitSignUp}>회원가입</SignBtn>
         </div>
-        <div>
+        <GoText>
           <span>이미 회원이신가요?</span>
-          <span>로그인</span>
-        </div>
-        <button onClick={handleKakao}>카카오</button>
+          <GoLogin onClick={handleSignIn}>로그인</GoLogin>
+        </GoText>
       </Container>
-    </div>
+    </SignWrapper>
   );
 };
 
 export default SignUpPage;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-`;
-
 const InputDiv = styled.div`
   margin: 10px 0;
   flex-grow: 1;
+`;
+
+const InputBox = styled.div`
+  display: flex;
 `;
 
 interface inputprop {
@@ -250,8 +284,7 @@ interface inputprop {
 }
 
 const DataInput = styled.input<inputprop>`
-  // width: 250px;
-  width: ${({ setwidth }) => (setwidth === "short" ? "250px" : "340px")};
+  flex: ${({ setwidth }) => (setwidth === "short" ? "3" : "1")};
   height: 35px;
   border: 1.5px solid #cccccc;
   border-radius: 5px;
@@ -263,9 +296,9 @@ const DataInput = styled.input<inputprop>`
   }
 `;
 
-const CheckBtn = styled.button`
-  font-family: "S-CoreDream-3Light";
-  width: 80px;
+const CheckBtn = styled.div`
+  flex: 1;
+  width: auto;
   height: 35px;
   border: none;
   cursor: pointer;
@@ -273,13 +306,14 @@ const CheckBtn = styled.button`
   transition: transform 0.2s, background-color 0.3s;
   background-color: #f6dee2;
 
+  display: flex;
   margin-left: 10px;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
 
   &:hover {
     background-color: #fbe4e6;
+    font-weight: bold;
   }
 
   &:active {
@@ -299,26 +333,14 @@ const CheckText = styled.div<checkvalue>`
   color: ${({ check }) => (check === "true" ? "green" : "red")};
 `;
 
-const SignUpBtn = styled.button`
-  font-family: "S-CoreDream-3Light";
-  width: 340px;
-  height: 35px;
-  border: none;
+const GoText = styled.div`
+  font-size: 1.1rem;
+`;
+
+const GoLogin = styled.span`
   cursor: pointer;
-  border-radius: 5px;
-  transition: transform 0.2s, background-color 0.3s;
-  background-color: #f6dee2;
-
-  margin: 10px 0;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
+  margin-left: 1rem;
   &:hover {
-    background-color: #fbe4e6;
-  }
-
-  &:active {
-    transform: scale(1.05);
+    font-weight: bold;
   }
 `;
