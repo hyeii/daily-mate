@@ -86,7 +86,7 @@ const SignUpPage = () => {
   useEffect(() => {
     // 비밀번호 정규식. 최소 하나 이상의 영문자(대소문자 구분 X), 최소 하나 이상의 숫자 및 특수문자, 8자 이상 16자 이하
     const regPassword =
-      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@$!%*?&#/])[A-Za-z\d@$!%*?&#/]{8,16}$/;
     if (regPassword.test(inputPassword)) {
       setRegPasswordMessage("사용 가능한 비밀번호입니다.");
       setRegPasswordValue(true);
@@ -155,9 +155,10 @@ const SignUpPage = () => {
     console.log(signUpBody);
     const signUpResult = await signUp(signUpBody);
     if (signUpResult) {
+      alert("회원가입이 완료되었습니다. 로그인 후 이용해주세요");
       navigate("/signin");
     } else {
-      //  새로고침
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
