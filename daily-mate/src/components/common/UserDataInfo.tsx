@@ -105,7 +105,9 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
         </div>
       </ImageProfileContainer>
       <div ref={modalRef} style={{ position: "relative" }}>
-        <EtcIcon onClick={handleEtc} size={24} />
+        {id !== userInfo.userId ? (
+          <EtcIcon onClick={handleEtc} size={24} />
+        ) : null}
         {etcClicked ? (
           <EtcModalWrapper>
             {status === "friendList" ? (
@@ -128,11 +130,9 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
             ) : (
               <EtcModalBoxWaiting>친구 대기중</EtcModalBoxWaiting>
             )}
-            {id !== userInfo.userId ? (
-              <EtcModalBox onClick={() => handleUserDiary(id)}>
-                다이어리 놀러가기
-              </EtcModalBox>
-            ) : null}
+            <EtcModalBox onClick={() => handleUserDiary(id)}>
+              다이어리 놀러가기
+            </EtcModalBox>
           </EtcModalWrapper>
         ) : null}
       </div>
