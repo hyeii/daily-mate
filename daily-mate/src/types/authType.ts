@@ -74,3 +74,13 @@ export interface reIssueTokenResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface getInfoResponse {
+  userId: number;
+  email: string;
+  nickname: string;
+  image: string;
+  profile: string;
+  type: string;
+  createdAt: string;
+}

@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import {
+  getInfoResponse,
   myInfoResponse,
   reIssueTokenResponse,
   signUpRequest,
@@ -149,6 +150,16 @@ export const updateUserPassword = async (
   } catch (error) {
     console.error("비밀번호 변경 오류 : ", error);
     alert("비밀번호를 다시 확인해주세요");
+    return null;
+  }
+};
+
+export const getUserByUserId = async (userId: number) => {
+  try {
+    const res = await API.get<getInfoResponse>(`/user/${userId}`);
+    return res.data;
+  } catch (error) {
+    console.error("userId로 정보 조회 오류 : ", error);
     return null;
   }
 };
