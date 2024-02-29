@@ -57,3 +57,45 @@ export const FullHeart = styled(HiHeart)`
 export const OutLineHeart = styled(HiOutlineHeart)`
   ${LikeHeart}
 `;
+
+export const SignWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 1rem;
+
+  border-radius: 15px;
+  box-shadow: 0px 0px 15px #c9c9c9;
+
+  width: 300px;
+`;
+
+export const SignBtn = styled.div`
+  width: auto;
+  height: 35px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.2s, background-color 0.3s;
+  background-color: #f6dee2;
+
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #fbe4e6;
+    font-weight: bold;
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+`;

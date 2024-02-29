@@ -79,7 +79,7 @@ interface SidebarProps {
 const MainContainer = styled.div<SidebarProps>`
   overflow-x: hidden;
   position: relative;
-  min-height: 80vh;
+  min-height: 100vh;
   width: ${({ isopen }) =>
     isopen === "open" ? "calc(100vw - 300px)" : "100vw"};
   left: ${({ isopen }) => (isopen === "open" ? "300px" : "0px")};
@@ -102,6 +102,7 @@ const MainBox = styled.div<SidebarProps>`
 
 const Wrapper = styled.div`
   overflow-x: hidden;
+  background-color: #fcf2f2;
 `;
 
 const OpenBtn = styled(RxDoubleArrowRight)<SidebarProps>`
