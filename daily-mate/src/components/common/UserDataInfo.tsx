@@ -51,7 +51,8 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
   const handleConfirmFriend = (friendId: number, nickname: string) => {
     const confirmResponse = confirmFriend(friendId, nickname);
     if (confirmResponse !== null) {
-      // 새로고침
+      alert(`${nickname}님과 친구가 되었습니다`);
+      window.location.reload();
     } else {
       alert("다시 시도해 주세요");
     }
@@ -60,7 +61,8 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
   const handleDenyFriend = (friendId: number, nickname: string) => {
     const denyResponse = denyFriend(friendId, nickname);
     if (denyResponse !== null) {
-      // 새로고침
+      alert(`${nickname}님의 친구 신청이 거절되었습니다`);
+      window.location.reload();
     } else {
       alert("다시 시도해 주세요");
     }
@@ -70,15 +72,18 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
     const deleteResponse = deleteFriend(friendId);
     if (deleteResponse !== null) {
       // 새로고침
+      alert("친구가 삭제되었습니다.");
+      window.location.reload();
     } else {
       alert("다시 시도해 주세요");
     }
   };
 
   const handleRegistFriend = (toId: number, nickname: string) => {
-    const registResponse = registFriend(toId, nickname);
+    const registResponse = registFriend(toId);
     if (registResponse !== null) {
-      // 새로고침
+      alert(`${nickname}님에게 친구를 신청했습니다`);
+      window.location.reload();
     } else {
       alert("다시 시도해 주세요");
     }

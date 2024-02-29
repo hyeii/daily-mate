@@ -11,33 +11,6 @@ const WaitingList = () => {
       const getWaitingResponse = await getWaitingList();
       if (getWaitingResponse !== null) {
         setWaitingList(getWaitingResponse);
-      } else {
-        setWaitingList([
-          {
-            userId: 10,
-            email: "1232@123.com",
-            nickname: "김아직친구아님",
-            image: "url",
-            profile: "신청받아",
-            requestDate: "2024-02-10",
-          },
-          {
-            userId: 11,
-            email: "1232@123.com",
-            nickname: "박친구아님",
-            image: "url",
-            profile: "신청받아22",
-            requestDate: "2024-02-10",
-          },
-          {
-            userId: 12,
-            email: "1232@123.com",
-            nickname: "이친구아님",
-            image: "url",
-            profile: "신청받아33",
-            requestDate: "2024-02-10",
-          },
-        ]);
       }
     };
     fetchData();
