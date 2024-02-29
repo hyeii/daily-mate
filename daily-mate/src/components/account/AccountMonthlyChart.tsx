@@ -50,31 +50,61 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
         <CategoryContainer>
           <CategoryItem>
             <div>식비</div>
-            <div style={{ color: "#A585FF", fontWeight: "bold" }}>
+            <div
+              style={{
+                color: "#A585FF",
+                fontWeight: "bold",
+                textShadow: "0 0 4px rgba(165,133,255, 1)",
+              }}
+            >
               {outputs.식비 ?? 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
             <div>카페 </div>
-            <div style={{ color: "#FFEB80", fontWeight: "bold" }}>
+            <div
+              style={{
+                color: "#FFEB80",
+                fontWeight: "bold",
+                textShadow: "0 0 4px rgba(214,180,10, 0.5)",
+              }}
+            >
               {outputs.카페 ?? 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
             <div>생활 </div>
-            <div style={{ color: "#FBA76A", fontWeight: "bold" }}>
+            <div
+              style={{
+                color: "#FBA76A",
+                fontWeight: "bold",
+                textShadow: "0 0 4px rgba(222,135,72, 1)",
+              }}
+            >
               {outputs.생활 ?? 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
             <div>교통</div>
-            <div style={{ color: "#DEFF97", fontWeight: "bold" }}>
+            <div
+              style={{
+                color: "#DEFF97",
+                fontWeight: "bold",
+                textShadow: "0 0 4px rgb(139,154,110)",
+              }}
+            >
               {outputs.교통 ?? 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
             <div>기타</div>
-            <div style={{ color: "#FF96E2", fontWeight: "bold" }}>
+            <div
+              style={{
+                color: "#FF96E2",
+                fontWeight: "bold",
+                textShadow: "0 0 4px rgba(219,29,166, 0.5)",
+              }}
+            >
               {outputs.기타 ?? 0}원
             </div>
           </CategoryItem>
@@ -88,8 +118,8 @@ export default AccountMonthlyChart;
 
 const MonthlyChartWrapper = styled.div`
   display: grid;
-  grid-template-columns: 25rem 25rem;
-  grid-template-rows: 25rem 10rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
   grid-gap: 2rem;
 `;
 
@@ -104,6 +134,9 @@ const ChartContainer = styled.div`
     align-items: center;
     display: flex;
   }
+
+  background-color: #ffffff;
+  border-radius: 10px;
 `;
 
 const DataContainer = styled.div`
@@ -116,6 +149,10 @@ const DataContainer = styled.div`
     grid-row: 2;
     align-items: center;
   }
+
+  background-color: #ffffff;
+  padding: 0.7rem;
+  border-radius: 10px;
 `;
 
 const InOutDataBox = styled.div`
