@@ -61,7 +61,8 @@ const SignInPage = () => {
       // setRefreshToken(signInResult.refreshToken);
 
       setIsLogged(true);
-      navigate("/");
+      alert(`${signInResult.nickName}님 어서오세요!`);
+      navigate("/diary");
     } else {
       alert("로그인 정보를 확인해주세요");
     }
@@ -97,7 +98,8 @@ const SignInPage = () => {
           </InputBox>
         </InputDiv>
         <SignBtn onClick={handleSubmit}>로그인</SignBtn>
-        <MoveSignBtn onClick={handleSignUp}>회원가입</MoveSignBtn>
+        <span>아직 회원이 아니신가요?</span>
+        <MoveSignBtn onClick={handleSignUp}>이메일로 가입하기</MoveSignBtn>
         <SocialLoginBox>
           <div>
             <SocialLogin
