@@ -172,9 +172,18 @@ const DiaryWritePage = () => {
               <label htmlFor="type3">친구공개</label>
             </RadioButtonContainer>
           </OpenTypeRadioContainer>
-          <PickText>이미지</PickText>
-          <input type="file" accept="image/*" onChange={handleImage} />
-          {inputImage && <img src={imagePreview} alt="preview" />}
+          <AddLabel htmlFor="file">이미지 첨부하기</AddLabel>
+          <AddImage
+            type="file"
+            accept="image/*"
+            id="file"
+            onChange={handleImage}
+          />
+          {inputImage && (
+            <PreviewImgBox>
+              <PreviewImg src={imagePreview} alt="preview" />
+            </PreviewImgBox>
+          )}
         </RightWrapper>
       </RelativeWrapper>
       <SubmitBtnBox>
@@ -221,6 +230,7 @@ const TitleInput = styled.input`
   outline: none;
   padding: 0.5rem;
   font-family: "LeeSeoyun";
+  background-color: transparent;
 
   &:focus {
     border-color: #000000;
@@ -240,14 +250,14 @@ const ContentInput = styled.textarea`
   width: auto;
   border: 0.1rem solid;
   border-radius: 0.5rem;
-  border-color: rgb(233, 233, 233);
-  background-color: rgb(233, 233, 233);
+  border-color: #ffffff;
+  background-color: #ffffff;
   outline: none;
   padding: 0.5rem;
   font-family: "LeeSeoyun";
 
   &:focus {
-    border-color: #000000;
+    border-color: #d4d4d4;
   }
 `;
 
@@ -282,8 +292,27 @@ const AddSelect = styled.select`
   outline: none;
   font-size: 1.1em;
   padding: 0.5rem 1rem;
-  background-color: rgb(233, 233, 233);
+  background-color: #ffffff;
   font-family: "LeeSeoyun";
+`;
+
+const AddImage = styled.input`
+  margin: 0.5rem 0;
+  opacity: 0;
+`;
+
+const AddLabel = styled.label`
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #ffffff;
+  font-family: "LeeSeoyun";
+
+  &:hover {
+    background-color: #f3bebe;
+    color: #ffffff;
+  }
 `;
 
 const OpenTypeRadioContainer = styled.div`
@@ -338,5 +367,24 @@ const RightWrapper = styled.div`
   @media screen and (min-width: 1300px) {
     flex: 1;
     margin: 3rem 0.3rem;
+  }
+`;
+
+const PreviewImgBox = styled.div`
+  width: auto;
+  display: flex;
+  margin-top: 0.5rem;
+`;
+
+const PreviewImg = styled.img`
+  max-width: 100%;
+  object-fit: scale-down;
+
+  @media screen and (min-width: 1300px) {
+    max-height: 240px;
+  }
+
+  @media screen and (max-width: 1299px) {
+    max-height: 350px;
   }
 `;
