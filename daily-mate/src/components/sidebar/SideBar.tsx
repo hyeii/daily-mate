@@ -99,7 +99,7 @@ const SidebarWrapper = styled.div<SidebarProps>`
   height: 100vh;
   left: ${({ isopen }) => (isopen === "open" ? "0" : "-300px")};
   width: 300px;
-  background-color: #fbeffb;
+  background-color: #f5d5d5;
   overflow-x: hidden;
   transition: left 0.3s ease;
   font-size: 1.15rem;
