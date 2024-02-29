@@ -20,6 +20,7 @@ import { whoseDiaryState, writeDate } from "../../atoms/diaryAtom";
 
 interface props {
   currentMonth: Date;
+  setCurrentDay: (day: Date) => void;
   accountByMonth: accountByMonthResponse | null;
   diaryByMonth: (diaryByMonthResponse | null)[];
   calendarType: string;
@@ -35,6 +36,7 @@ interface dayDivProps {
 
 const CalendarCells = ({
   currentMonth,
+  setCurrentDay,
   accountByMonth,
   diaryByMonth,
   calendarType,
@@ -60,6 +62,7 @@ const CalendarCells = ({
     if (isThisMonth === "otherMonth") return;
 
     const formattedDate = format(day, "yyyy-MM-dd");
+    setCurrentDay(day);
     const formatLast = parseInt(format(day, "d"));
     setSelectedDate(formattedDate);
     console.log(formattedDate);
@@ -192,7 +195,7 @@ const DayCover = styled.div<dayDivProps>`
     isthismonth === "thisMonth" ? "pointer" : "default"};
   color: ${({ isthismonth, isselected, ismini }) =>
     isthismonth === "thisMonth" && isselected === "selected" && ismini === "yes"
-      ? "blue"
+      ? "#ff6161"
       : isthismonth === "thisMonth"
       ? "black"
       : "#dddddd"};

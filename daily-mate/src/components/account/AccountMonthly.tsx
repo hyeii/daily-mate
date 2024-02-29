@@ -78,4 +78,5 @@ const MonthContainer = styled.div`
   align-items: center;
   width: 100px;
   justify-content: space-between;
+  margin: 1rem 0;
 `;

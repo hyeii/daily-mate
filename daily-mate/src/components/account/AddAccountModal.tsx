@@ -9,6 +9,7 @@ import { accountByDateResponse, accountRequest } from "../../types/accountType";
 import { addAccount, modifyAccount } from "../../apis/accountApi";
 import styled from "styled-components";
 import { LuX } from "react-icons/lu";
+import { format } from "date-fns";
 
 interface props {
   openType: string;
@@ -22,8 +23,14 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
     modalOriginAccountState
   );
 
-  const [date, setDate] = useState<string>(originAccount.date);
-  const [category, setCategory] = useState<string>(originAccount.category);
+  const [date, setDate] = useState<string>(
+    originAccount.date !== ""
+      ? originAccount.date
+      : format(new Date(), "yyyy-MM-dd")
+  );
+  const [category, setCategory] = useState<string>(
+    originAccount.category !== "" ? originAccount.category : "식비"
+  );
   const [content, setContent] = useState<string>(originAccount.content);
   const [ammount, setAmmount] = useState<number>(originAccount.amount);
   const [addType, setAddType] = useState<string>("out");
@@ -114,15 +121,16 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
           <AddBox>날짜</AddBox>
           <AddInput
             type="date"
-            defaultValue={originAccount.date}
+            key={date}
+            defaultValue={date}
             onChange={handleDate}
           />
 
           <AddBox>카테고리</AddBox>
           {addType === "out" ? (
             <AddSelect
-              defaultValue={originAccount.category}
-              key={originAccount.category}
+              defaultValue={category}
+              key={category}
               onChange={handleCategory}
             >
               <option value="식비">식비</option>

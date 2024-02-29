@@ -8,9 +8,10 @@ import InOutMonthly from "../account/InOutMonthly";
 import { getAccountMonthly } from "../../apis/accountApi";
 import { diaryByMonthResponse } from "../../types/diaryType";
 import { getDiaryByMonth, getOtherDiaryByMonth } from "../../apis/diaryApi";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { whoseDiaryState } from "../../atoms/diaryAtom";
 import styled from "styled-components";
+import { selectedDateState } from "../../atoms/accountAtom";
 
 export interface props {
   isMini: string;
@@ -20,6 +21,7 @@ export interface props {
 const Calendar = ({ isMini, calendarType }: props) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const whoseDiary = useRecoilValue(whoseDiaryState);
+  const setSelectedDate = useSetRecoilState(selectedDateState);
   const [accountByMonth, setAccountByMonth] =
     useState<accountByMonthResponse | null>(null);
   const [diaryByMonth, setDiaryByMonth] = useState<
@@ -35,6 +37,11 @@ const Calendar = ({ isMini, calendarType }: props) => {
 
   const setToday = () => {
     setCurrentMonth(new Date());
+    setSelectedDate(format(new Date(), "yyyy-MM-dd"));
+  };
+
+  const setCurrentDay = (day: Date) => {
+    setCurrentMonth(day);
   };
 
   useEffect(() => {
@@ -99,15 +106,14 @@ const Calendar = ({ isMini, calendarType }: props) => {
         </div>
       ) : null}
       <CalendarDays isMini={isMini} />
-      {/* {accountByMonth ? ( */}
       <CalendarCells
         currentMonth={currentMonth}
+        setCurrentDay={() => setCurrentDay}
         accountByMonth={accountByMonth}
         diaryByMonth={diaryByMonth}
         calendarType={calendarType}
         isMini={isMini}
       />
-      {/* ) : } */}
       <TodayBtnContainer>
         <TodayBtn onClick={setToday}>오늘</TodayBtn>
       </TodayBtnContainer>
@@ -124,9 +130,10 @@ interface calendarStyleProps {
 const CalendarWrapper = styled.div<calendarStyleProps>`
   width: ${({ ismini }) => (ismini === "yes" ? "30vw" : "auto")};
   padding: 1rem;
-  border: 1px solid #e8e8e8;
-  border-radius: 5px;
+  // border: 1px solid #e8e8e8;
+  border-radius: 10px;
   box-sizing: border-box;
+  background-color: #ffffff;
 
   display: flex;
   flex-direction: column;

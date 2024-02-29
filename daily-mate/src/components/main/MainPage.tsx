@@ -12,10 +12,6 @@ const MainPage = () => {
     navigate("/signin");
   };
 
-  const handleSignUp = () => {
-    navigate("/signup");
-  };
-
   return (
     <Wrapper>
       <TitleBox>
@@ -26,12 +22,9 @@ const MainPage = () => {
       </div>
 
       {loginState ? (
-        <button onClick={handleLogOut}>로그아웃</button>
+        <div>반갑습니다!</div>
       ) : (
-        <div>
-          <button onClick={handleSignIn}>로그인</button>
-          <button onClick={handleSignUp}>회원가입</button>
-        </div>
+        <StartBtn onClick={handleSignIn}>시작하기</StartBtn>
       )}
     </Wrapper>
   );
@@ -49,4 +42,24 @@ const TitleBox = styled.div`
   align-items: center;
   font-family: "LeeSeoyun";
   font-size: 2rem;
+`;
+
+const StartBtn = styled.button`
+  background-color: #ff6161;
+  color: white;
+  border: 0;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 6px 18px;
+  font-family: "LeeSeoyun";
+  font-size: 1.5rem;
+  transition: transform 0.2s, background-color 0.3s;
+
+  &:hover {
+    background-color: #e45757;
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
 `;

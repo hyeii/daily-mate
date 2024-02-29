@@ -89,13 +89,15 @@ const MainContainer = styled.div<SidebarProps>`
 const MainBox = styled.div<SidebarProps>`
   width: auto;
 
-  @media screen and (min-width: 992px) {
-    margin: ${({ isopen }) =>
-      isopen === "open" ? "3rem 10rem" : "3rem 20rem"};
+  @media screen and (min-width: 1300px) {
+    margin: ${({ isopen }) => (isopen === "open" ? "3rem 7rem" : "3rem 15rem")};
+  }
+
+  @media screen and (min-width: 992px) and (max-width: 1299px) {
+    margin: ${({ isopen }) => (isopen === "open" ? "3rem 5rem" : "3rem 7rem")};
   }
 
   @media screen and (max-width: 991px) {
-    margin: 3rem 5rem;
     margin: ${({ isopen }) => (isopen === "open" ? "3rem 3rem" : "3rem 5rem")};
   }
 `;

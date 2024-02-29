@@ -93,7 +93,7 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
     navigate(`/diary/monthly/${id}`);
   };
   return (
-    <FriendInfoWrapper>
+    <UserInfoWrapper>
       <ImageProfileContainer>
         <ImageBox
           src={process.env.PUBLIC_URL + "/defaultImg.png"}
@@ -136,18 +136,22 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
           </EtcModalWrapper>
         ) : null}
       </div>
-    </FriendInfoWrapper>
+    </UserInfoWrapper>
   );
 };
 
 export default UserDataInfo;
 
-const FriendInfoWrapper = styled.div`
-  width: 80%;
+const UserInfoWrapper = styled.div`
+  width: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 10px 0;
+  // background-color: #fcdede;
+  border-radius: 15px;
+  margin: 1rem 2.5rem;
+  padding: 1rem;
+  box-shadow: 0 0 5px rgb(137, 137, 137);
 `;
 
 const ImageProfileContainer = styled.div`
@@ -181,18 +185,19 @@ const EtcIcon = styled(RxDotsHorizontal)`
 const EtcModalWrapper = styled.div`
   position: absolute;
   z-index: 999;
-  width: 130px;
+  width: 140px;
   top: 24px;
   right: 0px;
   background: #ffffff;
   box-shadow: 0px 0px 10px #939393;
   border-radius: 10px;
   padding: 4px 8px;
+  font-size: 1.2rem;
 `;
 
 const EtcModalBox = styled.div`
   cursor: pointer;
-  margin: 0.5rem 0;
+  margin: 0.7rem 0;
   &: hover {
     font-weight: bold;
   }
