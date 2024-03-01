@@ -47,34 +47,34 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             log.info("[SUCCESS_HANDLER] accessToken : {}", tokenDto.getAccessToken());
             refreshTokenRedisRepository.save(refreshToken); // 소셜로그인
 
-            // 리디렉션으로 Param에 넣어서 프론트에 값을 보내면 값이 노출되어서 보안에 취약하니까
-            // JSON형식으로 응답을 보내자
-
-            // LoginResDto를 보낼거니까 우선 만들기
-            LogInResDto logInResDto = LogInResDto.builder()
-                    .accessToken(tokenDto.getAccessToken())
-                    .refreshToken(tokenDto.getRefreshToken())
-                    .userId(oAuth2User.getUserId())
-                    .email(oAuth2User.getUsername())
-                    .nickName(oAuth2User.getName())
-                    .image(oAuth2User.getUser().getImage())
-                    .profile(oAuth2User.getUser().getProfile())
-                    .type(oAuth2User.getAuthorities().toString())
-                    .build();
-
-            // JSON 형식으로 변환
-            ObjectMapper objectMapper = new ObjectMapper();
-            String userInfo = objectMapper.writeValueAsString(logInResDto);
+//            // 리디렉션으로 Param에 넣어서 프론트에 값을 보내면 값이 노출되어서 보안에 취약하니까
+//            // JSON형식으로 응답을 보내자
+//
+//            // LoginResDto를 보낼거니까 우선 만들기
+//            LogInResDto logInResDto = LogInResDto.builder()
+//                    .accessToken(tokenDto.getAccessToken())
+//                    .refreshToken(tokenDto.getRefreshToken())
+//                    .userId(oAuth2User.getUserId())
+//                    .email(oAuth2User.getUsername())
+//                    .nickName(oAuth2User.getName())
+//                    .image(oAuth2User.getUser().getImage())
+//                    .profile(oAuth2User.getUser().getProfile())
+//                    .type(oAuth2User.getAuthorities().toString())
+//                    .build();
+//
+//            // JSON 형식으로 변환
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String userInfo = objectMapper.writeValueAsString(logInResDto);
 
 //            // 응답 생성
 //            response.setContentType("application/json");
 //            response.setCharacterEncoding("UTF-8");
 //            response.getWriter().write(userInfo);
+//            // 위처럼하면 프론트에서 값을 못받아여~  그래서 토큰만 보내주고 토큰정보로 유저정보 반환해주는거로 변경합니다...
 
             // 리다이렉트하장
             // URL 인코딩
-            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
-////            response.sendRedirect("/oauth/google/success?userInfo=" + encodeUserInfo);
+//            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
 //            response.sendRedirect("/oauth/google/success?" + encodeUserInfo);
             response.sendRedirect("http://localhost:3000/oauth/google/success?accessToken=" + tokenDto.getAccessToken());
 

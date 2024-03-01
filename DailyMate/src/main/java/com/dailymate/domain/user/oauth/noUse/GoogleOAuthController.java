@@ -18,6 +18,13 @@
 //import javax.servlet.http.HttpServletResponse;
 //import java.net.URI;
 //
+/**
+ * 구글 로그인의 정석대로
+ * code를 구글과 주고받아 유저정보를 추출하는 컨트롤러입니다.
+ *
+ * 하지만 이걸 사용하지 않고
+ * Spring Security OAuth2의 기본 동작인 loadUser와 successHandler를 사용하여 유저정보를 추출할 것이라 주석처리 하였습니다.
+ */
 //@Slf4j
 //@RestController
 //@RequestMapping("/oauth")

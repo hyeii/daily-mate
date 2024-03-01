@@ -153,6 +153,30 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public LogInResDto getGoogleLoginInfo(String token) {
+        Long userId = jwtTokenProvider.getUserId(token);
+        String email = jwtTokenProvider.getUserEmail(token);
+
+        Users googleUser = getLoginUser(userId);
+        String refreshToken = refreshTokenRedisRepository.findById(email)
+                .orElseThrow(() -> {
+                    log.error("[구글 로그인 정보] 리프레쉬 토큰이 존재하지 않습니다.");
+                    return new TokenException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
+                }).getRefreshToken();
+
+        return LogInResDto.builder()
+                .accessToken(token)
+                .refreshToken(refreshToken)
+                .userId(userId)
+                .email(email)
+                .nickName(googleUser.getNickname())
+                .image(googleUser.getImage())
+                .profile(googleUser.getProfile())
+                .type(googleUser.getType().getRole())
+                .build();
+    }
+
     /**
      * 토큰 재발급
      */
