@@ -2,6 +2,16 @@ import { useRecoilState } from "recoil";
 import { userInfoState } from "../../atoms/authAtom";
 import { ChangeEvent, useState } from "react";
 import { updateUserInfo } from "../../apis/authApis";
+import styled from "styled-components";
+import {
+  AddInput,
+  CompleteBtn,
+  InfoContainer,
+  InfoInputBox,
+  InfoTitle,
+  Title,
+  UpdateContainer,
+} from "../common/CommonStyledComponents";
 
 const UpdateInfoPage = () => {
   // 정보수정을 별도 페이지가 아니라 프로필 기본페이지에서 컴포넌트로만 처리할지 고민.
@@ -41,15 +51,25 @@ const UpdateInfoPage = () => {
 
   return (
     <div>
-      <h3>정보수정 : 닉네임, 한줄소개</h3>
-      <div>
-        <input defaultValue={newNickname} onChange={nicknameHandler} />
-        <input
-          defaultValue={newProfileMessage}
-          onChange={profileMessageHandler}
-        />
-        <button onClick={updateSubmitHandler}>저장</button>
-      </div>
+      <Title>내 정보 수정</Title>
+      <UpdateContainer>
+        <InfoContainer>
+          <InfoTitle>닉네임</InfoTitle>
+          <InfoInputBox>
+            <AddInput defaultValue={newNickname} onChange={nicknameHandler} />
+          </InfoInputBox>
+        </InfoContainer>
+        <InfoContainer>
+          <InfoTitle>한줄소개</InfoTitle>
+          <InfoInputBox>
+            <AddInput
+              defaultValue={newProfileMessage}
+              onChange={profileMessageHandler}
+            />
+          </InfoInputBox>
+        </InfoContainer>
+        <CompleteBtn onClick={updateSubmitHandler}>저장</CompleteBtn>
+      </UpdateContainer>
     </div>
   );
 };

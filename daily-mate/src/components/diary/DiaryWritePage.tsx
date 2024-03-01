@@ -88,7 +88,7 @@ const DiaryWritePage = () => {
       alert("일기 작성 완료!");
       setTimeout(() => {
         navigate(`/diary/monthly/${userInfo.userId}`);
-      }, 500);
+      }, 1000);
     }
   };
   return (
