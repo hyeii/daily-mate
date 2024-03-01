@@ -1,4 +1,4 @@
-package com.dailymate.global.common.oauth.dto;
+package com.dailymate.domain.user.oauth.noUse.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.dailymate.domain.user.service;
+package com.dailymate.global.common.oauth;
 
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.Users;
