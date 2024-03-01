@@ -99,7 +99,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
             return createUser(oAuthAttributes, providerId);
         }
 
-        if(user.getImage() != oAuth2UserDto.getImage()) {
+        if(!user.getImage().equals(oAuth2UserDto.getImage())) {
             log.info("[소셜 로그인] 이미지가 달라서 이미지 업데이트");
             user.updateImage(oAuth2UserDto.getImage());
         }
