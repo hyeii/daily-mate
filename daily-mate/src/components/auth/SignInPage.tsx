@@ -127,7 +127,7 @@ const SignInPage = () => {
         <SocialLoginBox>
           <div>
             <SocialLogin
-              // onClick={handleKakao}
+              onClick={handleKakao}
               src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
               alt="kakaoLogin"
             />
