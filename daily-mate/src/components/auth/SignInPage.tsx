@@ -63,7 +63,7 @@ const SignInPage = () => {
 
       setIsLogged(true);
       alert(`${signInResult.nickName}님 어서오세요!`);
-      navigate("/diary");
+      navigate("/account");
     } else {
       alert("로그인 정보를 확인해주세요");
     }
@@ -89,7 +89,7 @@ const SignInPage = () => {
       );
       console.log(res.data);
 
-      navigate("/");
+      navigate("/account");
     } catch (error) {
       console.error(error);
     }
