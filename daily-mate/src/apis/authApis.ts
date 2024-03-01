@@ -181,3 +181,14 @@ export const socialLogIn = async (token: string) => {
     return null;
   }
 };
+
+export const deleteUser = async () => {
+  try {
+    const res = await API.delete("/user");
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.error("회원 탈퇴 오류 : ", error);
+    return null;
+  }
+};
