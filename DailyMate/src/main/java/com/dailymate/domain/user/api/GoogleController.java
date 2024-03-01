@@ -19,19 +19,18 @@ public class GoogleController {
         return new RedirectView("/oauth2/authorization/google");
     }
 
-//    @GetMapping("/google/success")
-////    public ResponseEntity<LogInResDto> googleLogin(@RequestParam("userInfo") String userInfo) {
-////        // userInfo는 URL의 쿼리 매개변수로부터 전달된 인코딩된 LogInResDto 정보입니다.
-////        // 이를 다시 LogInResDto 객체로 변환합니다.
-////        LogInResDto logInResDto = convertUserInfoToLogInResDto(userInfo);
-////
-////        // 변환된 LogInResDto 객체를 ResponseEntity에 담아서 반환
-////        return ResponseEntity.ok(logInResDto);
-////    }
+    @GetMapping("/google/success")
+    public ResponseEntity<?> googleLogin() {
+        return ResponseEntity.ok().build();
+    }
+
+//    public ResponseEntity<LogInResDto> googleLogin(@RequestParam("userInfo") String userInfo) {
+//        // userInfo는 URL의 쿼리 매개변수로부터 전달된 인코딩된 LogInResDto 정보입니다.
+//        // 이를 다시 LogInResDto 객체로 변환합니다.
+//        LogInResDto logInResDto = convertUserInfoToLogInResDto(userInfo);
 //
-//
-//    public ResponseEntity<?> googleLogin() {
-//        return ResponseEntity.ok().build();
+//        // 변환된 LogInResDto 객체를 ResponseEntity에 담아서 반환
+//        return ResponseEntity.ok(logInResDto);
 //    }
 //
 //    // userInfo를 LogInResDto 객체로 변환하는 메서드
