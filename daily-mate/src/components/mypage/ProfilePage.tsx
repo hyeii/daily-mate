@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { userInfoState } from "../../atoms/authAtom";
 import ProfileImage from "./ProfileImage";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { deleteUser } from "../../apis/authApis";
+import useLogOut from "../../hooks/useLogOut";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const userInfo = useRecoilValue(userInfoState);
+  const { LogOut } = useLogOut();
 
   const updateInfoHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     navigate("/mypage/update");
@@ -18,6 +21,20 @@ const ProfilePage = () => {
 
   const friendsHandler = () => {
     navigate("/friends/list");
+  };
+
+  const deleteUserHandler = async () => {
+    if (
+      window.confirm("데일리메이트에서 탈퇴하시겠습니까?") &&
+      window.confirm("회원 탈퇴를 진행합니다")
+    ) {
+      const deleteResponse = await deleteUser();
+      if (deleteResponse) {
+        LogOut();
+        alert("탈퇴가 완료되었습니다.");
+        navigate("/");
+      }
+    }
   };
 
   return (
@@ -45,7 +62,7 @@ const ProfilePage = () => {
           </ProfileBottomContainer>
           <div onClick={updateInfoHandler}>회원 정보 수정</div>
           <div onClick={updatePasswordHandler}>비밀번호 변경</div>
-          <div>회원 탈퇴</div>
+          <div onClick={deleteUserHandler}>회원 탈퇴</div>
         </InfoContainer>
       </ProfileContainer>
     </div>

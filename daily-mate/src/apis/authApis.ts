@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   getInfoResponse,
   myInfoResponse,
@@ -160,6 +160,35 @@ export const getUserByUserId = async (userId: number) => {
     return res.data;
   } catch (error) {
     console.error("userId로 정보 조회 오류 : ", error);
+    return null;
+  }
+};
+
+export const socialLogIn = async (token: string) => {
+  try {
+    const socialAPI = axios.create({
+      baseURL: process.env.REACT_APP_URL,
+      headers: {
+        Authorization: token,
+      },
+    });
+    const res = await socialAPI.get<userResponse>("/oauth/google/login-info");
+
+    console.log("구글로그인 데이터 : ", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("구글 로그인 에러 : ", error);
+    return null;
+  }
+};
+
+export const deleteUser = async () => {
+  try {
+    const res = await API.delete("/user");
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.error("회원 탈퇴 오류 : ", error);
     return null;
   }
 };

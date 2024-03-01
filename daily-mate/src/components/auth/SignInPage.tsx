@@ -1,12 +1,6 @@
 import { ChangeEvent, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import {
-  isLoginState,
-  userImageURLState,
-  userInfoState,
-} from "../../atoms/authAtom";
 import { useNavigate } from "react-router-dom";
-import { userInfo, userResponse } from "../../types/authType";
+import { userResponse } from "../../types/authType";
 import { useSignIn } from "../../apis/authApis";
 import styled from "styled-components";
 import {
@@ -15,15 +9,13 @@ import {
   SignWrapper,
 } from "../common/CommonStyledComponents";
 import axios from "axios";
+import useLogin from "../../hooks/useLogIn";
 
 const SignInPage = () => {
   // TODO : api 요청 분리
 
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
-  const setIsLogged = useSetRecoilState(isLoginState);
-  const setUserInfo = useSetRecoilState(userInfoState);
-  const setUserImage = useSetRecoilState(userImageURLState);
 
   const navigate = useNavigate();
 
@@ -34,6 +26,7 @@ const SignInPage = () => {
     setInputPassword(event.target.value);
   };
   const signIn = useSignIn();
+  const { LogIn } = useLogin();
 
   const handleSubmit = async () => {
     if (inputEmail === "") {
@@ -48,20 +41,7 @@ const SignInPage = () => {
 
     const signInResult = await signIn(inputEmail, inputPassword);
     if (signInResult !== null) {
-      console.log("로그인 유저 정보 : ", signInResult);
-      const logInUserInfo: userInfo = {
-        userId: signInResult.userId,
-        nickname: signInResult.nickName,
-        email: signInResult.email,
-        profile: signInResult.profile,
-        type: signInResult.type,
-      };
-
-      setUserInfo(logInUserInfo);
-      setUserImage(signInResult.image);
-      // setRefreshToken(signInResult.refreshToken);
-
-      setIsLogged(true);
+      LogIn(signInResult);
       alert(`${signInResult.nickName}님 어서오세요!`);
       navigate("/account");
     } else {
@@ -127,7 +107,7 @@ const SignInPage = () => {
         <SocialLoginBox>
           <div>
             <SocialLogin
-              // onClick={handleKakao}
+              onClick={handleKakao}
               src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
               alt="kakaoLogin"
             />
