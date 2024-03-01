@@ -99,3 +99,61 @@ export const SignBtn = styled.div`
     transform: scale(1.05);
   }
 `;
+
+export const Title = styled.h3`
+  margin-right: 2rem;
+  font-size: 1.2rem;
+`;
+
+export const UpdateContainer = styled.div`
+  margin: 2rem 0;
+`;
+
+export const InfoContainer = styled.div`
+  display: flex;
+  margin: 1rem 0;
+  align-items: center;
+`;
+
+export const InfoTitle = styled.div`
+  flex: 1;
+  font-size: 1.3rem;
+`;
+
+export const InfoInputBox = styled.div`
+  flex: 4;
+`;
+
+export const AddInput = styled.input`
+  flex: 8;
+  height: 20px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  font-family: "LeeSeoyun";
+  font-size: 1.4rem;
+
+  box-shadow: 0 0 5px rgb(137, 137, 137);
+`;
+
+export const CompleteBtn = styled.button`
+  background-color: #ff6161;
+  font-size: 1.3rem;
+  color: white;
+  border: 0;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 6px 18px;
+  font-family: "LeeSeoyun";
+  transition: transform 0.2s, background-color 0.3s;
+
+  &:hover {
+    background-color: #e45757;
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+`;

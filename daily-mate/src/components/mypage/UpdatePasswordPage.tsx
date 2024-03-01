@@ -3,6 +3,16 @@ import { updatePasswordInput } from "../../types/authType";
 import axios, { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import { updateUserPassword } from "../../apis/authApis";
+import {
+  AddInput,
+  CompleteBtn,
+  InfoContainer,
+  InfoInputBox,
+  InfoTitle,
+  Title,
+  UpdateContainer,
+} from "../common/CommonStyledComponents";
+import styled from "styled-components";
 
 const UpdatePasswordPage = () => {
   const [updatePassword, setUpdatePassword] = useState<updatePasswordInput>({
@@ -59,23 +69,49 @@ const UpdatePasswordPage = () => {
 
   return (
     <div>
-      <h2>비밀번호 변경</h2>
-      <div>
-        <div>기존 비밀번호</div>
-        <input type="password" onChange={existPasswordHandler} />
-        <div>새 비밀번호</div>
-        <input type="password" onChange={newPasswordHandler} />
-        <div>새 비밀번호 확인</div>
-        <input type="password" onChange={newPasswordCheckHandler} />
-        {isEqual ? (
-          <div>비밀번호가 일치합니다</div>
-        ) : !beforeEnter ? (
-          <div>비밀번호가 일치하지 않습니다</div>
-        ) : null}
-      </div>
-      <button onClick={updatePasswordHandler}>확인</button>
+      <Title>비밀번호 변경</Title>
+      <UpdateContainer>
+        <InfoContainer>
+          <InfoTitle>기존 비밀번호</InfoTitle>
+          <InfoInputBox>
+            <AddInput type="password" onChange={existPasswordHandler} />
+          </InfoInputBox>
+        </InfoContainer>
+        <InfoContainer>
+          <InfoTitle>새 비밀번호</InfoTitle>
+          <InfoInputBox>
+            <AddInput type="password" onChange={newPasswordHandler} />
+          </InfoInputBox>
+        </InfoContainer>
+        <InfoContainer>
+          <InfoTitle>새 비밀번호 확인</InfoTitle>
+          <InfoInputBox>
+            <AddInput type="password" onChange={newPasswordCheckHandler} />
+            {isEqual ? (
+              <IsEqualText status="equal">비밀번호가 일치합니다</IsEqualText>
+            ) : !beforeEnter ? (
+              <IsEqualText status="diff">
+                비밀번호가 일치하지 않습니다
+              </IsEqualText>
+            ) : null}
+          </InfoInputBox>
+        </InfoContainer>
+
+        <CompleteBtn onClick={updatePasswordHandler}>확인</CompleteBtn>
+      </UpdateContainer>
     </div>
   );
 };
 
 export default UpdatePasswordPage;
+
+interface isEqual {
+  status: string;
+}
+
+const IsEqualText = styled.span<isEqual>`
+  margin: 0 2rem;
+  font-size: 1.1rem;
+  text-align: center;
+  color: ${({ status }) => (status === "equal" ? "green" : "red")};
+`;
