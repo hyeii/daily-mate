@@ -75,7 +75,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             // URL 인코딩
             String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
 ////            response.sendRedirect("/oauth/google/success?userInfo=" + encodeUserInfo);
-            response.sendRedirect("/oauth/google/success?" + encodeUserInfo);
+//            response.sendRedirect("/oauth/google/success?" + encodeUserInfo);
+            response.sendRedirect("http://localhost:3000/oauth/google/success?accessToken=" + tokenDto.getAccessToken());
 
             log.info("[SUCCESS_HANDLER] 응답 생성 완료.");
         } catch (AuthenticationException e) {
