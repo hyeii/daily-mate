@@ -1,44 +1,26 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { sideBarOpenState } from "../../atoms/sideBarAtom";
-import {
-  isLoginState,
-  userImageURLState,
-  userInfoState,
-} from "../../atoms/authAtom";
+import { userInfoState } from "../../atoms/authAtom";
 import { logOut } from "../../apis/authApis";
 import { IoSearch, IoNotificationsOutline } from "react-icons/io5";
-import { RxDoubleArrowLeft } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 import { format } from "date-fns";
+import useLogOut from "../../hooks/useLogOut";
 
 const SideBar = () => {
   const isOpen = useRecoilValue(sideBarOpenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-  const setIsLogin = useSetRecoilState(isLoginState);
-  const setSidebarOpen = useSetRecoilState(sideBarOpenState);
-  const setImageURL = useSetRecoilState(userImageURLState);
   const setSelectedDate = useSetRecoilState(selectedDateState);
   const setAccountTab = useSetRecoilState(accountTabState);
   const navigate = useNavigate();
+  const { LogOut } = useLogOut();
 
   const handleLogOut = async () => {
     const logOutResult = await logOut();
     if (logOutResult !== null) {
-      setUserInfo({
-        userId: -1,
-        nickname: "",
-        email: "",
-        profile: "",
-        type: "",
-      });
-      setIsLogin(false);
-      setSidebarOpen(false);
-      setImageURL("");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("accessToken");
-      // 인터셉터 초기화
+      LogOut();
       alert("로그아웃 완료");
       navigate("/");
     }
@@ -109,20 +91,6 @@ const SidebarContainer = styled.div`
   margin: 2rem;
   display: flex;
   flex-direction: column;
-`;
-
-const SidebarBtnBox = styled.div`
-  display: flex;
-  justify-content: end;
-`;
-const SidebarBtn = styled(RxDoubleArrowLeft)`
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  // color: #aaaaaa;
-  cursor: pointer;
-  &: hover {
-    transform: scale(1.1);
-  }
 `;
 
 const ImageBox = styled.img`

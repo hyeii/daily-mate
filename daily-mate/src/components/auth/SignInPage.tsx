@@ -9,7 +9,7 @@ import {
   SignWrapper,
 } from "../common/CommonStyledComponents";
 import axios from "axios";
-import useLogin from "../../apis/login";
+import useLogin from "../../hooks/useLogIn";
 
 const SignInPage = () => {
   // TODO : api 요청 분리

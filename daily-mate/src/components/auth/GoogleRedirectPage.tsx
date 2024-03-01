@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { socialLogIn } from "../../apis/authApis";
-import useLogin from "../../apis/login";
+import useLogin from "../../hooks/useLogIn";
 
 const GoogleRedirectPage = () => {
   const token = new URL(window.location.href).searchParams.get("accessToken");
