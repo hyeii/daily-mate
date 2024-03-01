@@ -70,11 +70,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 //            response.setContentType("application/json");
 //            response.setCharacterEncoding("UTF-8");
 //            response.getWriter().write(userInfo);
+//            // 위처럼하면 프론트에서 값을 못받아여~  그래서 토큰만 보내주고 토큰정보로 유저정보 반환해주는거로 변경합니다...
 
             // 리다이렉트하장
             // URL 인코딩
 //            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
-////            response.sendRedirect("/oauth/google/success?userInfo=" + encodeUserInfo);
 //            response.sendRedirect("/oauth/google/success?" + encodeUserInfo);
             response.sendRedirect("http://localhost:3000/oauth/google/success?accessToken=" + tokenDto.getAccessToken());
 
