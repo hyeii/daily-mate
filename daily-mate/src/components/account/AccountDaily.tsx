@@ -59,7 +59,7 @@ const AccountDaily = ({ currentDay }: props) => {
                   textShadow: "0 0 4px rgba(165,133,255, 1)",
                 }}
               >
-                {dailyOutput[0]}원
+                {dailyOutput[0] ? dailyOutput[0].toLocaleString() : 0}원
               </div>
             </CategoryItem>
             <CategoryItem>
@@ -71,7 +71,7 @@ const AccountDaily = ({ currentDay }: props) => {
                   textShadow: "0 0 4px rgba(214,180,10, 0.5)",
                 }}
               >
-                {dailyOutput[1]}원
+                {dailyOutput[1] ? dailyOutput[1].toLocaleString() : 0}원
               </div>
             </CategoryItem>
             <CategoryItem>
@@ -83,7 +83,7 @@ const AccountDaily = ({ currentDay }: props) => {
                   textShadow: "0 0 4px rgba(222,135,72, 1)",
                 }}
               >
-                {dailyOutput[2]}원
+                {dailyOutput[2] ? dailyOutput[2].toLocaleString() : 0}원
               </div>
             </CategoryItem>
             <CategoryItem>
@@ -95,7 +95,7 @@ const AccountDaily = ({ currentDay }: props) => {
                   textShadow: "0 0 4px rgb(139,154,110)",
                 }}
               >
-                {dailyOutput[3]}원
+                {dailyOutput[3] ? dailyOutput[3].toLocaleString() : 0}원
               </div>
             </CategoryItem>
             <CategoryItem>
@@ -107,7 +107,7 @@ const AccountDaily = ({ currentDay }: props) => {
                   textShadow: "0 0 4px rgba(219,29,166, 0.5)",
                 }}
               >
-                {dailyOutput[4]}원
+                {dailyOutput[4] ? dailyOutput[4].toLocaleString() : 0}원
               </div>
             </CategoryItem>
           </CategoryContainer>

@@ -15,12 +15,12 @@ const AccountCell = ({ date, input, output }: props) => {
       {input === 0 ? (
         <div> </div>
       ) : (
-        <AmountNumber texttype="in">+{input}</AmountNumber>
+        <AmountNumber texttype="in">+{input.toLocaleString()}</AmountNumber>
       )}
       {output === 0 ? (
         <div> </div>
       ) : (
-        <AmountNumber texttype="out">{output}</AmountNumber>
+        <AmountNumber texttype="out">{output.toLocaleString()}</AmountNumber>
       )}
     </AccountCellWrapper>
   );

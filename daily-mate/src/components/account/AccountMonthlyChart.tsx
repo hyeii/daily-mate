@@ -38,11 +38,15 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
       <DataContainer>
         <InOutDataBox>
           <AmountNumber textType="text">수입</AmountNumber>
-          <AmountNumber textType="in">{inOutValues[0]}원</AmountNumber>
+          <AmountNumber textType="in">
+            {inOutValues[0].toLocaleString()}원
+          </AmountNumber>
         </InOutDataBox>
         <InOutDataBox>
           <AmountNumber textType="text">지출</AmountNumber>
-          <AmountNumber textType="out">{inOutValues[1]}원</AmountNumber>
+          <AmountNumber textType="out">
+            {inOutValues[1].toLocaleString()}원
+          </AmountNumber>
         </InOutDataBox>
       </DataContainer>
       <DataContainer>
@@ -57,7 +61,7 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
                 textShadow: "0 0 4px rgba(165,133,255, 1)",
               }}
             >
-              {outputs.식비 ?? 0}원
+              {outputs.식비 ? outputs.식비.toLocaleString() : 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
@@ -69,7 +73,7 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
                 textShadow: "0 0 4px rgba(214,180,10, 0.5)",
               }}
             >
-              {outputs.카페 ?? 0}원
+              {outputs.카페 ? outputs.카페.toLocaleString() : 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
@@ -81,7 +85,7 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
                 textShadow: "0 0 4px rgba(222,135,72, 1)",
               }}
             >
-              {outputs.생활 ?? 0}원
+              {outputs.생활 ? outputs.생활.toLocaleString() : 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
@@ -93,7 +97,7 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
                 textShadow: "0 0 4px rgb(139,154,110)",
               }}
             >
-              {outputs.교통 ?? 0}원
+              {outputs.교통 ? outputs.교통.toLocaleString() : 0}원
             </div>
           </CategoryItem>
           <CategoryItem>
@@ -105,7 +109,7 @@ const AccountMonthlyChart = ({ outputs, inOutValues }: props) => {
                 textShadow: "0 0 4px rgba(219,29,166, 0.5)",
               }}
             >
-              {outputs.기타 ?? 0}원
+              {outputs.기타 ? outputs.기타.toLocaleString() : 0}원
             </div>
           </CategoryItem>
         </CategoryContainer>

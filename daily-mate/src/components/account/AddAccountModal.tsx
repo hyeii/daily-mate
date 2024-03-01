@@ -46,7 +46,9 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
     setContent(event.target.value);
   };
   const handleAmmount = (event: ChangeEvent<HTMLInputElement>) => {
-    setAmmount(parseInt(event.target.value));
+    let numberOnly = event.target.value.replace(/[^0-9]/g, "");
+    event.target.value = numberOnly.replace(/\d(?=(?:\d{3})+$)/g, "$&,");
+    setAmmount(parseInt(numberOnly));
   };
 
   const handleAddTypeIn = () => {
@@ -153,7 +155,7 @@ const AddAccountModal = ({ openType, originAccount }: props) => {
 
           <AddBox>금액</AddBox>
           <AddInput
-            type="number"
+            type="text"
             onChange={handleAmmount}
             defaultValue={Math.abs(originAccount.amount)}
           />

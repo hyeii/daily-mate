@@ -64,7 +64,7 @@ const AccountHistory = ({ accountList }: props) => {
                   <TableCell>{item.content}</TableCell>
                   <TableCell>
                     <AmountCell>
-                      <div>{item.amount}</div>
+                      <div>{item.amount.toLocaleString()}</div>
                       <IconStyles
                         style={{ opacity: openIcon === item.accountId ? 1 : 0 }}
                       >

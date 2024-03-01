@@ -15,11 +15,15 @@ const InOutMonthly = ({ totalInput, totalOutput }: props) => {
     <InOutWrapper>
       <InOutContainer>
         <AmountNumber textType="text">수입</AmountNumber>
-        <AmountNumber textType="in">{totalInput}원</AmountNumber>
+        <AmountNumber textType="in">
+          {totalInput.toLocaleString()}원
+        </AmountNumber>
       </InOutContainer>
       <InOutContainer>
         <AmountNumber textType="text">지출</AmountNumber>
-        <AmountNumber textType="out">{totalOutput}원</AmountNumber>
+        <AmountNumber textType="out">
+          {totalOutput.toLocaleString()}원
+        </AmountNumber>
       </InOutContainer>
     </InOutWrapper>
   );
