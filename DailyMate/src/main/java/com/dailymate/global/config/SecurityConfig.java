@@ -1,6 +1,6 @@
 package com.dailymate.global.config;
 
-import com.dailymate.domain.user.service.OAuth2UserServiceImpl;
+import com.dailymate.global.common.oauth.OAuth2UserServiceImpl;
 import com.dailymate.global.common.jwt.JwtAuthenticationFilter;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
 import com.dailymate.global.common.jwt.exception.JwtAccessDeniedHandler;
