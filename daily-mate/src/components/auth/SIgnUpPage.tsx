@@ -171,28 +171,6 @@ const SignUpPage = () => {
     }
   };
 
-  const handleKakao = () => {
-    const kakaoURL: string = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
-    window.location.href = kakaoURL;
-  };
-
-  const handleGoogle = async () => {
-    const googleURL = "http://localhost:8080/oauth2/authorization/google";
-    // const googleURL: string = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
-    // window.location.href = googleURL;
-
-    // try {
-    //   const res = await axios.get<userResponse>(
-    //     "http://localhost:8080/oauth/google"
-    //   );
-    //   console.log(res.data);
-
-    //   navigate("/");
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  };
-
   return (
     <SignWrapper>
       <h3>회원가입</h3>

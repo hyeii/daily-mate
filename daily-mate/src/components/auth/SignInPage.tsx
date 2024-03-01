@@ -6,7 +6,7 @@ import {
   userInfoState,
 } from "../../atoms/authAtom";
 import { useNavigate } from "react-router-dom";
-import { userInfo } from "../../types/authType";
+import { userInfo, userResponse } from "../../types/authType";
 import { useSignIn } from "../../apis/authApis";
 import styled from "styled-components";
 import {
@@ -14,6 +14,7 @@ import {
   SignBtn,
   SignWrapper,
 } from "../common/CommonStyledComponents";
+import axios from "axios";
 
 const SignInPage = () => {
   // TODO : api 요청 분리
@@ -71,6 +72,29 @@ const SignInPage = () => {
   const handleSignUp = () => {
     navigate("/signup");
   };
+
+  const handleKakao = () => {
+    const kakaoURL: string = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
+    window.location.href = kakaoURL;
+  };
+
+  const handleGoogle = async () => {
+    const googleURL = "http://localhost:8080/oauth/google";
+    // const googleURL: string = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
+    // window.location.href = googleURL;
+
+    try {
+      const res = await axios.get<userResponse>(
+        "http://localhost:8080/oauth/google"
+      );
+      console.log(res.data);
+
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <SignWrapper>
       <h3>로그인</h3>
@@ -103,12 +127,14 @@ const SignInPage = () => {
         <SocialLoginBox>
           <div>
             <SocialLogin
+              onClick={handleKakao}
               src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
               alt="kakaoLogin"
             />
           </div>
           <div>
             <SocialLogin
+              onClick={handleGoogle}
               src={process.env.PUBLIC_URL + "/web_light_sq_SI@4x.png"}
               alt="googleLogin"
             />
@@ -132,6 +158,7 @@ const SocialLogin = styled.img`
   height: 35px;
   width: 148px;
   object-fit: fill;
+  cursor: pointer;
 `;
 
 const InputDiv = styled.div`
