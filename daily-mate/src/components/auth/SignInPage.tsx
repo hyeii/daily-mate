@@ -127,17 +127,19 @@ const SignInPage = () => {
         <SocialLoginBox>
           <div>
             <SocialLogin
-              onClick={handleKakao}
+              // onClick={handleKakao}
               src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
               alt="kakaoLogin"
             />
           </div>
           <div>
-            <SocialLogin
-              onClick={handleGoogle}
-              src={process.env.PUBLIC_URL + "/web_light_sq_SI@4x.png"}
-              alt="googleLogin"
-            />
+            <a href={process.env.REACT_APP_URL + "/oauth/google"}>
+              <SocialLogin
+                // onClick={handleGoogle}
+                src={process.env.PUBLIC_URL + "/web_light_sq_SI@4x.png"}
+                alt="googleLogin"
+              />
+            </a>
           </div>
         </SocialLoginBox>
       </Container>
