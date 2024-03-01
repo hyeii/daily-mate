@@ -66,16 +66,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             ObjectMapper objectMapper = new ObjectMapper();
             String userInfo = objectMapper.writeValueAsString(logInResDto);
 
-            // 응답 생성
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(userInfo);
+//            // 응답 생성
+//            response.setContentType("application/json");
+//            response.setCharacterEncoding("UTF-8");
+//            response.getWriter().write(userInfo);
 
-//            // 리다이렉트하장
-//            // URL 인코딩
-//            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
+            // 리다이렉트하장
+            // URL 인코딩
+            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
 ////            response.sendRedirect("/oauth/google/success?userInfo=" + encodeUserInfo);
-//            response.sendRedirect("/oauth/google/success?" + encodeUserInfo);
+            response.sendRedirect("/oauth/google/success?" + encodeUserInfo);
 
             log.info("[SUCCESS_HANDLER] 응답 생성 완료.");
         } catch (AuthenticationException e) {

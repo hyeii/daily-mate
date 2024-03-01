@@ -19,7 +19,7 @@ public class GoogleController {
         return new RedirectView("/oauth2/authorization/google");
     }
 
-//    @GetMapping("/google/success")
+    @GetMapping("/google/success")
 ////    public ResponseEntity<LogInResDto> googleLogin(@RequestParam("userInfo") String userInfo) {
 ////        // userInfo는 URL의 쿼리 매개변수로부터 전달된 인코딩된 LogInResDto 정보입니다.
 ////        // 이를 다시 LogInResDto 객체로 변환합니다.
@@ -30,9 +30,9 @@ public class GoogleController {
 ////    }
 //
 //
-//    public ResponseEntity<?> googleLogin() {
-//        return ResponseEntity.ok().build();
-//    }
+    public ResponseEntity<?> googleLogin() {
+        return ResponseEntity.ok().build();
+    }
 //
 //    // userInfo를 LogInResDto 객체로 변환하는 메서드
 //    private LogInResDto convertUserInfoToLogInResDto(String userInfo) {
