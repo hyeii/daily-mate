@@ -66,7 +66,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             ObjectMapper objectMapper = new ObjectMapper();
             String userInfo = objectMapper.writeValueAsString(logInResDto);
 
-            // 응답 생성
+//            // 응답 생성
 //            response.setContentType("application/json");
 //            response.setCharacterEncoding("UTF-8");
 //            response.getWriter().write(userInfo);

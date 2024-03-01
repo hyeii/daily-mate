@@ -84,6 +84,12 @@ public class SecurityConfig {
 
                 // OAuth2 설정 추가
                 .oauth2Login()
+//                .authorizationEndpoint()
+//                .baseUri("/oauth2/authorization")
+//                .and()
+//                .redirectionEndpoint()
+//                .baseUri("/oauth/google/callback")
+//                .and()
                 .userInfoEndpoint().userService(oAuth2UserService).and()
                 .successHandler(oAuth2SuccessHandler)
                 .failureHandler(oAuth2FailureHandler)
@@ -110,6 +116,7 @@ public class SecurityConfig {
 
             // oauth
             "/oauth/**",
+            "/oauth2/**",
 
             // h2-console
             "/h2-console/**",
@@ -117,7 +124,6 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_ONLY_ADMIN = {
             "/user/admin/**",
-
     };
 
     /**
