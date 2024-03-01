@@ -2,6 +2,7 @@ package com.dailymate.domain.alert.api;
 
 import com.dailymate.domain.alert.dto.AlertReqDto;
 import com.dailymate.domain.alert.dto.AlertResDto;
+import com.dailymate.domain.alert.dto.UrlDto;
 import com.dailymate.domain.alert.service.AlertService;
 import com.dailymate.global.dto.MessageDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,7 +52,7 @@ public class AlertController {
             summary = "해당 url로 이동"
     )
     @GetMapping("/{alertId}")
-    public ResponseEntity<String> findAlertUrl(@RequestHeader(ACCESS_TOKEN) String token, @PathVariable Long alertId) {
+    public ResponseEntity<UrlDto> findAlertUrl(@RequestHeader(ACCESS_TOKEN) String token, @PathVariable Long alertId) {
         return ResponseEntity.ok(alertService.findAlertUrl(token, alertId));
     }
 }

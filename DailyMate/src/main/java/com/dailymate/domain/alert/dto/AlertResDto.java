@@ -10,6 +10,7 @@ public class AlertResDto {
     private Long toId;
     private Long fromId;
     private String content;
+    private Long diaryId;
     private String type;
     private String url;
 
