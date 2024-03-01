@@ -47,24 +47,24 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             log.info("[SUCCESS_HANDLER] accessToken : {}", tokenDto.getAccessToken());
             refreshTokenRedisRepository.save(refreshToken); // 소셜로그인
 
-            // 리디렉션으로 Param에 넣어서 프론트에 값을 보내면 값이 노출되어서 보안에 취약하니까
-            // JSON형식으로 응답을 보내자
-
-            // LoginResDto를 보낼거니까 우선 만들기
-            LogInResDto logInResDto = LogInResDto.builder()
-                    .accessToken(tokenDto.getAccessToken())
-                    .refreshToken(tokenDto.getRefreshToken())
-                    .userId(oAuth2User.getUserId())
-                    .email(oAuth2User.getUsername())
-                    .nickName(oAuth2User.getName())
-                    .image(oAuth2User.getUser().getImage())
-                    .profile(oAuth2User.getUser().getProfile())
-                    .type(oAuth2User.getAuthorities().toString())
-                    .build();
-
-            // JSON 형식으로 변환
-            ObjectMapper objectMapper = new ObjectMapper();
-            String userInfo = objectMapper.writeValueAsString(logInResDto);
+//            // 리디렉션으로 Param에 넣어서 프론트에 값을 보내면 값이 노출되어서 보안에 취약하니까
+//            // JSON형식으로 응답을 보내자
+//
+//            // LoginResDto를 보낼거니까 우선 만들기
+//            LogInResDto logInResDto = LogInResDto.builder()
+//                    .accessToken(tokenDto.getAccessToken())
+//                    .refreshToken(tokenDto.getRefreshToken())
+//                    .userId(oAuth2User.getUserId())
+//                    .email(oAuth2User.getUsername())
+//                    .nickName(oAuth2User.getName())
+//                    .image(oAuth2User.getUser().getImage())
+//                    .profile(oAuth2User.getUser().getProfile())
+//                    .type(oAuth2User.getAuthorities().toString())
+//                    .build();
+//
+//            // JSON 형식으로 변환
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String userInfo = objectMapper.writeValueAsString(logInResDto);
 
 //            // 응답 생성
 //            response.setContentType("application/json");
@@ -73,7 +73,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
             // 리다이렉트하장
             // URL 인코딩
-            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
+//            String encodeUserInfo = URLEncoder.encode(userInfo, "UTF-8");
 ////            response.sendRedirect("/oauth/google/success?userInfo=" + encodeUserInfo);
 //            response.sendRedirect("/oauth/google/success?" + encodeUserInfo);
             response.sendRedirect("http://localhost:3000/oauth/google/success?accessToken=" + tokenDto.getAccessToken());
