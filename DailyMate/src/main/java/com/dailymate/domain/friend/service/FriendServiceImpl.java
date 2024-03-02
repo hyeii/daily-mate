@@ -63,11 +63,12 @@ public class FriendServiceImpl implements FriendService {
 
         friendRepository.save(requestFriend);
         log.info("[친구 신청] 친구 신청 완료.");
+        log.info("[친구 신청] ===================================================");
 
         log.info("[친구 신청] 친구 신청 알림 전송합니다.");
-        AlertReqDto reqDto = new AlertReqDto(toId, loginUserId, null, "친구요청");
-        alertService.addAlert(reqDto);
-        log.info("[친구 신청] 알림 전송 완료. 메서드 종료함당 ");
+        AlertReqDto alert = new AlertReqDto(toId, loginUserId, null, "친구요청");
+        alertService.addAlert(alert);
+        log.info("[친구 신청] 알림 전송 완료. 메서드 종료함당!!!");
     }
 
     @Override
@@ -114,6 +115,12 @@ public class FriendServiceImpl implements FriendService {
         friendRepository.save(friend);
 
         log.info("[친구 신청 승낙] 친구 승낙 완료 !");
+        log.info("[친구 신청 승낙] ====================================================");
+
+        log.info("[친구 신청 승낙] 친구 승낙 알림 전송하겠읍니다 ");
+        AlertReqDto alert = new AlertReqDto(friendId, loginUserId, null, "친구승낙");
+        alertService.addAlert(alert);
+        log.info("[친구 신청 승낙] 알림 전송 완료. 메서드 종료 !!!! ");
     }
 
     @Transactional

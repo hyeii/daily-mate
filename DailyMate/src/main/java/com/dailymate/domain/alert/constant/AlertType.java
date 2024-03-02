@@ -27,7 +27,7 @@ public enum AlertType {
         if(value.contains("댓글"))
             return 댓글;
 
-            return 댓글좋아요;
+        return 댓글좋아요;
     }
 
 //    public static String findUrl(AlertType alertType) {
