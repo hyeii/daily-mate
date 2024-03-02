@@ -18,6 +18,7 @@ import com.dailymate.global.common.redis.RedisUtil;
 import com.dailymate.global.exception.exception.NotFoundException;
 import com.dailymate.global.exception.exception.TokenException;
 import com.dailymate.global.exception.exception.TokenExceptionMessage;
+import com.dailymate.global.image.exception.ImageExceptionMessage;
 import com.dailymate.global.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +49,6 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final RedisUtil redisUtil;
     private final ImageService imageService;
-    private final FriendRepository friendRepository;
 
     /**
      * 회원가입
@@ -434,6 +435,42 @@ public class UserServiceImpl implements UserService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 프로필 이미지 등록
+     */
+    @Override
+    public void addUserImage(String token, MultipartFile image) {
+        Users loginUser = getLoginUser(getLoginUserId(token));
+        log.info("[프로필 이미지 등록] {}님의 이미지 등록 요청 : {}", loginUser.getNickname(), image);
+
+        if(image == null || image.isEmpty()) {
+            log.error("[프로필 이미지 등록] 이미지 파일이 없습니다.");
+            throw new UserBadRequestException(ImageExceptionMessage.IMAGE_BAD_REQUEST.getMsg());
+        }
+
+        String imageUrl = imageService.uploadImage(image);
+        loginUser.updateImage(imageUrl); // 기존 프로필과 동일한지는 따로 체크 안함
+        userRepository.save(loginUser);
+
+        log.info("[프로필 이미지 등록] 이미지 등록 완료.");
+    }
+
+    @Override
+    public void deleteUserImage(String token) {
+        Users loginUser = getLoginUser(getLoginUserId(token));
+        log.info("[프로필 이미지 삭제] {}님의 이미지 삭제 요청", loginUser.getNickname());
+
+        if(loginUser.getImage() == null) {
+            log.error("[프로필 이미지 삭제] 기존의 프로필 이미지가 없습니다.");
+            throw new UserNotFoundException(ImageExceptionMessage.IMAGE_URL_BAD_REQUEST.getMsg());
+        }
+
+        loginUser.updateImage(null);
+        userRepository.save(loginUser);
+
+        log.info("[프로필 이미지 삭제] 이미지 삭제 완료.");
     }
 
     /**

@@ -3,6 +3,7 @@ package com.dailymate.domain.user.service;
 import com.dailymate.domain.user.dto.request.*;
 import com.dailymate.domain.user.dto.response.*;
 import com.dailymate.global.common.jwt.JwtTokenDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -39,5 +40,11 @@ public interface UserService {
     UserAllInfoDto findUserByUserId(String token, Long userId); // 혜미니요청
 
     List<UserSearchInfoDto> findUserByNickname(String token, String nickname);
+
+    // 이미지 등록
+    void addUserImage(String token, MultipartFile image);
+
+    // 이미지 삭제
+    void deleteUserImage(String token);
 
 }

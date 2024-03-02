@@ -8,8 +8,10 @@ import com.dailymate.global.dto.MessageDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -96,6 +98,26 @@ public class UserController {
     public ResponseEntity<MessageDto> updateUser(@RequestHeader(ACCESS_TOKEN) String token, @RequestBody UpdateUserReqDto reqDto) {
         userService.updateUser(token, reqDto);
         return ResponseEntity.ok(MessageDto.message("UPDATE SUCCESS"));
+    }
+
+    @Operation(
+            summary = "프로필 이미지 등록",
+            description = "로그인 사용자의 프로필 이미지를 등록/수정합니다."
+    )
+    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MessageDto> addUserImage(@RequestHeader(ACCESS_TOKEN) String token, @RequestPart(value = "image")MultipartFile image) {
+        userService.addUserImage(token, image);
+        return ResponseEntity.ok(MessageDto.message("ADD-IMAGE SUCCESS"));
+    }
+
+    @Operation(
+            summary = "프로필 이미지 삭제",
+            description = "로그인 사용자의 프로필 이미지를 삭제합니다."
+    )
+    @DeleteMapping("/image")
+    public ResponseEntity<MessageDto> deleteUserImage(@RequestHeader(ACCESS_TOKEN) String token) {
+        userService.deleteUserImage(token);
+        return ResponseEntity.ok(MessageDto.message("DELETE-IMAGE SUCCESS"));
     }
 
     @Operation(
