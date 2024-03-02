@@ -33,7 +33,7 @@ public class AlertServiceImpl implements AlertService{
     @Override
     @Transactional
     public void addAlert(AlertReqDto alertReqDto) {
-        log.info("[ADD_ALERT] 알림 전송.");
+        log.info("[ADD_ALERT] 알림 전송 요청");
 
         Alert alert = Alert.builder()
                 .toId(alertReqDto.getToId())
@@ -44,6 +44,7 @@ public class AlertServiceImpl implements AlertService{
                 .build();
 
         alertRepository.save(alert);
+        log.info("[ADD_ALERT] 알림 전송 완료");
     }
 
     @Override
