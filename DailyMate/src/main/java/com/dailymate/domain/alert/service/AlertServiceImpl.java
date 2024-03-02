@@ -5,6 +5,7 @@ import com.dailymate.domain.alert.dao.AlertRepository;
 import com.dailymate.domain.alert.domain.Alert;
 import com.dailymate.domain.alert.dto.AlertReqDto;
 import com.dailymate.domain.alert.dto.AlertResDto;
+import com.dailymate.domain.alert.dto.UrlDto;
 import com.dailymate.domain.alert.exception.AlertExceptionMessage;
 import com.dailymate.domain.alert.exception.AlertForbiddenException;
 import com.dailymate.domain.alert.exception.AlertNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -82,6 +84,7 @@ public class AlertServiceImpl implements AlertService{
                     .toId(alert.getToId())
                     .fromId(alert.getFromId())
                     .content(alert.getContent())
+                    .diaryId(alert.getDiaryId())
                     .type(alert.getType().getValue())
                     .url(alert.getUrl())
                     .build();
@@ -90,12 +93,25 @@ public class AlertServiceImpl implements AlertService{
         return alertResDtoList;
     }
 
+//    @Transactional
+//    @Override
+//    public String findAlertUrl(String token, Long alertId) {
+//        Long userId = jwtTokenProvider.getUserId(token);
+//        return alertRepository.findUrl(userId, alertId);
+//    }
+
     @Transactional
     @Override
-    public String findAlertUrl(String token, Long alertId) {
+    public UrlDto findAlertUrl(String token, Long alertId) {
         Long userId = jwtTokenProvider.getUserId(token);
-        return alertRepository.findUrl(userId, alertId);
-    }
+        Alert alert = alertRepository.findByToIdAndAlertId(userId, alertId)
+                .orElseThrow(() -> {
+                    return new AlertNotFoundException(AlertExceptionMessage.ALERT_NOT_FOUND.getMsg());
+                });
 
+        return UrlDto.builder()
+                .url(alert.getUrl())
+                .build();
+    }
 
 }
