@@ -86,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
 
         // 알림 전송
-        AlertReqDto alert = new AlertReqDto(user.getUserId(), diary.getUsers().getUserId(), diaryId, "댓글");
+        AlertReqDto alert = new AlertReqDto(diary.getUsers().getUserId(), user.getUserId(), diaryId, "댓글");
         alertService.addAlert(alert);
     }
 
@@ -190,11 +190,12 @@ public class CommentServiceImpl implements CommentService {
                     .user(user)
                     .comment(comment)
                     .build());
+
+            // 알림 전송
+            AlertReqDto alert = new AlertReqDto(comment.getUsers().getUserId(), user.getUserId(), comment.getDiary().getDiaryId(), "댓글좋아요");
+            alertService.addAlert(alert);
         }
 
-        // 알림 전송
-        AlertReqDto alert = new AlertReqDto(user.getUserId(), comment.getUsers().getUserId(), comment.getDiary().getDiaryId(), "댓글좋아요");
-        alertService.addAlert(alert);
     }
 
     /**
