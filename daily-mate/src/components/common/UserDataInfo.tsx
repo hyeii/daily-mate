@@ -91,7 +91,9 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
   };
 
   const handleUserDiary = (id: number) => {
-    navigate(`/diary/monthly/${id}`);
+    setTimeout(() => {
+      navigate(`/diary/monthly/${id}`);
+    }, 1000);
   };
   return (
     <UserInfoWrapper>

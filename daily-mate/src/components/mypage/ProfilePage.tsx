@@ -5,11 +5,25 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { deleteUser } from "../../apis/authApis";
 import useLogOut from "../../hooks/useLogOut";
+import { useEffect, useState } from "react";
+import { getFriendList } from "../../apis/friendApi";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const userInfo = useRecoilValue(userInfoState);
+  const [friendsCnt, setFriendsCnt] = useState<number>(0);
+
   const { LogOut } = useLogOut();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const getFriendResponse = await getFriendList();
+      if (getFriendResponse !== null) {
+        setFriendsCnt(getFriendResponse.length);
+      }
+    };
+    fetchData();
+  }, []);
 
   const updateInfoHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     navigate("/mypage/update");
@@ -47,7 +61,7 @@ const ProfilePage = () => {
         <InfoContainer>
           <NickNameFriendBox>
             <NickNameBox>{userInfo.nickname}</NickNameBox>
-            <span onClick={friendsHandler}>명의 친구</span>
+            <Friends onClick={friendsHandler}>{friendsCnt}명의 친구</Friends>
           </NickNameFriendBox>
           <ProfileTextBox>{userInfo.profile}</ProfileTextBox>
           <ProfileBottomContainer>
@@ -60,9 +74,13 @@ const ProfilePage = () => {
               <Text>{userInfo.type}</Text>
             </ProfileContent>
           </ProfileBottomContainer>
-          <div onClick={updateInfoHandler}>회원 정보 수정</div>
-          <div onClick={updatePasswordHandler}>비밀번호 변경</div>
-          <div onClick={deleteUserHandler}>회원 탈퇴</div>
+          <EtcContainer>
+            <EtcHandler onClick={updateInfoHandler}>회원 정보 수정</EtcHandler>
+            <EtcHandler onClick={updatePasswordHandler}>
+              비밀번호 변경
+            </EtcHandler>
+            <EtcHandler onClick={deleteUserHandler}>회원 탈퇴</EtcHandler>
+          </EtcContainer>
         </InfoContainer>
       </ProfileContainer>
     </div>
@@ -112,6 +130,7 @@ const ProfileTextBox = styled.div`
   background-color: #fde6e6;
   padding: 1.2rem;
   border-radius: 10px;
+  min-height: 3rem;
 `;
 
 const ProfileBottomContainer = styled.div`
@@ -123,4 +142,26 @@ const ProfileMenuBox = styled.div`
 `;
 const ProfileContent = styled.div`
   flex: 2;
+`;
+
+const EtcContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin-top: 5rem;
+`;
+
+const EtcHandler = styled.div`
+  margin: 1rem 0;
+  cursor: pointer;
+  &: hover {
+    font-weight: bold;
+  }
+`;
+
+const Friends = styled.span`
+  cursor: pointer;
+  &: hover {
+    font-weight: bold;
+  }
 `;

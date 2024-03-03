@@ -42,7 +42,7 @@ const AccountHistory = ({ accountList }: props) => {
 
   return (
     <div>
-      <h3>거래내역</h3>
+      <Title>거래내역</Title>
       <TableContainer>
         <Table>
           <thead>
@@ -86,6 +86,10 @@ const AccountHistory = ({ accountList }: props) => {
 
 export default AccountHistory;
 
+const Title = styled.h3`
+  font-size: 1.3rem;
+`;
+
 const IconStyles = styled.div`
   opacity: 0;
 
@@ -96,18 +100,18 @@ const IconStyles = styled.div`
 `;
 
 const TableContainer = styled.div`
-  width: 80vw;
   overflow: auto;
 `;
 
 const Table = styled.table`
-  width: auto;
+  width: -webkit-fill-available;
   border-collapse: collapse;
+  font-size: 1.2rem;
 `;
 
 const TableHeaderCell = styled.th`
-  background-color: #f2f2f2;
-  border: 1px solid #ccc;
+  background-color: #ffffff;
+  border: 2px solid #ffffff;
   padding: 8px;
 
   &:nth-child(1) {
@@ -122,7 +126,7 @@ const TableHeaderCell = styled.th`
 `;
 
 const TableCell = styled.td`
-  border: 1px solid #ccc;
+  border: 2px solid #ffffff;
   padding: 8px;
   text-align: center;
 `;

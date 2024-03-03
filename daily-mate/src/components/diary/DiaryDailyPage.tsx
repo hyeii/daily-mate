@@ -116,13 +116,19 @@ const DiaryDailyPage = () => {
                 <div style={{ opacity: "0" }}>숨김</div>
               )}
               {diaryDetail.isLike ? (
-                <FullHeart
-                  onClick={() => handleLikeDiary(diaryDetail.diaryId)}
-                />
+                <div>
+                  <FullHeart
+                    onClick={() => handleLikeDiary(diaryDetail.diaryId)}
+                  />
+                  {diaryDetail.likeNum}
+                </div>
               ) : (
-                <OutLineHeart
-                  onClick={() => handleLikeDiary(diaryDetail.diaryId)}
-                />
+                <div>
+                  <OutLineHeart
+                    onClick={() => handleLikeDiary(diaryDetail.diaryId)}
+                  />
+                  {diaryDetail.likeNum}
+                </div>
               )}
             </DiaryIconBox>
           </DiaryBottom>
