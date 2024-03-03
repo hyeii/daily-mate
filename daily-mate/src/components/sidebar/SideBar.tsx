@@ -52,11 +52,7 @@ const SideBar = () => {
       <SidebarContainer>
         <UserProfileBox>
           <ImageBox
-            src={
-              userImageURL
-                ? S3URL + `${userImageURL}`
-                : process.env.PUBLIC_URL + "/defaultImg.png"
-            }
+            src={userImageURL ?? process.env.PUBLIC_URL + "/defaultImg.png"}
             alt="userImage"
           />
           <UserProfileRight>

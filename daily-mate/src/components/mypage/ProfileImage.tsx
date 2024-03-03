@@ -61,11 +61,7 @@ const ProfileImage = () => {
     <ImageWrapper>
       <ImageContainer>
         <ImageBox
-          src={
-            userImageURL
-              ? S3URL + `${userImageURL}`
-              : process.env.PUBLIC_URL + "/defaultImg.png"
-          }
+          src={userImageURL ?? process.env.PUBLIC_URL + "/defaultImg.png"}
           alt="userImage"
         />
         <EditBtnBox onClick={handleEdit}>
