@@ -56,6 +56,9 @@ public class Users extends BaseTime {
     }
 
     public void updateImage(String image) {
+        if(image != null && !image.startsWith("http"))
+            image = "https://dailymate.s3.ap-northeast-2.amazonaws.com/" + image;
+
         this.image = image;
     }
 
