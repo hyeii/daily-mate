@@ -26,6 +26,7 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
   const userInfo = useRecoilValue(userInfoState);
 
   const modalRef = useRef<HTMLDivElement>(null);
+  const S3URL = "https://dailymate.s3.ap-northeast-2.amazonaws.com/";
 
   const navigate = useNavigate();
 
@@ -96,8 +97,12 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
     <UserInfoWrapper>
       <ImageProfileContainer>
         <ImageBox
-          src={process.env.PUBLIC_URL + "/defaultImg.png"}
-          alt="default"
+          src={
+            image
+              ? S3URL + `${image}`
+              : process.env.PUBLIC_URL + "/defaultImg.png"
+          }
+          alt="userImage"
         />
         <div>
           <NicknameBox>{nickname}</NicknameBox>

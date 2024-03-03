@@ -39,3 +39,8 @@ export const userImageURLState = atom({
   default: "url",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const userImageModalState = atom({
+  key: "imageModal",
+  default: false,
+});

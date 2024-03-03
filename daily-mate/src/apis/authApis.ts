@@ -7,7 +7,7 @@ import {
   updatePasswordInput,
   userResponse,
 } from "../types/authType";
-import { API, foreAPI } from "./api";
+import { API, diaryAPI, foreAPI } from "./api";
 
 export const checkNickname = async (nickname: string) => {
   try {
@@ -189,6 +189,35 @@ export const deleteUser = async () => {
     return res.data;
   } catch (error) {
     console.error("회원 탈퇴 오류 : ", error);
+    return null;
+  }
+};
+
+export const updateImage = async (formData: FormData) => {
+  try {
+    const res = await diaryAPI.post("/user/image", formData);
+    console.log(res.data);
+    try {
+      const re_res: AxiosResponse<myInfoResponse> = await API.get("/user");
+      const result = re_res.data;
+
+      return result;
+    } catch (error) {
+      console.error("내 정보 조회 오류 : ", error);
+      return null;
+    }
+  } catch (error) {
+    console.error("이미지 변경 오류 : ", error);
+    return null;
+  }
+};
+
+export const deleteImage = async () => {
+  try {
+    const res = await API.delete("user/image");
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
     return null;
   }
 };
