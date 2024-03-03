@@ -99,11 +99,7 @@ const UserDataInfo = ({ id, nickname, image, profile, status }: props) => {
     <UserInfoWrapper>
       <ImageProfileContainer>
         <ImageBox
-          src={
-            image
-              ? S3URL + `${image}`
-              : process.env.PUBLIC_URL + "/defaultImg.png"
-          }
+          src={image ?? process.env.PUBLIC_URL + "/defaultImg.png"}
           alt="userImage"
         />
         <div>
