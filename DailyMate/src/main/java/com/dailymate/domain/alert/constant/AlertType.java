@@ -24,10 +24,10 @@ public enum AlertType {
         if(value.contains("일기좋아요"))
             return 일기좋아요;
 
-        if(value.contains("댓글"))
-            return 댓글;
+        if(value.contains("댓글좋아요"))
+            return 댓글좋아요;
 
-        return 댓글좋아요;
+        return 댓글;
     }
 
 //    public static String findUrl(AlertType alertType) {
