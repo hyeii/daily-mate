@@ -47,7 +47,7 @@ const AddInput = styled.input`
   outline: none;
   padding: 0.5rem;
   background-color: #ffffff;
-  font-family: "S-CoreDream-3Light";
+  font-family: "LeeSeoyun";
   flex: 1;
 `;
 

@@ -35,7 +35,9 @@ const DiaryDailyPage = () => {
   const deleteDiaryNow = () => {
     if (diaryDetail && deleteDiary(diaryDetail.diaryId) !== null) {
       alert("일기가 삭제되었습니다.");
-      navigate(`/diary/monthly/${userInfo.userId}`);
+      setTimeout(() => {
+        navigate(`/diary/monthly/${userInfo.userId}`);
+      }, 1000);
     }
   };
 
