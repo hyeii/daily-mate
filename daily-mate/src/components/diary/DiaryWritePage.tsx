@@ -69,6 +69,22 @@ const DiaryWritePage = () => {
 
   const submitDiary = () => {
     // 일기 저장
+
+    if (inputTitle === "") {
+      alert("제목을 작성해주세요");
+      return;
+    }
+
+    if (inputContent === "") {
+      alert("내용을 작성해주세요");
+      return;
+    }
+
+    if (inputOpenType === "") {
+      alert("공개 범위를 선택해주세요");
+      return;
+    }
+
     const diaryData: diaryRequest = {
       title: inputTitle,
       content: inputContent,

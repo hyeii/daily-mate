@@ -45,6 +45,11 @@ const NotificationInfo = ({ notify }: props) => {
         setContent("님이 댓글을 좋아합니다.");
         setAction("바로가기");
         break;
+      case "댓글":
+        setType(5);
+        setContent("님이 댓글을 달았습니다.");
+        setAction("바로가기");
+        break;
       default:
         break;
     }
@@ -65,10 +70,9 @@ const NotificationInfo = ({ notify }: props) => {
       case 2:
         break;
       case 3:
-        navigate(`/diary/${notify.diaryId}`);
-        break;
       case 4:
-        navigate(`/diary/${notify.diaryId}`);
+      case 5:
+        navigate(`/diary/daily/${notify.diaryId}`);
         break;
       default:
         break;

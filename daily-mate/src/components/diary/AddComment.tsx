@@ -22,6 +22,7 @@ const AddComment = ({ diaryId }: props) => {
       content: inputComment,
     };
     addComment(diaryId, comment);
+    window.location.reload();
   };
   return (
     <AddCommentWrapper>
