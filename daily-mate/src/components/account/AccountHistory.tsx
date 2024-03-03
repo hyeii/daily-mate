@@ -63,8 +63,8 @@ const AccountHistory = ({ accountList }: props) => {
                   <TableCell>{item.category ?? `수입`}</TableCell>
                   <TableCell>{item.content}</TableCell>
                   <TableCell>
+                    {item.amount.toLocaleString()}
                     <AmountCell>
-                      <div>{item.amount.toLocaleString()}</div>
                       <IconStyles
                         style={{ opacity: openIcon === item.accountId ? 1 : 0 }}
                       >
@@ -92,6 +92,9 @@ const Title = styled.h3`
 
 const IconStyles = styled.div`
   opacity: 0;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 
   &:hover {
     opacity: 1;
@@ -132,8 +135,10 @@ const TableCell = styled.td`
 `;
 
 const AmountCell = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-gap: 0.7rem;
-  text-align: end;
+  // display: grid;
+  // grid-template-columns: 3fr 1fr;
+  // grid-gap: 0.7rem;
+  // text-align: end;
+
+  position: relative;
 `;
