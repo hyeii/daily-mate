@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { sideBarOpenState } from "../../atoms/sideBarAtom";
-import { userInfoState } from "../../atoms/authAtom";
+import { userImageURLState, userInfoState } from "../../atoms/authAtom";
 import { logOut } from "../../apis/authApis";
 import { IoSearch, IoNotificationsOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +12,12 @@ import useLogOut from "../../hooks/useLogOut";
 const SideBar = () => {
   const isOpen = useRecoilValue(sideBarOpenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userImageURL = useRecoilValue(userImageURLState);
   const setSelectedDate = useSetRecoilState(selectedDateState);
   const setAccountTab = useSetRecoilState(accountTabState);
   const navigate = useNavigate();
   const { LogOut } = useLogOut();
+  const S3URL = "https://dailymate.s3.ap-northeast-2.amazonaws.com/";
 
   const handleLogOut = async () => {
     const logOutResult = await logOut();
@@ -50,8 +52,12 @@ const SideBar = () => {
       <SidebarContainer>
         <UserProfileBox>
           <ImageBox
-            src={process.env.PUBLIC_URL + "/defaultImg.png"}
-            alt="default"
+            src={
+              userImageURL
+                ? S3URL + `${userImageURL}`
+                : process.env.PUBLIC_URL + "/defaultImg.png"
+            }
+            alt="userImage"
           />
           <UserProfileRight>
             <NotificationBtn onClick={moveNotifications} />
