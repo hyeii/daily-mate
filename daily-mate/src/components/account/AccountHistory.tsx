@@ -60,7 +60,7 @@ const AccountHistory = ({ accountList }: props) => {
                   onMouseEnter={() => setOpenIcon(item.accountId)}
                   onMouseLeave={() => setOpenIcon(0)}
                 >
-                  <TableCell>{item.category}</TableCell>
+                  <TableCell>{item.category ?? `수입`}</TableCell>
                   <TableCell>{item.content}</TableCell>
                   <TableCell>
                     <AmountCell>
