@@ -45,7 +45,7 @@ const AddInput = styled.input`
   border-radius: 15px;
   outline: none;
   padding: 0.5rem;
-  background-color: rgb(233, 233, 233);
+  background-color: #ffffff;
   font-family: "S-CoreDream-3Light";
   flex: 1;
 `;
