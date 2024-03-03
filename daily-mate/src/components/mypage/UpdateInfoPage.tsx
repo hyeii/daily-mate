@@ -12,9 +12,10 @@ import {
   Title,
   UpdateContainer,
 } from "../common/CommonStyledComponents";
+import { useNavigate } from "react-router-dom";
 
 const UpdateInfoPage = () => {
-  // 정보수정을 별도 페이지가 아니라 프로필 기본페이지에서 컴포넌트로만 처리할지 고민.
+  const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [newNickname, setNewNickname] = useState<string>(userInfo.nickname);
@@ -46,6 +47,7 @@ const UpdateInfoPage = () => {
         profile: updateResult.profile,
       }));
       alert("내 정보가 수정되었습니다");
+      navigate("/mypage/profile");
     }
   };
 
