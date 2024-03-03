@@ -1,5 +1,7 @@
 package com.dailymate.domain.comment.service;
 
+import com.dailymate.domain.alert.dto.AlertReqDto;
+import com.dailymate.domain.alert.service.AlertService;
 import com.dailymate.domain.comment.dao.CommentRepository;
 import com.dailymate.domain.comment.dao.LikeCommentRepository;
 import com.dailymate.domain.comment.domain.Comment;
@@ -43,6 +45,7 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AlertService alertService;
 
     /**
      * 댓글 작성
@@ -81,6 +84,10 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = Comment.createComment(commentReqDto, diary, user);
 
         commentRepository.save(comment);
+
+        // 알림 전송
+        AlertReqDto alert = new AlertReqDto(user.getUserId(), diary.getUsers().getUserId(), diaryId, "댓글");
+        alertService.addAlert(alert);
     }
 
     /**
@@ -184,6 +191,10 @@ public class CommentServiceImpl implements CommentService {
                     .comment(comment)
                     .build());
         }
+
+        // 알림 전송
+        AlertReqDto alert = new AlertReqDto(user.getUserId(), comment.getUsers().getUserId(), comment.getDiary().getDiaryId(), "댓글좋아요");
+        alertService.addAlert(alert);
     }
 
     /**
