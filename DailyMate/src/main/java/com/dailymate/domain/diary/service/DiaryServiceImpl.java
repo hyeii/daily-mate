@@ -204,11 +204,12 @@ public class DiaryServiceImpl implements DiaryService {
                     .user(user)
                     .diary(diary)
                     .build());
+
+            // 알림 전송
+            AlertReqDto alert = new AlertReqDto(diary.getUsers().getUserId(), user.getUserId(), diaryId, "일기좋아요");
+            alertService.addAlert(alert);
         }
 
-        // 알림 전송
-        AlertReqDto alert = new AlertReqDto(user.getUserId(), diary.getUsers().getUserId(), diaryId, "일기좋아요");
-        alertService.addAlert(alert);
     }
 
     /**
