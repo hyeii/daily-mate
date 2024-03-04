@@ -17,6 +17,7 @@ import MyDiaryCell from "./cell/MyDiaryCell";
 import OtherDiaryCell from "./cell/OtherDiaryCell";
 import { userInfoState } from "../../atoms/authAtom";
 import { whoseDiaryState, writeDate } from "../../atoms/diaryAtom";
+import TodoCell from "./cell/TodoCell";
 
 interface props {
   currentMonth: Date;
@@ -153,6 +154,8 @@ const CalendarCells = ({
                 diaryInfo={diaryByMonth[parseInt(format(day, "d"))]}
               />
             </DiaryDayBox>
+          ) : isThisMonth === "thisMonth" && calendarType === "todo" ? (
+            <TodoCell date={format(day, "yyyy-MM-dd")}></TodoCell>
           ) : null}
         </DayCover>
       );

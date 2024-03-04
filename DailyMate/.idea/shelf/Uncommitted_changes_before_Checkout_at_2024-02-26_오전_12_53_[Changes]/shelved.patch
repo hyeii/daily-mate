@@ -1,0 +1,611 @@
+Index: build/resources/main/application-s3.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/resources/main/application-s3.yml b/build/resources/main/application-s3.yml
+new file mode 100644
+--- /dev/null	
++++ b/build/resources/main/application-s3.yml	
+@@ -0,0 +1,11 @@
++cloud:
++  aws:
++    stack:
++      auto: false
++    region:
++      static: ap-northeast-2
++    credentials:
++      access-key: AKIAYYSGWEUVUWBIPXRJ
++      secret-key: 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
++    s3:
++      bucket: dailymate
+\ No newline at end of file
+Index: .idea/git_toolbox_prj.xml
+===================================================================
+diff --git a/.idea/git_toolbox_prj.xml b/.idea/git_toolbox_prj.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/git_toolbox_prj.xml	
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GitToolBoxProjectSettings">
++    <option name="commitMessageIssueKeyValidationOverride">
++      <BoolValueOverride>
++        <option name="enabled" value="true" />
++      </BoolValueOverride>
++    </option>
++    <option name="commitMessageValidationEnabledOverride">
++      <BoolValueOverride>
++        <option name="enabled" value="true" />
++      </BoolValueOverride>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: build/resources/main/application-swagger.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/resources/main/application-swagger.yml b/build/resources/main/application-swagger.yml
+new file mode 100644
+--- /dev/null	
++++ b/build/resources/main/application-swagger.yml	
+@@ -0,0 +1,14 @@
++springdoc:
++  packages-to-scan: com.dailymate # swagger를 적용하기 위해 스캔할 패키지를 지정
++  default-consumes-media-type: application/json;charset=UTF-8
++  default-produces-media-type: application/json;charset=UTF-8
++  swagger-ui:
++    tags-sorter: alpha          # alpha : 알파벳 순 태그 정렬, method : HTTP Method 순 정렬
++    operations-sorter: alpha
++  api-docs:
++    path: /api-docs/json
++    groups:
++      enabled: true
++  cache:
++    disabled: true
++
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	
++++ b/.idea/.gitignore	
+@@ -0,0 +1,8 @@
++# Default ignored files
++/shelf/
++/workspace.xml
++# Editor-based HTTP Client requests
++/httpRequests/
++# Datasource local storage ignored files
++/dataSources/
++/dataSources.local.xml
+Index: .idea/compiler.xml
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/compiler.xml	
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <annotationProcessing>
++      <profile name="Gradle Imported" enabled="true">
++        <outputRelativeToContentRoot value="true" />
++        <processorPath useClasspath="false">
++          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.24/13a394eed5c4f9efb2a6d956e2086f1d81e857d9/lombok-1.18.24.jar" />
++          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-configuration-processor/2.7.6/ef52bd1c96c4b04f3fe6c72a6108a3bea24f966f/spring-boot-configuration-processor-2.7.6.jar" />
++        </processorPath>
++        <module name="DailyMate.main" />
++      </profile>
++    </annotationProcessing>
++    <bytecodeTargetLevel target="11" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/vcs.xml	
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/uiDesigner.xml
+===================================================================
+diff --git a/.idea/uiDesigner.xml b/.idea/uiDesigner.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/uiDesigner.xml	
+@@ -0,0 +1,124 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Palette2">
++    <group name="Swing">
++      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
++      </item>
++      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.svg" removable="false" auto-create-binding="false" can-attach-label="true">
++        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
++        <initial-values>
++          <property name="text" value="Button" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="RadioButton" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="CheckBox" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="Label" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
++          <preferred-size width="-1" height="20" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
++      </item>
++    </group>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/modules.xml
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/modules.xml	
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DailyMate.main.iml" filepath="$PROJECT_DIR$/.idea/modules/DailyMate.main.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/gradle.xml	
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
++  <component name="GradleSettings">
++    <option name="linkedExternalProjectsSettings">
++      <GradleProjectSettings>
++        <option name="delegatedBuild" value="true" />
++        <option name="testRunner" value="GRADLE" />
++        <option name="distributionType" value="DEFAULT_WRAPPED" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="gradleJvm" value="temurin-11" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++          </set>
++        </option>
++      </GradleProjectSettings>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: build/resources/main/application.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/resources/main/application.yml b/build/resources/main/application.yml
+new file mode 100644
+--- /dev/null	
++++ b/build/resources/main/application.yml	
+@@ -0,0 +1,16 @@
++spring:
++  profiles:
++    include:
++      - h2
++      - s3
++      - swagger
++      - jwt
++  jpa:
++    defer-datasource-initialization: true
++
++servlet:
++  multipart:
++    max-file-size: 10MB
++    max-request-size: 10MB
++    enabled: true
++
+Index: build/resources/main/application-h2.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/resources/main/application-h2.yml b/build/resources/main/application-h2.yml
+new file mode 100644
+--- /dev/null	
++++ b/build/resources/main/application-h2.yml	
+@@ -0,0 +1,38 @@
++spring:
++  web:
++    resources:
++      static-locations: classpath:/dist/
++      add-mappings: "false"
++
++  # https://herojoon-dev.tistory.com/135  JPA 설정 참고
++  # JPA 설정
++  jpa:
++    database-platform: org.hibernate.dialect.H2Dialect
++    hibernate:
++      ddl-auto: create        # DB 초기화 전략 (none, create, create-drop, update, validate)
++    properties:
++      hibernate:
++        dialect: org.hibernate.dialect.H2Dialect
++        format_sql: true      # 쿼리 로그 포맷 (정렬)
++        show_sql: true        # 쿼리 로그 출력
++
++  # h2 관련 - https://congsong.tistory.com/46
++  datasource:
++    url: jdbc:h2:mem:testdb   # H2 DB 연결 주소 (In-Memory Mode) url에 mem이 붙으면 인메모리 방식으로 작동
++    #url: 'jdbc:h2:~/test'    # H2 DB 연결 주소 (Embedded Mode)
++    driver-class-name: org.h2.Driver
++    username: sa
++    password:
++
++  # H2 Console 설정
++  h2:
++    console: # H2 DB를 웹에서 관리할 수 있는 기능
++      enabled: true           # H2 Console 사용 여부
++
++  logging.level:
++    org.hibernate:
++      type.descriptor.sql: trace # sql의 데이터까지 다 보이게 // query의 ?에 어떤 값이 들어가는지 추적할 수 있는 설정. TRACE Log에 값을 보여줌
++
++cors:
++  front_url: "*"
++
+Index: HELP.md
+===================================================================
+diff --git a/HELP.md b/HELP.md
+new file mode 100644
+--- /dev/null	
++++ b/HELP.md	
+@@ -0,0 +1,27 @@
++# Getting Started
++
++### Reference Documentation
++
++For further reference, please consider the following sections:
++
++* [Official Gradle documentation](https://docs.gradle.org)
++* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.2.2/gradle-plugin/reference/html/)
++* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.2.2/gradle-plugin/reference/html/#build-image)
++* [Spring Web Services](https://docs.spring.io/spring-boot/docs/3.2.2/reference/htmlsingle/index.html#io.webservices)
++* [Spring Web](https://docs.spring.io/spring-boot/docs/3.2.2/reference/htmlsingle/index.html#web)
++
++### Guides
++
++The following guides illustrate how to use some features concretely:
++
++* [Producing a SOAP web service](https://spring.io/guides/gs/producing-web-service/)
++* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
++* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
++* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
++
++### Additional Links
++
++These additional references should also help you:
++
++* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
++
+Index: .idea/jarRepositories.xml
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/jarRepositories.xml	
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="MavenRepo" />
++      <option name="name" value="MavenRepo" />
++      <option name="url" value="https://repo.maven.apache.org/maven2/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: .gradle/buildOutputCleanup/cache.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/.gradle/buildOutputCleanup/cache.properties b/.gradle/buildOutputCleanup/cache.properties
+new file mode 100644
+--- /dev/null	
++++ b/.gradle/buildOutputCleanup/cache.properties	
+@@ -0,0 +1,2 @@
++#Sun Jan 21 16:22:43 KST 2024
++gradle.version=8.5
+Index: build/resources/main/application-jwt.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/resources/main/application-jwt.yml b/build/resources/main/application-jwt.yml
+new file mode 100644
+--- /dev/null	
++++ b/build/resources/main/application-jwt.yml	
+@@ -0,0 +1,7 @@
++jwt:
++  secret:
++    2d9dce5eb6bb0ed84af77f7f10359b28abe657953a9b317c4a6baf73817be523
++  redis:
++    host: localhost
++    port: 6379
++
+Index: ../daily-mate/tsconfig.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"compilerOptions\": {\r\n    \"target\": \"es5\",\r\n    \"lib\": [\r\n      \"dom\",\r\n      \"dom.iterable\",\r\n      \"esnext\"\r\n    ],\r\n    \"allowJs\": true,\r\n    \"skipLibCheck\": true,\r\n    \"esModuleInterop\": true,\r\n    \"allowSyntheticDefaultImports\": true,\r\n    \"strict\": true,\r\n    \"forceConsistentCasingInFileNames\": true,\r\n    \"noFallthroughCasesInSwitch\": true,\r\n    \"module\": \"esnext\",\r\n    \"moduleResolution\": \"node\",\r\n    \"resolveJsonModule\": true,\r\n    \"isolatedModules\": true,\r\n    \"noEmit\": true,\r\n    \"jsx\": \"react-jsx\"\r\n  },\r\n  \"include\": [\r\n    \"src\"\r\n  ]\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../daily-mate/tsconfig.json b/../daily-mate/tsconfig.json
+--- a/../daily-mate/tsconfig.json	
++++ b/../daily-mate/tsconfig.json	
+@@ -1,11 +1,7 @@
+ {
+   "compilerOptions": {
+     "target": "es5",
+-    "lib": [
+-      "dom",
+-      "dom.iterable",
+-      "esnext"
+-    ],
++    "lib": ["dom", "dom.iterable", "esnext"],
+     "allowJs": true,
+     "skipLibCheck": true,
+     "esModuleInterop": true,
+@@ -20,7 +16,5 @@
+     "noEmit": true,
+     "jsx": "react-jsx"
+   },
+-  "include": [
+-    "src"
+-  ]
++  "include": ["src"]
+ }
+Index: build/resources/main/data.sql
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/resources/main/data.sql b/build/resources/main/data.sql
+new file mode 100644
+--- /dev/null	
++++ b/build/resources/main/data.sql	
+@@ -0,0 +1,32 @@
++/* SQL 작성용 */
++
++-- INSERT INTO ACCOUNT (ACCOUNT_ID, USER_ID, AMOUNT, CATEGORY, CONTENT, CREATED_AT, DATE, TYPE, DELETED_AT)
++-- VALUES (100, 101, 1000000, null, '월급이 들어왔당 히히', '2024-01-25 23:25:59', '2024-01-15', '수입', null),
++--        (101, 101, -33000, '식비', '월급 들어온 기념으로 짜장면 먹음', '2024-01-25 23:27:00', '2024-01-15', '지출', null),
++--        (102, 101, -4500, '식비', '후식으로 탕후루', '2024-01-25 23:29:00', '2024-01-15', '지출', null),
++--        (103, 101, 500, null, '내 전재산', '2024-01-01 23:59:59', '2024-01-01', '수입', null),
++--        (104, 101, -20000, '교통', '지각해서 택시탐', '2024-01-28 20:38:55', '2024-01-16', '지출', null),
++--        (105, 101, -400000, '생활', '관리비', '2024-01-01 00:00:00', '2024-01-01', '지출', '2024-01-02 00:00:00'),
++--        (200, 106, 500000, null, '한달 용돈', '2023-01-01 00:00:00', '2023-01-01', '수입', null),
++--        (201, 106, -5000, '기타', '로또 구매', '2023-01-01 10:00:00', '2023-01-01', '지출', null),
++--        (202, 106, -5000, '기타', '로또 구매', '2023-01-01 10:00:00', '2023-01-01', '지출', '2024-01-02 00:00:00'),
++--        (203, 106, -2500, '카페', '아이스 아메리카노', '2023-01-03 10:00:00', '2023-01-03', '지출', null);
++--
++INSERT INTO USERS (USER_ID, EMAIL, PASSWORD, NICKNAME, TYPE, DELETED_AT)
++VALUES (101, 'test1@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트1', 'ROLE_USER', null),
++       (200, 'admin1@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '관리자1', 'ROLE_ADMIN', null),
++       (201, 'admin2@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '관리자2', 'ROLE_ADMIN', null),
++       (102, 'test2@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트2', 'ROLE_USER', '2024-02-01'),
++       (103, 'test3@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트2', 'ROLE_USER', null),
++       (104, 'test4@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트3', 'ROLE_USER', null),
++       (105, 'test5@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '테스트4', 'ROLE_USER', null),
++       (106, 'dd39@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '천재윤영', 'ROLE_USER', null),
++       (107, 'aa@naver.com', '{bcrypt}$2a$10$O4PtZTti4R48sqjQGyKD6exSAfKZWuYGzqAqC/zdj1ITlQ7DfY5ZS', '프로젝트언제끝나', 'ROLE_USER', '2024-02-14');
++
++-- INSERT INTO FRIEND (FRIEND_ID, TO_ID, FROM_ID, REQUEST_DATE, STATUS)
++-- VALUES (10000, 101, 104, '2024-02-18', FALSE),
++--        (10001, 101, 103, '2024-02-18', TRUE),
++--        (10002, 101, 200, '2024-02-17', FALSE),
++--        (10003, 103, 104, '2024-01-31', TRUE),
++--        (10004, 103, 106, '2024-02-01', FALSE),
++--        (10005, 105, 101, '2024-01-01', TRUE);
+\ No newline at end of file
+Index: .idea/misc.xml
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/misc.xml	
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="FrameworkDetectionExcludesConfiguration">
++    <file type="web" url="file://$PROJECT_DIR$" />
++  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="temurin-11" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: build/bootRunMainClassName
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/bootRunMainClassName b/build/bootRunMainClassName
+new file mode 100644
+--- /dev/null	
++++ b/build/bootRunMainClassName	
+@@ -0,0 +1,1 @@
++com.dailymate.DailyMateApplication
+\ No newline at end of file
+Index: .idea/modules/DailyMate.main.iml
+===================================================================
+diff --git a/.idea/modules/DailyMate.main.iml b/.idea/modules/DailyMate.main.iml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/modules/DailyMate.main.iml	
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module version="4">
++  <component name="NewModuleRootManager">
++    <content url="file://$MODULE_DIR$/../../build/generated/sources/annotationProcessor/java/main">
++      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
++    </content>
++  </component>
++</module>
+\ No newline at end of file
+Index: src/main/resources/application-s3.yml
+===================================================================
+diff --git a/src/main/resources/application-s3.yml b/src/main/resources/application-s3.yml
+new file mode 100644
+--- /dev/null	
++++ b/src/main/resources/application-s3.yml	
+@@ -0,0 +1,11 @@
++cloud:
++  aws:
++    stack:
++      auto: false
++    region:
++      static: ap-northeast-2
++    credentials:
++      access-key: AKIAYYSGWEUVUWBIPXRJ
++      secret-key: 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
++    s3:
++      bucket: dailymate
+\ No newline at end of file
+diff --git a/.gradle/vcs-1/gc.properties b/.gradle/vcs-1/gc.properties
+new file mode 100644
+diff --git a/.gradle/8.5/dependencies-accessors/gc.properties b/.gradle/8.5/dependencies-accessors/gc.properties
+new file mode 100644
+diff --git a/.gradle/8.5/gc.properties b/.gradle/8.5/gc.properties
+new file mode 100644
+diff --git a/build/resources/main/static/index.html b/build/resources/main/static/index.html
+new file mode 100644

@@ -39,7 +39,9 @@ const SideBar = () => {
   const moveMyPage = () => {
     navigate("/mypage/profile");
   };
-
+  const myTodo = () => {
+    navigate("/todo");
+  };
   const moveNotifications = () => {
     navigate("/notifications");
   };
@@ -64,7 +66,7 @@ const SideBar = () => {
         <SidebarSearchIcon onClick={moveSearch} />
         <SidebarItems onClick={moveDiary}>다이어리</SidebarItems>
         <SidebarItems onClick={moveAccount}>가계부</SidebarItems>
-        <SidebarItems>할 일</SidebarItems>
+        <SidebarItems onClick={myTodo}>할 일</SidebarItems>
         <SidebarItems onClick={moveMyPage}>마이페이지</SidebarItems>
         <SidebarItems onClick={handleLogOut}>로그아웃</SidebarItems>
       </SidebarContainer>
