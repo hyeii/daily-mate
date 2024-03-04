@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="add : 수정, 삭제, 하루미루기 버튼 생성">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/src/components/todo/DailyTodoList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/src/components/todo/DailyTodoList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoAddModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoAddModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoPage.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="add : 수정, 삭제, 하루미루기 버튼 생성" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
