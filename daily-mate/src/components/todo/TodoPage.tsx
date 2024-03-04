@@ -6,6 +6,7 @@ import Calendar from "react-calendar";
 import { EnumNumberMember } from "@babel/types";
 import TodoAddModal from "./TodoAddModal";
 import { async } from "q";
+import styled from "styled-components";
 
 interface Todo {
   todoId: number;
@@ -169,7 +170,11 @@ const TodoPage = () => {
     );
   };
 
-  const handleAddTodo = async (content: String, repeat: number) => {
+  const handleAddTodo = async (
+    content: String,
+    repeat: number,
+    date: String
+  ) => {
     console.log(repeat);
     try {
       const response = await axios.post(
@@ -177,6 +182,7 @@ const TodoPage = () => {
         {
           content: content, // 할 일 내용
           repeatition: repeat, // 반복 설정
+          date: date,
           // date: selectedDate, // 선택된 날짜
         },
         {
@@ -202,20 +208,33 @@ const TodoPage = () => {
   };
   return (
     <div>
-      <h2>나의 할 일 목록</h2>
-      <button onClick={() => setView("daily")}>일</button>
-      <button onClick={() => setView("monthly")}>월</button>
+      <div>
+        {view === "daily" ? (
+          <>
+            <ActiveButton onClick={() => setView("daily")}>일</ActiveButton>
+            <InactiveButton onClick={() => setView("monthly")}>
+              월
+            </InactiveButton>
+          </>
+        ) : (
+          <>
+            <InactiveButton onClick={() => setView("daily")}>일</InactiveButton>
+            <ActiveButton onClick={() => setView("monthly")}>월</ActiveButton>
+          </>
+        )}
+      </div>
       {view === "daily" ? (
         <div>
           <div>
-            <button onClick={handlePreviousDay}>&lt;</button>
-            <input
+            <PreviousButton onClick={handlePreviousDay}>&lt;</PreviousButton>
+            <DateInput
               type="date"
               value={selectedDate}
               onChange={handleDateChange}
             />
-            <button onClick={handleNextDay}>&gt;</button>
+            <NextButton onClick={handleNextDay}>&gt;</NextButton>
           </div>
+          <h1>할 일</h1>
           <DailyTodoList
             todoList={todoList}
             onToggleTodo={handleToggleTodo}
@@ -229,14 +248,75 @@ const TodoPage = () => {
           <TodoCalendar />
         </div>
       )}
-      <button onClick={openModal}>+ 할 일 추가</button>
+      <ADdButton onClick={openModal}>+ 할 일 추가</ADdButton>
       <TodoAddModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAddTodo={handleAddTodo}
+        date={selectedDate}
       />
     </div>
   );
 };
 
 export default TodoPage;
+
+const StyledButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 25px;
+  padding: 20px;
+
+  cursor: pointer;
+`;
+
+const ActiveButton = styled(StyledButton)`
+  color: black;
+`;
+
+const InactiveButton = styled(StyledButton)`
+  color: gray;
+`;
+
+const PreviousButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 25px;
+  padding: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  color: pink; /* 분홍색으로 변경 */
+`;
+
+const NextButton = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 25px;
+  cursor: pointer;
+  color: pink; /* 분홍색으로 변경 */
+`;
+
+const DateInput = styled.input`
+  border: none;
+  background-color: transparent;
+  font-family: "Arial", sans-serif;
+  font-size: 25px;
+  padding: 20px;
+  cursor: pointer;
+  color: pink; /* 분홍색으로 변경 */
+
+  &::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+`;
+
+const ADdButton = styled.button`
+  border: none;
+  font-size: 20px;
+  background-color: transparent;
+  cursor: pointer;
+  color: gray;
+  &:hover {
+    background-color: #f1f1f1; /* 호버시 배경색 변경 */
+  }
+`;

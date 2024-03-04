@@ -3,7 +3,7 @@ import Calendar from "../calendar/Calendar";
 const TodoCalendar = () => {
   return (
     <div>
-      <Calendar isMini="not" calendarType="account" />
+      <Calendar isMini="no" calendarType="todo" />
     </div>
   );
 };
