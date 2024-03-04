@@ -1,5 +1,8 @@
 package com.dailymate.domain.diary.service;
 
+import com.dailymate.domain.alert.dao.AlertRepository;
+import com.dailymate.domain.alert.dto.AlertReqDto;
+import com.dailymate.domain.alert.service.AlertService;
 import com.dailymate.domain.diary.constant.Feeling;
 import com.dailymate.domain.diary.constant.OpenType;
 import com.dailymate.domain.diary.constant.Weather;
@@ -44,6 +47,7 @@ public class DiaryServiceImpl implements DiaryService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final FriendRepository friendRepository;
+    private final AlertService alertService;
 
     /**
      * 일기 작성
@@ -200,7 +204,12 @@ public class DiaryServiceImpl implements DiaryService {
                     .user(user)
                     .diary(diary)
                     .build());
+
+            // 알림 전송
+            AlertReqDto alert = new AlertReqDto(diary.getUsers().getUserId(), user.getUserId(), diaryId, "일기좋아요");
+            alertService.addAlert(alert);
         }
+
     }
 
     /**

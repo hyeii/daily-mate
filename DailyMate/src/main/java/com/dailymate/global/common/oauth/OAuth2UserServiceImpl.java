@@ -1,4 +1,4 @@
-package com.dailymate.domain.user.service;
+package com.dailymate.global.common.oauth;
 
 import com.dailymate.domain.user.dao.UserRepository;
 import com.dailymate.domain.user.domain.Users;
@@ -38,6 +38,8 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
      */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.info("[LOAD_USER] 이것도 실행 잘됨");
+
         // DefaultOAuth2User 서비스를 통해 user 정보를 가져와야 하기 때문에 대리자 생성
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
@@ -97,7 +99,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
             return createUser(oAuthAttributes, providerId);
         }
 
-        if(user.getImage() != oAuth2UserDto.getImage()) {
+        if(!user.getImage().equals(oAuth2UserDto.getImage())) {
             log.info("[소셜 로그인] 이미지가 달라서 이미지 업데이트");
             user.updateImage(oAuth2UserDto.getImage());
         }
