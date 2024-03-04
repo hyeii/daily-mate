@@ -32,14 +32,15 @@ public class TodoServiceImpl implements TodoService {
 	public void addTodo(AddTodoReqDto addTodoReqDto, String token) {
 		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 등록] 할일 등록 요청");
-
+		log.info(addTodoReqDto.getContent());
+		log.info("Repeatition: " + addTodoReqDto.getRepeatition());
 		LocalDate today = LocalDate.now();
 		for(int i = 0; i < addTodoReqDto.getRepeatition(); i++){
 			String todayString = today.plusDays(i).toString();
 			Todo todo = Todo.builder()
 					.userId(USERID)
 					.content(addTodoReqDto.getContent())
-					.date(todayString)
+					.date(addTodoReqDto.getDate())
 					.todoOrder(0)
 					.done(false)
 					.repeatition(addTodoReqDto.getRepeatition())
@@ -114,6 +115,7 @@ public class TodoServiceImpl implements TodoService {
 
 		log.info("[할일 삭제] 할일 찾기 완료");
 		todo.delete();
+		todoRepository.save(todo);
 		log.info("[할일 삭제] 할일 삭제 완료");
 
 	}
@@ -147,10 +149,11 @@ public class TodoServiceImpl implements TodoService {
 				.todoOrder(todo.getTodoOrder())
 				.done(todo.getDone())
 				.userId(todo.getUserId())
+				.repeatition(todo.getRepeatition())
 				.build();
 
-		todoRepository.save(postponedTodo);
 		deleteTodo(todoId, token);
+		todoRepository.save(postponedTodo);
 
 		log.info("[할일 미루기] 할일 미루기 완료");
 		return postponedDate.toString();
@@ -200,13 +203,18 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public Integer getSuccessRate(String token, String date) {
+	public Integer getSuccessRate(String date, String token) {
+		log.info("[토큰 확인] token: {}", token);
 		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 일간 달성도 조회] 달성도 조회 요청. userId : {}", USERID);
 
 		List<Todo> todoList = todoRepository.findByUserIdAndDate(USERID, date);
 
 		int totalTodos = todoList.size();
+
+		if(totalTodos == 0){
+			return -1;
+		}
 
 		long completedTodos = todoList.stream().filter(Todo::getDone).count();
 

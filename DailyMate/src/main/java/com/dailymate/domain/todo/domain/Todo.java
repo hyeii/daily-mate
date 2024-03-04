@@ -19,7 +19,7 @@ public class Todo extends BaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "todo_id")
+	@Column(name = "TODO_ID")
 	private Long todoId;
 	@NotNull
 	private Long userId;

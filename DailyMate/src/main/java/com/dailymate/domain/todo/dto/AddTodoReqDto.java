@@ -8,4 +8,6 @@ import lombok.NoArgsConstructor;
 public class AddTodoReqDto {
 	private String content;
 	private Integer repeatition;
+
+	private String date;
 }
