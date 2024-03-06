@@ -1,5 +1,7 @@
 import axios from "axios";
 import { getReissueToken } from "./authApis";
+import useLogOut from "../hooks/useLogOut";
+import { useNavigate } from "react-router-dom";
 
 export const foreAPI = axios.create({
   baseURL: process.env.REACT_APP_URL,
@@ -58,6 +60,11 @@ API.interceptors.response.use(
         return axios(originRequest);
       } else if (res && res.status === 404) {
         // 리프레시토큰도 만료, 재로그인요청
+        const { LogOut } = useLogOut();
+        const navigate = useNavigate();
+        LogOut();
+        alert("다시 로그인해주세요!");
+        navigate("/");
       } else {
       }
     }
@@ -100,6 +107,11 @@ diaryAPI.interceptors.response.use(
         return axios(originRequest);
       } else if (res && res.status === 404) {
         // 리프레시토큰도 만료, 재로그인요청
+        const { LogOut } = useLogOut();
+        const navigate = useNavigate();
+        LogOut();
+        alert("다시 로그인해주세요!");
+        navigate("/");
       } else {
       }
     }

@@ -1,4 +1,3 @@
-import { AxiosResponse } from "axios";
 import { API } from "./api";
 import { searchResponse } from "../types/authType";
 
@@ -9,7 +8,6 @@ export const searchUser = async (nickname: string) => {
         nickname: nickname,
       },
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error("사용자 검색 오류 : ", error);

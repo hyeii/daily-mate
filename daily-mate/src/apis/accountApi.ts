@@ -14,8 +14,6 @@ export const addAccount = async (body: accountRequest) => {
       "/account",
       body
     );
-    console.log("수입 카테고리 테스트 : ", body);
-    console.log(res.data.message);
     return res.data.message;
   } catch (error) {
     console.error("내역 등록 오류 : ", error);
@@ -33,7 +31,6 @@ export const modifyAccount = async (
       `/account/${accountId}`,
       body
     );
-    console.log(res.data.message);
     return res.data.message;
   } catch (error) {
     console.error("내역 수정 오류 : ", error);
@@ -46,7 +43,6 @@ export const deleteAccount = async (accountId: number) => {
     const res: AxiosResponse<{ message: string }> = await API.delete(
       `/account/${accountId}`
     );
-    console.log(res.data.message);
     return res.data.message;
   } catch (error) {
     console.error("내역 삭제 오류 : ", error);
@@ -61,7 +57,6 @@ export const getAccountMonthly = async (date: string) => {
         date: date,
       },
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     console.error("월별 거래 금액 조회 오류 : ", error);
