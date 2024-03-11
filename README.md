@@ -424,108 +424,108 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
  │      tony-lee-8IKf54pc3qk-unsplash.jpg  
  │      web_light_sq_SI@4x.png  
  │      
- └─src
-     │  App.css
-     │  App.test.tsx
-     │  App.tsx
-     │  index.css
-     │  index.tsx
-     │  logo.svg
-     │  react-app-env.d.ts
-     │  reportWebVitals.ts
-     │  setupTests.ts
+ └─src  
+     │  App.css  
+     │  App.test.tsx  
+     │  App.tsx  
+     │  index.css  
+     │  index.tsx  
+     │  logo.svg  
+     │  react-app-env.d.ts  
+     │  reportWebVitals.ts  
+     │  setupTests.ts  
      │  
-     ├─apis
-     │      accountApi.ts
-     │      api.ts
-     │      authApis.ts
-     │      diaryApi.ts
-     │      friendApi.ts
-     │      notificationApis.ts
-     │      searchApi.ts
+     ├─apis  
+     │      accountApi.ts  
+     │      api.ts  
+     │      authApis.ts  
+     │      diaryApi.ts  
+     │      friendApi.ts  
+     │      notificationApis.ts  
+     │      searchApi.ts  
      │      
-     ├─atoms
-     │      accountAtom.ts
-     │      authAtom.ts
-     │      diaryAtom.ts
-     │      sideBarAtom.ts
+     ├─atoms  
+     │      accountAtom.ts  
+     │      authAtom.ts  
+     │      diaryAtom.ts  
+     │      sideBarAtom.ts  
      │      
-     ├─components
-     │  │  index.tsx
+     ├─components  
+     │  │  index.tsx  
      │  │  
-     │  ├─account
-     │  │      AccountCalendar.tsx
-     │  │      AccountDaily.tsx
-     │  │      AccountHistory.tsx
-     │  │      AccountMonthly.tsx
-     │  │      AccountMonthlyChart.tsx
-     │  │      AccountPage.tsx
-     │  │      AddAccountModal.tsx
-     │  │      BarChart.tsx
-     │  │      DoughnutChart.tsx
-     │  │      InOutMonthly.tsx
+     │  ├─account  
+     │  │      AccountCalendar.tsx  
+     │  │      AccountDaily.tsx  
+     │  │      AccountHistory.tsx  
+     │  │      AccountMonthly.tsx  
+     │  │      AccountMonthlyChart.tsx  
+     │  │      AccountPage.tsx  
+     │  │      AddAccountModal.tsx  
+     │  │      BarChart.tsx  
+     │  │      DoughnutChart.tsx  
+     │  │      InOutMonthly.tsx  
      │  │      
-     │  ├─auth
-     │  │      GoogleRedirectPage.tsx
-     │  │      KakaoRedirectPage.tsx
-     │  │      SignInPage.tsx
-     │  │      SIgnUpPage.tsx
+     │  ├─auth  
+     │  │      GoogleRedirectPage.tsx  
+     │  │      KakaoRedirectPage.tsx  
+     │  │      SignInPage.tsx  
+     │  │      SIgnUpPage.tsx  
      │  │      
-     │  ├─calendar
-     │  │  │  Calendar.tsx
-     │  │  │  CalendarCells.tsx
-     │  │  │  CalendarDays.tsx
-     │  │  │  CalendarHeader.tsx
+     │  ├─calendar  
+     │  │  │  Calendar.tsx  
+     │  │  │  CalendarCells.tsx  
+     │  │  │  CalendarDays.tsx  
+     │  │  │  CalendarHeader.tsx  
      │  │  │  
-     │  │  └─cell
-     │  │          AccountCell.tsx
-     │  │          MyDiaryCell.tsx
-     │  │          OtherDiaryCell.tsx
-     │  │          
-     │  ├─common
-     │  │      CommonStyledComponents.tsx
-     │  │      FormatDate.tsx
-     │  │      UserDataInfo.tsx
+     │  │  └─cell  
+     │  │          AccountCell.tsx   
+     │  │          MyDiaryCell.tsx  
+     │  │          OtherDiaryCell.tsx  
+     │  │            
+     │  ├─common  
+     │  │      CommonStyledComponents.tsx  
+     │  │      FormatDate.tsx  
+     │  │      UserDataInfo.tsx  
      │  │      
-     │  ├─diary
-     │  │      AddComment.tsx
-     │  │      DiaryComment.tsx
-     │  │      DiaryDailyPage.tsx
-     │  │      DiaryMonthlyPage.tsx
-     │  │      DiaryWritePage.tsx
-     │  │      PickDateModal.tsx
+     │  ├─diary  
+     │  │      AddComment.tsx  
+     │  │      DiaryComment.tsx  
+     │  │      DiaryDailyPage.tsx  
+     │  │      DiaryMonthlyPage.tsx  
+     │  │      DiaryWritePage.tsx  
+     │  │      PickDateModal.tsx  
      │  │      
-     │  ├─friends
-     │  │      FriendsList.tsx
-     │  │      FriendsListPage.tsx
-     │  │      WaitingList.tsx
+     │  ├─friends  
+     │  │      FriendsList.tsx  
+     │  │      FriendsListPage.tsx  
+     │  │      WaitingList.tsx  
      │  │      
-     │  ├─main
-     │  │      MainPage.tsx
+     │  ├─main  
+     │  │      MainPage.tsx  
      │  │      
-     │  ├─mypage
-     │  │      ProfileImage.tsx
-     │  │      ProfilePage.tsx
-     │  │      UpdateInfoPage.tsx
-     │  │      UpdatePasswordPage.tsx
+     │  ├─mypage  
+     │  │      ProfileImage.tsx  
+     │  │      ProfilePage.tsx  
+     │  │      UpdateInfoPage.tsx  
+     │  │      UpdatePasswordPage.tsx  
      │  │      
-     │  ├─notifications
-     │  │      NotificationPage.tsx
+     │  ├─notifications  
+     │  │      NotificationPage.tsx  
      │  │      
-     │  ├─search
-     │  │      SearchPage.tsx
+     │  ├─search  
+     │  │      SearchPage.tsx  
      │  │      
-     │  ├─sidebar
-     │  │      SideBar.tsx
+     │  ├─sidebar  
+     │  │      SideBar.tsx  
      │  │      
-     │  └─todo
-     │          TodoPage.tsx
+     │  └─todo  
+     │          TodoPage.tsx  
      │          
-     └─types
-             accountType.ts
-             authType.ts
-             diaryType.ts
-             notificationType.ts
+     └─types  
+             accountType.ts  
+             authType.ts  
+             diaryType.ts  
+             notificationType.ts  
 
 <br>
 <br>
