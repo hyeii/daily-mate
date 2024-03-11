@@ -101,8 +101,8 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
 
 ## 📂 프로젝트 구성
 
-# Backend
 <details>
+# Backend
    DailyMate           
     └─src  
         ├─main  
@@ -400,10 +400,8 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
                     └─example  
                         └─dailymate  
                                 DailyMateApplicationTests.java  
-</details>
 
 # Frontend
-<details>
  daily-mate  
  │  .gitignore  
  │  package-lock.json  
@@ -529,6 +527,8 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
              authType.ts  
              diaryType.ts  
              notificationType.ts  
+
+             
 </details>
 
 <br>
