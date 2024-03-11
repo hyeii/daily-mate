@@ -122,318 +122,307 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
         │  │          │  │  ├─dao  
         │  │          │  │  │      AccountRepository.java  
         │  │          │  │  │        
-        │  │          │  │  ├─domain
-        │  │          │  │  │      Account.java
+        │  │          │  │  ├─domain  
+        │  │          │  │  │      Account.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dto
-        │  │          │  │  │      AccountReqDto.java
-        │  │          │  │  │      AccountResDto.java
-        │  │          │  │  │      AmountResDto.java
-        │  │          │  │  │      OutputResDto.java
+        │  │          │  │  ├─dto  
+        │  │          │  │  │      AccountReqDto.java  
+        │  │          │  │  │      AccountResDto.java  
+        │  │          │  │  │      AmountResDto.java  
+        │  │          │  │  │      OutputResDto.java  
         │  │          │  │  │      
-        │  │          │  │  ├─exception
-        │  │          │  │  │      AccountBadRequestException.java
-        │  │          │  │  │      AccountExceptionMessage.java
-        │  │          │  │  │      AccountForbiddenException.java
-        │  │          │  │  │      AccountNotFoundException.java
+        │  │          │  │  ├─exception  
+        │  │          │  │  │      AccountBadRequestException.java  
+        │  │          │  │  │      AccountExceptionMessage.java  
+        │  │          │  │  │      AccountForbiddenException.java  
+        │  │          │  │  │      AccountNotFoundException.java  
         │  │          │  │  │      
-        │  │          │  │  └─service
-        │  │          │  │          AccountService.java
-        │  │          │  │          AccountServiceImpl.java
+        │  │          │  │  └─service  
+        │  │          │  │          AccountService.java  
+        │  │          │  │          AccountServiceImpl.java  
         │  │          │  │          
-        │  │          │  ├─alert
-        │  │          │  │  ├─api
-        │  │          │  │  │      AlertController.java
+        │  │          │  ├─alert  
+        │  │          │  │  ├─api  
+        │  │          │  │  │      AlertController.java  
         │  │          │  │  │      
-        │  │          │  │  ├─constant
-        │  │          │  │  │      AlertType.java
+        │  │          │  │  ├─constant  
+        │  │          │  │  │      AlertType.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dao
-        │  │          │  │  │      AlertRepository.java
+        │  │          │  │  ├─dao  
+        │  │          │  │  │      AlertRepository.java  
         │  │          │  │  │      
-        │  │          │  │  ├─domain
-        │  │          │  │  │      Alert.java
+        │  │          │  │  ├─domain  
+        │  │          │  │  │      Alert.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dto
-        │  │          │  │  │      AlertReqDto.java
-        │  │          │  │  │      AlertResDto.java
-        │  │          │  │  │      UrlDto.java
-        │  │          │  │  │      UrlResDto.java
+        │  │          │  │  ├─dto  
+        │  │          │  │  │      AlertReqDto.java  
+        │  │          │  │  │      AlertResDto.java  
+        │  │          │  │  │      UrlDto.java  
+        │  │          │  │  │      UrlResDto.java  
         │  │          │  │  │      
-        │  │          │  │  ├─exception
-        │  │          │  │  │      AlertExceptionMessage.java
-        │  │          │  │  │      AlertForbiddenException.java
-        │  │          │  │  │      AlertNotFoundException.java
+        │  │          │  │  ├─exception  
+        │  │          │  │  │      AlertExceptionMessage.java  
+        │  │          │  │  │      AlertForbiddenException.java  
+        │  │          │  │  │      AlertNotFoundException.java  
         │  │          │  │  │      
-        │  │          │  │  └─service
-        │  │          │  │          AlertService.java
-        │  │          │  │          AlertServiceImpl.java
+        │  │          │  │  └─service  
+        │  │          │  │          AlertService.java  
+        │  │          │  │          AlertServiceImpl.java  
         │  │          │  │          
-        │  │          │  ├─comment
-        │  │          │  │  ├─api
-        │  │          │  │  │      CommentController.java
+        │  │          │  ├─comment  
+        │  │          │  │  ├─api  
+        │  │          │  │  │      CommentController.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dao
-        │  │          │  │  │      CommentRepository.java
-        │  │          │  │  │      LikeCommentRepository.java
+        │  │          │  │  ├─dao  
+        │  │          │  │  │      CommentRepository.java  
+        │  │          │  │  │      LikeCommentRepository.java  
+        │  │          │  │  │        
+        │  │          │  │  ├─domain  
+        │  │          │  │  │      Comment.java  
+        │  │          │  │  │      LikeComment.java  
+        │  │          │  │  │      LikeCommentKey.java  
         │  │          │  │  │      
-        │  │          │  │  ├─domain
-        │  │          │  │  │      Comment.java
-        │  │          │  │  │      LikeComment.java
-        │  │          │  │  │      LikeCommentKey.java
+        │  │          │  │  ├─dto  
+        │  │          │  │  │      CommentReqDto.java  
+        │  │          │  │  │      CommentResDto.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dto
-        │  │          │  │  │      CommentReqDto.java
-        │  │          │  │  │      CommentResDto.java
+        │  │          │  │  ├─exception  
+        │  │          │  │  │      CommentBadRequestException.java  
+        │  │          │  │  │      CommentExceptionMessage.java  
+        │  │          │  │  │      CommentForbiddenException.java  
+        │  │          │  │  │      CommentNotFoundException.java  
+        │  │          │  │  │        
+        │  │          │  │  └─service  
+        │  │          │  │          CommentService.java  
+        │  │          │  │          CommentServiceImpl.java  
+        │  │          │  │           
+        │  │          │  ├─diary  
+        │  │          │  │  ├─api  
+        │  │          │  │  │      DiaryController.java  
         │  │          │  │  │      
-        │  │          │  │  ├─exception
-        │  │          │  │  │      CommentBadRequestException.java
-        │  │          │  │  │      CommentExceptionMessage.java
-        │  │          │  │  │      CommentForbiddenException.java
-        │  │          │  │  │      CommentNotFoundException.java
+        │  │          │  │  ├─constant  
+        │  │          │  │  │      Feeling.java  
+        │  │          │  │  │      OpenType.java  
+        │  │          │  │  │      Weather.java  
         │  │          │  │  │      
-        │  │          │  │  └─service
-        │  │          │  │          CommentService.java
-        │  │          │  │          CommentServiceImpl.java
+        │  │          │  │  ├─dao  
+        │  │          │  │  │      DiaryRepository.java  
+        │  │          │  │  │      LikeDiaryRepository.java  
+        │  │          │  │  │      
+        │  │          │  │  ├─domain  
+        │  │          │  │  │      Diary.java  
+        │  │          │  │  │      LikeDiary.java  
+        │  │          │  │  │      LikeDiaryKey.java  
+        │  │          │  │  │      
+        │  │          │  │  ├─dto  
+        │  │          │  │  │      DiaryMonthlyResDto.java  
+        │  │          │  │  │      DiaryReqDto.java  
+        │  │          │  │  │      DiaryResDto.java  
+        │  │          │  │  │      
+        │  │          │  │  ├─exception  
+        │  │          │  │  │      DiaryBadRequestException.java  
+        │  │          │  │  │      DiaryExceptionMessage.java  
+        │  │          │  │  │      DiaryForbiddenException.java  
+        │  │          │  │  │      DiaryNotFoundException.java  
+        │  │          │  │  │      
+        │  │          │  │  └─service  
+        │  │          │  │          DiaryService.java    
+        │  │          │  │          DiaryServiceImpl.java  
         │  │          │  │          
-        │  │          │  ├─diary
-        │  │          │  │  ├─api
-        │  │          │  │  │      DiaryController.java
+        │  │          │  ├─friend  
+        │  │          │  │  ├─api  
+        │  │          │  │  │      FriendController.java  
         │  │          │  │  │      
-        │  │          │  │  ├─constant
-        │  │          │  │  │      Feeling.java
-        │  │          │  │  │      OpenType.java
-        │  │          │  │  │      Weather.java
+        │  │          │  │  ├─dao  
+        │  │          │  │  │      FriendRepository.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dao
-        │  │          │  │  │      DiaryRepository.java
-        │  │          │  │  │      LikeDiaryRepository.java
+        │  │          │  │  ├─domain  
+        │  │          │  │  │      Friend.java  
         │  │          │  │  │      
-        │  │          │  │  ├─domain
-        │  │          │  │  │      Diary.java
-        │  │          │  │  │      LikeDiary.java
-        │  │          │  │  │      LikeDiaryKey.java
+        │  │          │  │  ├─dto  
+        │  │          │  │  │      FriendInfoDto.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dto
-        │  │          │  │  │      DiaryMonthlyResDto.java
-        │  │          │  │  │      DiaryReqDto.java
-        │  │          │  │  │      DiaryResDto.java
+        │  │          │  │  ├─exception  
+        │  │          │  │  │      FriendBadRequestException.java   
+        │  │          │  │  │      FriendExceptionMessage.java  
+        │  │          │  │  │      FriendNotFountException.java  
         │  │          │  │  │      
-        │  │          │  │  ├─exception
-        │  │          │  │  │      DiaryBadRequestException.java
-        │  │          │  │  │      DiaryExceptionMessage.java
-        │  │          │  │  │      DiaryForbiddenException.java
-        │  │          │  │  │      DiaryNotFoundException.java
-        │  │          │  │  │      
-        │  │          │  │  └─service
-        │  │          │  │          DiaryService.java
-        │  │          │  │          DiaryServiceImpl.java
+        │  │          │  │  └─service  
+        │  │          │  │          FriendService.java  
+        │  │          │  │          FriendServiceImpl.java  
         │  │          │  │          
-        │  │          │  ├─friend
-        │  │          │  │  ├─api
-        │  │          │  │  │      FriendController.java
+        │  │          │  ├─todo  
+        │  │          │  │  ├─api  
+        │  │          │  │  │      TodoController.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dao
-        │  │          │  │  │      FriendRepository.java
+        │  │          │  │  ├─dao  
+        │  │          │  │  │      TodoRepository.java    
         │  │          │  │  │      
-        │  │          │  │  ├─domain
-        │  │          │  │  │      Friend.java
+        │  │          │  │  ├─domain  
+        │  │          │  │  │      Todo.java  
         │  │          │  │  │      
-        │  │          │  │  ├─dto
-        │  │          │  │  │      FriendInfoDto.java
+        │  │          │  │  ├─dto  
+        │  │          │  │  │      AddTodoReqDto.java  
+        │  │          │  │  │      TodoReqDto.java  
+        │  │          │  │  │      TodoResDto.java  
+        │  │          │  │  │      UpdateTodoReqDto.java  
         │  │          │  │  │      
-        │  │          │  │  ├─exception
-        │  │          │  │  │      FriendBadRequestException.java
-        │  │          │  │  │      FriendExceptionMessage.java
-        │  │          │  │  │      FriendNotFountException.java
+        │  │          │  │  ├─exception  
+        │  │          │  │  │      TodoExceptionMessage.java  
+        │  │          │  │  │      TodoForbiddenException.java  
+        │  │          │  │  │      TodoNotFoundException.java  
         │  │          │  │  │      
-        │  │          │  │  └─service
-        │  │          │  │          FriendService.java
-        │  │          │  │          FriendServiceImpl.java
+        │  │          │  │  └─service  
+        │  │          │  │          TodoService.java    
+        │  │          │  │          TodoServiceImpl.java  
         │  │          │  │          
-        │  │          │  ├─todo
-        │  │          │  │  ├─api
-        │  │          │  │  │      TodoController.java
-        │  │          │  │  │      
-        │  │          │  │  ├─dao
-        │  │          │  │  │      TodoRepository.java
-        │  │          │  │  │      
-        │  │          │  │  ├─domain
-        │  │          │  │  │      Todo.java
-        │  │          │  │  │      
-        │  │          │  │  ├─dto
-        │  │          │  │  │      AddTodoReqDto.java
-        │  │          │  │  │      TodoReqDto.java
-        │  │          │  │  │      TodoResDto.java
-        │  │          │  │  │      UpdateTodoReqDto.java
-        │  │          │  │  │      
-        │  │          │  │  ├─exception
-        │  │          │  │  │      TodoExceptionMessage.java
-        │  │          │  │  │      TodoForbiddenException.java
-        │  │          │  │  │      TodoNotFoundException.java
-        │  │          │  │  │      
-        │  │          │  │  └─service
-        │  │          │  │          TodoService.java
-        │  │          │  │          TodoServiceImpl.java
-        │  │          │  │          
-        │  │          │  └─user
-        │  │          │      ├─api
-        │  │          │      │      GoogleController.java
-        │  │          │      │      UserController.java
+        │  │          │  └─user  
+        │  │          │      ├─api  
+        │  │          │      │      GoogleController.java  
+        │  │          │      │      UserController.java  
         │  │          │      │      
-        │  │          │      ├─constant
-        │  │          │      │      UserType.java
+        │  │          │      ├─constant  
+        │  │          │      │      UserType.java  
         │  │          │      │      
-        │  │          │      ├─dao
-        │  │          │      │      RefreshTokenRedisRepository.java
-        │  │          │      │      UserRepository.java
+        │  │          │      ├─dao  
+        │  │          │      │      RefreshTokenRedisRepository.java  
+        │  │          │      │      UserRepository.java  
         │  │          │      │      
-        │  │          │      ├─domain
-        │  │          │      │      RefreshToken.java
-        │  │          │      │      Users.java
+        │  │          │      ├─domain  
+        │  │          │      │      RefreshToken.java  
+        │  │          │      │      Users.java  
         │  │          │      │      
-        │  │          │      ├─dto
-        │  │          │      │  ├─oauth
-        │  │          │      │  │      GoogleOAuth2UserDto.java
-        │  │          │      │  │      KakaoOAuth2UserDto.java
-        │  │          │      │  │      OAuth2UserDto.java
-        │  │          │      │  │      OAuthAttributes.java
+        │  │          │      ├─dto  
+        │  │          │      │  ├─oauth  
+        │  │          │      │  │      GoogleOAuth2UserDto.java  
+        │  │          │      │  │      KakaoOAuth2UserDto.java  
+        │  │          │      │  │      OAuth2UserDto.java  
+        │  │          │      │  │      OAuthAttributes.java  
         │  │          │      │  │      
-        │  │          │      │  ├─request
-        │  │          │      │  │      LogInReqDto.java
-        │  │          │      │  │      PasswordDto.java
-        │  │          │      │  │      SignUpReqDto.java
-        │  │          │      │  │      UpdatePasswordReqDto.java
-        │  │          │      │  │      UpdateUserReqDto.java
+        │  │          │      │  ├─request  
+        │  │          │      │  │      LogInReqDto.java  
+        │  │          │      │  │      PasswordDto.java  
+        │  │          │      │  │      SignUpReqDto.java  
+        │  │          │      │  │      UpdatePasswordReqDto.java  
+        │  │          │      │  │      UpdateUserReqDto.java  
         │  │          │      │  │      
-        │  │          │      │  └─response
-        │  │          │      │          LogInResDto.java
-        │  │          │      │          MyInfoDto.java
-        │  │          │      │          UserAllInfoDto.java
-        │  │          │      │          UserSearchInfoDto.java
+        │  │          │      │  └─response  
+        │  │          │      │          LogInResDto.java  
+        │  │          │      │          MyInfoDto.java  
+        │  │          │      │          UserAllInfoDto.java  
+        │  │          │      │          UserSearchInfoDto.java  
         │  │          │      │          
-        │  │          │      ├─exception
-        │  │          │      │      UserBadRequestException.java
-        │  │          │      │      UserExceptionMessage.java
-        │  │          │      │      UserForbiddenException.java
-        │  │          │      │      UserNotFoundException.java
-        │  │          │      │      
-        │  │          │      ├─oauth
-        │  │          │      │  └─noUse
-        │  │          │      │      │  GoogleOAuthController.java
-        │  │          │      │      │  
-        │  │          │      │      └─dto
-        │  │          │      │              GoogleLoginResponse.java
-        │  │          │      │              GoogleOAuthRequest.java
+        │  │          │      ├─exception  
+        │  │          │      │      UserBadRequestException.java  
+        │  │          │      │      UserExceptionMessage.java  
+        │  │          │      │      UserForbiddenException.java  
+        │  │          │      │      UserNotFoundException.java  
         │  │          │      │              
-        │  │          │      └─service
-        │  │          │              UserService.java
-        │  │          │              UserServiceImpl.java
+        │  │          │      └─service  
+        │  │          │              UserService.java  
+        │  │          │              UserServiceImpl.java  
         │  │          │              
-        │  │          └─global
-        │  │              ├─common
-        │  │              │  │  BaseTime.java
+        │  │          └─global  
+        │  │              ├─common  
+        │  │              │  │  BaseTime.java  
         │  │              │  │  
-        │  │              │  ├─jwt
-        │  │              │  │  │  JwtAuthenticationFilter.java
-        │  │              │  │  │  JwtTokenDto.java
-        │  │              │  │  │  JwtTokenProvider.java
+        │  │              │  ├─jwt  
+        │  │              │  │  │  JwtAuthenticationFilter.java  
+        │  │              │  │  │  JwtTokenDto.java  
+        │  │              │  │  │  JwtTokenProvider.java  
         │  │              │  │  │  
-        │  │              │  │  ├─constant
-        │  │              │  │  │      JwtTokenExpiration.java
+        │  │              │  │  ├─constant  
+        │  │              │  │  │      JwtTokenExpiration.java  
         │  │              │  │  │      
-        │  │              │  │  └─exception
-        │  │              │  │          JwtAccessDeniedHandler.java
-        │  │              │  │          JwtAuthenticationEntryPoint.java
+        │  │              │  │  └─exception  
+        │  │              │  │          JwtAccessDeniedHandler.java  
+        │  │              │  │          JwtAuthenticationEntryPoint.java  
         │  │              │  │          
-        │  │              │  ├─oauth
-        │  │              │  │      OAuth2FailureHandler.java
-        │  │              │  │      OAuth2SuccessHandler.java
-        │  │              │  │      OAuth2UserServiceImpl.java
+        │  │              │  ├─oauth  
+        │  │              │  │      OAuth2FailureHandler.java  
+        │  │              │  │      OAuth2SuccessHandler.java  
+        │  │              │  │      OAuth2UserServiceImpl.java  
         │  │              │  │      
-        │  │              │  ├─redis
-        │  │              │  │      RedisUtil.java
+        │  │              │  ├─redis  
+        │  │              │  │      RedisUtil.java  
         │  │              │  │      
-        │  │              │  └─security
-        │  │              │          SecurityUtil.java
-        │  │              │          UserDetailsImpl.java
-        │  │              │          UserDetailsServiceImpl.java
+        │  │              │  └─security  
+        │  │              │          SecurityUtil.java  
+        │  │              │          UserDetailsImpl.java  
+        │  │              │          UserDetailsServiceImpl.java  
         │  │              │          
-        │  │              ├─config
-        │  │              │      CorsConfig.java
-        │  │              │      RedisConfig.java
-        │  │              │      S3Config.java
-        │  │              │      SecurityConfig.java
-        │  │              │      SwaggerConfig.java
+        │  │              ├─config  
+        │  │              │      CorsConfig.java  
+        │  │              │      RedisConfig.java  
+        │  │              │      S3Config.java  
+        │  │              │      SecurityConfig.java  
+        │  │              │      SwaggerConfig.java  
         │  │              │      
-        │  │              ├─dto
-        │  │              │      MessageDto.java
+        │  │              ├─dto  
+        │  │              │      MessageDto.java  
         │  │              │      
-        │  │              ├─exception
-        │  │              │  │  GlobalExceptionHandler.java
+        │  │              ├─exception  
+        │  │              │  │  GlobalExceptionHandler.java  
         │  │              │  │  
-        │  │              │  └─exception
-        │  │              │          BadRequestException.java
-        │  │              │          ForbiddenException.java
-        │  │              │          NotFoundException.java
-        │  │              │          TokenException.java
-        │  │              │          TokenExceptionMessage.java
+        │  │              │  └─exception  
+        │  │              │          BadRequestException.java  
+        │  │              │          ForbiddenException.java  
+        │  │              │          NotFoundException.java  
+        │  │              │          TokenException.java  
+        │  │              │          TokenExceptionMessage.java  
         │  │              │          
-        │  │              └─image
-        │  │                  ├─api
-        │  │                  │      ImageController.java
+        │  │              └─image  
+        │  │                  ├─exception  
+        │  │                  │      ImageBadRequestException.java  
+        │  │                  │      ImageExceptionMessage.java  
+        │  │                  │      ImageNotFoundException.java  
         │  │                  │      
-        │  │                  ├─exception
-        │  │                  │      ImageBadRequestException.java
-        │  │                  │      ImageExceptionMessage.java
-        │  │                  │      ImageNotFoundException.java
-        │  │                  │      
-        │  │                  └─service
-        │  │                          ImageService.java
-        │  │                          ImageServiceImpl.java
+        │  │                  └─service  
+        │  │                          ImageService.java  
+        │  │                          ImageServiceImpl.java  
         │  │                          
-        │  └─resources
-        │      │  application-h2.yml
-        │      │  application-jwt.yml
-        │      │  application-oauth.yml
-        │      │  application-s3.yml
-        │      │  application-swagger.yml
-        │      │  application.yml
-        │      │  data.sql
-        │      │  
-        │      └─static
-        │              index.html
+        │  └─resources  
+        │      │  application-h2.yml  
+        │      │  application-jwt.yml  
+        │      │  application-oauth.yml  
+        │      │  application-s3.yml  
+        │      │  application-swagger.yml  
+        │      │  application.yml  
+        │      │  data.sql  
+        │      │    
+        │      └─static  
+        │              index.html  
         │              
-        └─test
-            └─java
-                └─com
-                    └─example
-                        └─dailymate
-                                DailyMateApplicationTests.java
+        └─test  
+            └─java  
+                └─com  
+                    └─example  
+                        └─dailymate  
+                                DailyMateApplicationTests.java  
                                 
 # Frontend
- daily-mate
- │  .gitignore
- │  package-lock.json
- │  package.json
- │  README.md
- │  tsconfig.json
+ daily-mate  
+ │  .gitignore  
+ │  package-lock.json  
+ │  package.json  
+ │  README.md  
+ │  tsconfig.json  
  │  
- ├─public
- │      defaultImg.png
- │      favicon.ico
- │      free-icon-cloudy.png
- │      free-icon-rainy.png
- │      free-icon-snow.png
- │      free-icon-sunny.png
- │      index.html
- │      kakao_login_large_narrow.png
- │      logo192.png
- │      logo512.png
- │      manifest.json
- │      robots.txt
- │      tony-lee-8IKf54pc3qk-unsplash.jpg
- │      web_light_sq_SI@4x.png
+ ├─public  
+ │      defaultImg.png  
+ │      favicon.ico  
+ │      free-icon-cloudy.png  
+ │      free-icon-rainy.png  
+ │      free-icon-snow.png  
+ │      free-icon-sunny.png  
+ │      index.html  
+ │      kakao_login_large_narrow.png  
+ │      logo192.png  
+ │      logo512.png  
+ │      manifest.json  
+ │      robots.txt  
+ │      tony-lee-8IKf54pc3qk-unsplash.jpg  
+ │      web_light_sq_SI@4x.png  
  │      
  └─src
      │  App.css
