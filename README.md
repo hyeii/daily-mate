@@ -101,7 +101,6 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
 
 ## 📂 프로젝트 구성
 
-<details>
 # Backend
    DailyMate           
     └─src  
@@ -527,9 +526,6 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
              authType.ts  
              diaryType.ts  
              notificationType.ts  
-
-             
-</details>
 
 <br>
 <br>
