@@ -102,6 +102,7 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
 ## 📂 프로젝트 구성
 
 # Backend
+<detail>
    DailyMate           
     └─src  
         ├─main  
@@ -399,8 +400,10 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
                     └─example  
                         └─dailymate  
                                 DailyMateApplicationTests.java  
-                                
+</detail>
+
 # Frontend
+<detail>
  daily-mate  
  │  .gitignore  
  │  package-lock.json  
@@ -526,35 +529,35 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
              authType.ts  
              diaryType.ts  
              notificationType.ts  
+</detail>
 
 <br>
 <br>
 
 ## 🖥 서비스 화면
-### 1. 서비스를 처음 시작하는 화면
-<img src="https://github.com/yoonoi/algorithm-study/assets/104899234/672a4eb9-f7b5-4bc2-93b7-91f7a54a8317" width="200" height="400"/>
+### 메인화면
 
-1. 시작하기: 로그인 화면으로 이동합니다.
 
-### 2. 로그인 화면 
-<img src="https://github.com/yoonoi/algorithm-study/assets/104899234/37dc4fe9-b560-4158-953d-583162ca1daf" width="200" height="400"/>
+### 로그인 화면 
 
-1. 로그인: 로그인 성공 시 서비스를 이용할 수 있습니다.
 
-2. 구글 로그인: 로그인 성공 시 서비스를 이용할 수 있습니다.
+### 회원가입 화면
 
-3. 회원가입: 회원가입 화면으로 이동합니다.
 
-4. 비밀번호 재발급: 비밀번호 재발급 모달을 생성합니다.
+### 다이어리 메인
 
-### 3. 회원가입 화면
-<img src="https://github.com/yoonoi/algorithm-study/assets/104899234/5c213901-a219-42e4-94e8-639558848a7a" width="200" height="400"/>
 
-1. 이메일 인증: 이메일 발송 후 인증번호를 확인합니다.
+### 가계부 메인
 
-2. 도로명 검색: 도로명 검색창을 생성합니다.
 
-3. 회원가입: 회원가입 성공 시 로그인 화면으로 이동합니다.
+### 투두리스트 메인
+
+
+### 알림 화면
+
+
+### 친구 화면
+
 
 
 
