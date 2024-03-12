@@ -1,0 +1,6 @@
+jwt:
+  secret:
+    2d9dce5eb6bb0ed84af77f7f10359b28abe657953a9b317c4a6baf73817be523
+  redis:
+    host: localhost
+    port: 6379
