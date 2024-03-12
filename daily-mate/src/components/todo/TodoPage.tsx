@@ -57,10 +57,7 @@ const TodoPage = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      const sortedTodoList = response.data.sort(
-        (a: Todo, b: Todo) => a.todoOrder - b.todoOrder
-      );
-      setTodoList(sortedTodoList);
+      setTodoList(response.data);
     } catch (error) {
       console.error("Error fetching todo list:", error);
     }
@@ -244,7 +241,6 @@ const TodoPage = () => {
             onDeleteTodo={handleDeleteTodo}
             onPostponeTodo={handlePostponeTodo}
             onUpdateTodo={handleUpdateTodo}
-            setTodoList={setTodoList}
           />
         </div>
       ) : (

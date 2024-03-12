@@ -1,12 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
-import axios from "axios";
 
 interface Todo {
   todoId: number;
@@ -27,7 +20,6 @@ interface DailyTodoListProps {
   onUpdateTodo: (todoId: number, content: string, date: string) => void;
   onDeleteTodo: (todoId: number) => void;
   onPostponeTodo: (todoId: number) => void;
-  setTodoList: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
 const DailyTodoList: React.FC<DailyTodoListProps> = ({
@@ -36,29 +28,7 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
   onUpdateTodo,
   onDeleteTodo,
   onPostponeTodo,
-  setTodoList,
 }) => {
-  const accessToken = window.localStorage.getItem("accessToken");
-
-  const handleChangeOrder = async (
-    reqDto: { todoId: number; todoOrder: number }[]
-  ) => {
-    try {
-      const response = await axios.patch(
-        "http://localhost:8080/todo/changeOrder",
-        reqDto,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log("할일 순서 변경 성공:", response.data);
-    } catch (error) {
-      console.error("할일 순서 변경 실패:", error);
-    }
-  };
-
   const handleToggle = (todoId: number) => {
     onToggleTodo(todoId);
   };
@@ -76,54 +46,10 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
     onPostponeTodo(todoId);
   };
 
-  const onDragEnd = ({ source, destination }: DropResult) => {
-    console.log(">>> source", source);
-    console.log(">>> destination", destination);
-
-    if (!destination) return;
-
-    const sourceIndex = source.index;
-    const destinationIndex = destination.index;
-
-    const newTodoList = Array.from(todoList);
-    const movedTodo = newTodoList[sourceIndex];
-    newTodoList.splice(sourceIndex, 1);
-    newTodoList.splice(destinationIndex, 0, movedTodo);
-
-    setTodoList(newTodoList);
-
-    const reqDto = newTodoList.map((todo, index) => ({
-      todoId: todo.todoId,
-      todoOrder: index,
-    }));
-    handleChangeOrder(reqDto);
-  };
-
   const [expandedTodoId, setExpandedTodoId] = useState<number | null>(null);
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editedContent, setEditedContent] = useState<string>("");
   const [editedDate, setEditedDate] = useState<string>("");
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const animation = requestAnimationFrame(() => setEnabled(true));
-
-    return () => {
-      cancelAnimationFrame(animation);
-      setEnabled(false);
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   const sortedList = [...todoList].sort((a, b) => a.todoOrder - b.todoOrder);
-  //   setTodoList(sortedList);
-  //   console.log(sortedList);
-  //   console.log("여기다 여기다 여기다");
-  // }, []);
-
-  if (!enabled) {
-    return null;
-  }
 
   const toggleExpandedTodo = (todoId: number) => {
     if (expandedTodoId === todoId) {
@@ -142,134 +68,93 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
   return (
     <div>
       <ul>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                {todoList.map((todo, index) => (
-                  <Draggable
-                    key={todo.todoId}
-                    draggableId={String(todo.todoId)}
-                    index={index}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <ListItem key={todo.todoId}>
-                          <ContentWrapper>
-                            <div>
-                              <input
-                                type="checkbox"
-                                checked={todo.done}
-                                onChange={() => handleToggle(todo.todoId)}
-                              />
-                              <span
-                                style={{
-                                  textDecoration: todo.done
-                                    ? "line-through"
-                                    : "none",
-                                  display: "inline-block",
-                                  marginLeft: "5px",
-                                }}
-                              >
-                                {todo.content}
-                              </span>
-                            </div>
-                            <DropdownWrapper>
-                              <MoreButton
-                                onClick={() => toggleExpandedTodo(todo.todoId)}
-                              >
-                                ···
-                              </MoreButton>
-                              <DropdownContent
-                                $show={expandedTodoId === todo.todoId}
-                              >
-                                {editingTodoId === todo.todoId ? (
-                                  <div>
-                                    <ButtonRow>
-                                      <span>수정 할일</span>
-                                      <TextInput
-                                        type="text"
-                                        value={editedContent}
-                                        onChange={(e) =>
-                                          setEditedContent(e.target.value)
-                                        }
-                                      />
-                                    </ButtonRow>
-                                    <ButtonRow>
-                                      <span>수정 날짜</span>
-                                      <DateInput
-                                        type="date"
-                                        value={editedDate}
-                                        onChange={(e) =>
-                                          setEditedDate(e.target.value)
-                                        }
-                                      />
-                                    </ButtonRow>
-                                    <div>
-                                      <ButtonRow>
-                                        <SubmitButton
-                                          onClick={() =>
-                                            handleUpdate(
-                                              todo.todoId,
-                                              editedContent,
-                                              editedDate
-                                            )
-                                          }
-                                        >
-                                          수정
-                                        </SubmitButton>
-                                        <CancelButton
-                                          onClick={() => setEditingTodoId(null)}
-                                        >
-                                          취소
-                                        </CancelButton>
-                                      </ButtonRow>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <>
-                                    <button
-                                      onClick={() =>
-                                        toggleEditingTodo(
-                                          todo.todoId,
-                                          todo.content,
-                                          todo.date
-                                        )
-                                      }
-                                    >
-                                      수정하기
-                                    </button>
-                                    <button
-                                      onClick={() =>
-                                        handlePostpone(todo.todoId)
-                                      }
-                                    >
-                                      내일로 미루기
-                                    </button>
-                                    <DeleteButton
-                                      onClick={() => handleDelete(todo.todoId)}
-                                    >
-                                      삭제하기
-                                    </DeleteButton>
-                                  </>
-                                )}
-                              </DropdownContent>
-                            </DropdownWrapper>
-                          </ContentWrapper>
-                        </ListItem>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
+        {todoList.map((todo) => (
+          <ListItem key={todo.todoId}>
+            <ContentWrapper>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={todo.done}
+                  onChange={() => handleToggle(todo.todoId)}
+                />
+                <span
+                  style={{
+                    textDecoration: todo.done ? "line-through" : "none",
+                    display: "inline-block",
+                    marginLeft: "5px",
+                  }}
+                >
+                  {todo.content}
+                </span>
               </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+              <DropdownWrapper>
+                <MoreButton onClick={() => toggleExpandedTodo(todo.todoId)}>
+                  ···
+                </MoreButton>
+                <DropdownContent show={expandedTodoId === todo.todoId}>
+                  {editingTodoId === todo.todoId ? (
+                    <div>
+                      <ButtonRow>
+                        <span>수정 할일</span>
+                        <TextInput
+                          type="text"
+                          value={editedContent}
+                          onChange={(e) => setEditedContent(e.target.value)}
+                        />
+                      </ButtonRow>
+                      <ButtonRow>
+                        <span>수정 날짜</span>
+                        <DateInput
+                          type="date"
+                          value={editedDate}
+                          onChange={(e) => setEditedDate(e.target.value)}
+                        />
+                      </ButtonRow>
+                      <div>
+                        <ButtonRow>
+                          <SubmitButton
+                            onClick={() =>
+                              handleUpdate(
+                                todo.todoId,
+                                editedContent,
+                                editedDate
+                              )
+                            }
+                          >
+                            수정
+                          </SubmitButton>
+                          <CancelButton onClick={() => setEditingTodoId(null)}>
+                            취소
+                          </CancelButton>
+                        </ButtonRow>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() =>
+                          toggleEditingTodo(
+                            todo.todoId,
+                            todo.content,
+                            todo.date
+                          )
+                        }
+                      >
+                        수정하기
+                      </button>
+                      <button onClick={() => handlePostpone(todo.todoId)}>
+                        내일로 미루기
+                      </button>
+                      <DeleteButton onClick={() => handleDelete(todo.todoId)}>
+                        삭제하기
+                      </DeleteButton>
+                    </>
+                  )}
+                </DropdownContent>
+              </DropdownWrapper>
+            </ContentWrapper>
+          </ListItem>
+        ))}
       </ul>
     </div>
   );
@@ -306,9 +191,9 @@ const MoreButton = styled.button`
   font-size: 20px;
 `;
 
-const DropdownContent = styled.div<{ $show: boolean }>`
+const DropdownContent = styled.div<{ show: boolean }>`
   display: ${(props) =>
-    props.$show ? "block" : "none"}; /* 드롭다운 내용 숨김 */
+    props.show ? "block" : "none"}; /* 드롭다운 내용 숨김 */
   position: absolute; /* 절대 위치 설정 */
   background-color: white; /* 배경색 */
   min-width: 160px; /* 최소 너비 */
