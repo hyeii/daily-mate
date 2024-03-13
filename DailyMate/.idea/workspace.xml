@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="add : 수정, 삭제, 하루미루기 버튼 생성">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="add : 수정, 삭제, 하루미루기 버튼 생성" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,11 +61,11 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN"
   }
-}</component>
+}]]></component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="5" />
     <option name="recentBranches">
@@ -184,7 +182,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.DailyMate [bootRun]" />
-        <item itemvalue="Gradle.DailyMate [bootRun]" />
       </list>
     </recent_temporary>
   </component>
@@ -204,7 +201,6 @@
       <workItem from="1707796548664" duration="26366000" />
       <workItem from="1708878830492" duration="27000" />
       <workItem from="1709129930614" duration="383000" />
-      <workItem from="1710242672016" duration="2131000" />
     </task>
     <task id="LOCAL-00001" summary="feat todo - 할일 추가/수정/삭제 메서드 추가(미완성)">
       <created>1706523322132</created>
