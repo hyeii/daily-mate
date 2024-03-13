@@ -3,6 +3,7 @@ package com.dailymate.domain.todo.domain;
 import com.dailymate.global.common.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,11 +14,12 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Builder
 @AllArgsConstructor
+@Where(clause = "deleted_at is null")
 public class Todo extends BaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "todo_id")
+	@Column(name = "TODO_ID")
 	private Long todoId;
 	@NotNull
 	private Long userId;
@@ -31,7 +33,7 @@ public class Todo extends BaseTime {
 	private Boolean done;
 
 	@NotNull
-	private Integer repeat;
+	private Integer repeatition;
 
 
 	public void updateTodo(String content, String date){
@@ -41,5 +43,9 @@ public class Todo extends BaseTime {
 
 	public void toggleDone(){
 		this.done = !this.done;
+	}
+
+	public void changeOrder(Integer todoOrder){
+		this.todoOrder = todoOrder == null ? this.todoOrder : todoOrder;
 	}
 }

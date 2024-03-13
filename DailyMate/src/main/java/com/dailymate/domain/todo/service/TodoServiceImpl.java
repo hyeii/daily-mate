@@ -2,10 +2,7 @@ package com.dailymate.domain.todo.service;
 
 import com.dailymate.domain.todo.dao.TodoRepository;
 import com.dailymate.domain.todo.domain.Todo;
-import com.dailymate.domain.todo.dto.AddTodoReqDto;
-import com.dailymate.domain.todo.dto.TodoReqDto;
-import com.dailymate.domain.todo.dto.TodoResDto;
-import com.dailymate.domain.todo.dto.UpdateTodoReqDto;
+import com.dailymate.domain.todo.dto.*;
 import com.dailymate.domain.todo.exception.TodoExceptionMessage;
 import com.dailymate.domain.todo.exception.TodoForbiddenException;
 import com.dailymate.domain.todo.exception.TodoNotFoundException;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,17 +30,18 @@ public class TodoServiceImpl implements TodoService {
 	public void addTodo(AddTodoReqDto addTodoReqDto, String token) {
 		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 등록] 할일 등록 요청");
-
+		log.info(addTodoReqDto.getContent());
+		log.info("Repeatition: " + addTodoReqDto.getRepeatition());
 		LocalDate today = LocalDate.now();
-		for(int i = 0; i < addTodoReqDto.getRepeat(); i++){
+		for(int i = 0; i < addTodoReqDto.getRepeatition(); i++){
 			String todayString = today.plusDays(i).toString();
 			Todo todo = Todo.builder()
 					.userId(USERID)
 					.content(addTodoReqDto.getContent())
-					.date(todayString)
+					.date(addTodoReqDto.getDate())
 					.todoOrder(0)
 					.done(false)
-					.repeat(addTodoReqDto.getRepeat())
+					.repeatition(addTodoReqDto.getRepeatition())
 					.build();
 
 			todoRepository.save(todo);
@@ -114,6 +113,7 @@ public class TodoServiceImpl implements TodoService {
 
 		log.info("[할일 삭제] 할일 찾기 완료");
 		todo.delete();
+		todoRepository.save(todo);
 		log.info("[할일 삭제] 할일 삭제 완료");
 
 	}
@@ -147,17 +147,18 @@ public class TodoServiceImpl implements TodoService {
 				.todoOrder(todo.getTodoOrder())
 				.done(todo.getDone())
 				.userId(todo.getUserId())
+				.repeatition(todo.getRepeatition())
 				.build();
 
-		todoRepository.save(postponedTodo);
 		deleteTodo(todoId, token);
+		todoRepository.save(postponedTodo);
 
 		log.info("[할일 미루기] 할일 미루기 완료");
 		return postponedDate.toString();
 	}
 
 	@Override
-	public List<String> findTodoListByDay(String date, String token) {
+	public List<Todo> findTodoListByDay(String date, String token) {
 		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 일별 조회] 할일 일별 조회 요청. date : {}", date);
 
@@ -169,13 +170,8 @@ public class TodoServiceImpl implements TodoService {
 			return Collections.emptyList(); // 비어 있는 리스트 반환
 		}
 
-		// 2. 할일 내용만 추출하여 리스트로 반환
-		List<String> contentList = todoList.stream()
-				.map(Todo::getContent)
-				.collect(Collectors.toList());
-
 		log.info("[할일 일별 조회] 할일 내용 조회 완료. date : {}, userId : {}", date, USERID);
-		return contentList;
+		return todoList; // todoList 반환
 	}
 
 
@@ -205,13 +201,18 @@ public class TodoServiceImpl implements TodoService {
 	}
 
 	@Override
-	public Integer getSuccessRate(String token, String date) {
+	public Integer getSuccessRate(String date, String token) {
+		log.info("[토큰 확인] token: {}", token);
 		Long USERID = jwtTokenProvider.getUserId(token);
 		log.info("[할일 일간 달성도 조회] 달성도 조회 요청. userId : {}", USERID);
 
 		List<Todo> todoList = todoRepository.findByUserIdAndDate(USERID, date);
 
 		int totalTodos = todoList.size();
+
+		if(totalTodos == 0){
+			return -1;
+		}
 
 		long completedTodos = todoList.stream().filter(Todo::getDone).count();
 
@@ -246,5 +247,48 @@ public class TodoServiceImpl implements TodoService {
 
 		log.info("[할일 완료 체크] 할일 완료. todoId : {}", todoId);
 	}
+
+	@Override
+	public List<ChangeOrderResDto> changeOrder(List<ChangeOrderReqDto> changeOrderReqDto, String token) {
+		Long userId = jwtTokenProvider.getUserId(token);
+		log.info("[할일 순서 변경] 순서 변경 요청. userId : {}", userId);
+
+		List<ChangeOrderResDto> updatedTodoList = new ArrayList<>();
+
+		for (ChangeOrderReqDto dto : changeOrderReqDto) {
+			Long todoId = dto.getTodoId();
+			Integer todoOrder = dto.getTodoOrder();
+
+			// 해당 ID의 할일을 조회
+			Todo todo = todoRepository.findById(todoId)
+					.orElseThrow(() -> {
+						log.error("[할일 순서 변경] 할일을 찾을 수 없습니다. todoId : {}", todoId);
+						return new TodoNotFoundException("할일을 찾을 수 없습니다.");
+					});
+
+			// 로그인한 사용자의 할일인지 확인
+			if (!todo.getUserId().equals(userId)) {
+				log.error("[할일 순서 변경] 권한이 없는 할일입니다. todoId : {}", todoId);
+				throw new TodoForbiddenException("권한이 없는 할일입니다.");
+			}
+
+			// 순서를 변경하고 저장
+			todo.changeOrder(todoOrder);
+			Todo updatedTodo = todoRepository.save(todo);
+
+			// 변경된 Todo의 정보를 ChangeOrderResDto로 매핑하여 목록에 추가
+			ChangeOrderResDto updatedTodoDto = new ChangeOrderResDto();
+			updatedTodoDto.setTodoId(updatedTodo.getTodoId());
+			updatedTodoDto.setTodoOrder(updatedTodo.getTodoOrder());
+			updatedTodoList.add(updatedTodoDto);
+
+			log.info("[할일 순서 변경] 할일 순서 변경 완료. todoId : {}, order : {}", todoId, todoOrder);
+		}
+
+		log.info("[할일 순서 변경] 모든 할일의 순서 변경 완료");
+
+		return updatedTodoList;
+	}
+
 
 }
