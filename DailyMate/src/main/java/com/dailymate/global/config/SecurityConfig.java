@@ -1,13 +1,15 @@
 package com.dailymate.global.config;
 
+import com.dailymate.global.common.oauth.OAuth2UserServiceImpl;
 import com.dailymate.global.common.jwt.JwtAuthenticationFilter;
 import com.dailymate.global.common.jwt.JwtTokenProvider;
 import com.dailymate.global.common.jwt.exception.JwtAccessDeniedHandler;
 import com.dailymate.global.common.jwt.exception.JwtAuthenticationEntryPoint;
+import com.dailymate.global.common.oauth.OAuth2FailureHandler;
+import com.dailymate.global.common.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,7 +17,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.CorsFilter;
 
 /**
  * Spring Security의 설정을 담당
@@ -35,6 +37,10 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
+    private final OAuth2UserServiceImpl oAuth2UserService;
+    private final CorsFilter corsFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -45,6 +51,9 @@ public class SecurityConfig {
                 // REST API이므로 basic auth 및 csrf 보안을 사용하지 않음
                 .httpBasic().disable()
                 .csrf().disable()
+
+                // cors
+                .cors().disable()
 
                 // JWT를 사용하기 때문에 세션을 사용하지 않음
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -57,6 +66,7 @@ public class SecurityConfig {
                 .and()
 
                 .authorizeHttpRequests()
+//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // CORS 에러 임시용
                 // 해당 API에 대해서는 모든 요청을 허가
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
 
@@ -69,8 +79,23 @@ public class SecurityConfig {
 
                 // JWT 인증을 위하여 직접 구현한 필터를
                 // UsernamePasswordAuthenticationFilter 전에 실행
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 
+                // OAuth2 설정 추가
+                .oauth2Login()
+//                .authorizationEndpoint()
+//                .baseUri("/oauth2/authorization")
+//                .and()
+//                .redirectionEndpoint()
+//                .baseUri("/oauth/google/callback")
+//                .and()
+                .userInfoEndpoint().userService(oAuth2UserService).and()
+                .successHandler(oAuth2SuccessHandler)
+                .failureHandler(oAuth2FailureHandler)
+//                .defaultSuccessUrl("/oauth/loginInfo") // OAuth2 성공시 redirect
+
+                .and()
                 .build();
     }
 
@@ -89,7 +114,9 @@ public class SecurityConfig {
             "/user/check/**",
             "/user/reissue-token",
 
-            // social
+            // oauth
+            "/oauth/**",
+            "/oauth2/**",
 
             // h2-console
             "/h2-console/**",
@@ -97,7 +124,6 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_ONLY_ADMIN = {
             "/user/admin/**",
-
     };
 
     /**

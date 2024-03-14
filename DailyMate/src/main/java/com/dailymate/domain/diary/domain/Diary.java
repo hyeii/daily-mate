@@ -1,9 +1,11 @@
 package com.dailymate.domain.diary.domain;
 
+import com.dailymate.domain.comment.domain.Comment;
 import com.dailymate.domain.diary.constant.Feeling;
 import com.dailymate.domain.diary.constant.OpenType;
 import com.dailymate.domain.diary.constant.Weather;
 import com.dailymate.domain.diary.dto.DiaryReqDto;
+import com.dailymate.domain.user.domain.Users;
 import com.dailymate.global.common.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -12,6 +14,8 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Diary")
 @Getter
@@ -28,15 +32,15 @@ public class Diary extends BaseTime {
     @Column(name = "diary_id")
     private Long diaryId;
 
-    @NotNull
-    @Column
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    private Users users;
 
     @NotNull
     @Column
     private String title;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column
@@ -54,9 +58,13 @@ public class Diary extends BaseTime {
     @Enumerated(EnumType.STRING)
     private OpenType openType;
 
-    public static Diary createDiary(DiaryReqDto diaryReqDto) {
+    @OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+
+    public static Diary createDiary(DiaryReqDto diaryReqDto, Users users) {
         return Diary.builder()
-                .userId(1l)
+                .users(users)
                 .title(diaryReqDto.getTitle())
                 .content(diaryReqDto.getContent())
                 .date(diaryReqDto.getDate())
