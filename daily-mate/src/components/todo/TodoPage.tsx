@@ -258,8 +258,11 @@ const TodoPage = () => {
   const closeModal = () => {
     setIsModalOpen(false); // 모달 닫기
   };
+  const handleOutsideModalClick = () => {
+    setIsModalOpen(false); // 모달 외부 클릭 시 모달 닫기
+  };
   return (
-    <div>
+    <div onClick={handleOutsideModalClick}>
       <div>
         {view === "daily" ? (
           <>
