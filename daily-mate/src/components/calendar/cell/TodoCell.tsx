@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { findSuccess } from "../../../apis/todoApi";
 
 interface Props {
   date: string;
@@ -13,22 +14,24 @@ const TodoCell = ({ date }: Props) => {
 
   useEffect(() => {
     const getSuccess = async (date: string) => {
-      const accessToken = await window.localStorage.getItem("accessToken");
-      console.log(accessToken);
-      try {
-        const response = await axios.get("http://localhost:8080/todo/success", {
-          params: {
-            date: date,
-          },
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        setSuccessRate(response.data);
-      } catch (error) {
-        console.error("Error fetching todo list:", error);
+      const result: number | null = await findSuccess(date);
+      if (result != null) {
+        setSuccessRate(result);
       }
+      // try {
+      //   const response = await axios.get("http://localhost:8080/todo/success", {
+      //     params: {
+      //       date: date,
+      //     },
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //     },
+      //   });
+
+      //   setSuccessRate(response.data);
+      // } catch (error) {
+      //   console.error("Error fetching todo list:", error);
+      // }
     };
 
     getSuccess(date);

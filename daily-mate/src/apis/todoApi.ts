@@ -95,3 +95,17 @@ export const changeOrder = async (
     console.error("할일 순서 변경 실패:", error);
   }
 };
+
+export const findSuccess = async (date: string) => {
+  try {
+    const response = await API.get("/todo/success", {
+      params: {
+        date: date,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching todo list:", error);
+  }
+};
