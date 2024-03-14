@@ -56,6 +56,7 @@ const DiaryComment = ({ diaryId }: props) => {
       content: inputUpdateComment,
     };
     updateComment(comment.commentId, updatedComment);
+    window.location.reload();
     // updateState 초기화 위치 고민 필요!
     setUpdateState(-1);
   };
@@ -70,6 +71,7 @@ const DiaryComment = ({ diaryId }: props) => {
     }
     if (window.confirm("해당 댓글을 삭제할까요?")) {
       deleteComment(comment.commentId);
+      window.location.reload();
     }
   };
 
@@ -98,7 +100,7 @@ const DiaryComment = ({ diaryId }: props) => {
           </CommentTop>
           <CommentMiddle>
             {updateState === comment.commentId ? (
-              <input
+              <UpdateInput
                 type="text"
                 defaultValue={comment.content}
                 onChange={handleUpdateComment}
@@ -189,4 +191,16 @@ const ControlButtons = styled.span`
   &:hover {
     font-weight: bold;
   }
+`;
+
+const UpdateInput = styled.input`
+  width: auto;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding: 0.5rem;
+  background-color: #ffffff;
+  font-family: "LeeSeoyun";
+  font-size: 1em;
+  flex: 1;
 `;

@@ -7,6 +7,7 @@ import {
   DiaryMonthlyPage,
   DiaryWritePage,
   FriendsListPage,
+  GoogleRedirectPage,
   KakaoRedirectPage,
   MainPage,
   NotificationPage,
@@ -63,6 +64,10 @@ function App() {
             <Route path="/todo" element={<TodoPage />}></Route>
             <Route path="/search" element={<SearchPage />} />
             <Route path="/oauth/kakao" element={<KakaoRedirectPage />} />
+            <Route
+              path="/oauth/google/success"
+              element={<GoogleRedirectPage />}
+            />
           </Routes>
         </MainBox>
       </MainContainer>

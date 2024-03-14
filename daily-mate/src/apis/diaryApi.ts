@@ -1,11 +1,10 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { API, diaryAPI } from "./api";
 import {
   commentBody,
   commentListResponse,
   diaryByDateResponse,
   diaryByMonthResponse,
-  diaryRequest,
 } from "../types/diaryType";
 
 export const getDiaryByDiaryId = async (diaryId: number) => {
@@ -75,7 +74,6 @@ export const addDiary = async (formData: FormData) => {
       "/diary",
       formData
     );
-    console.log(res.data.message);
     return res.data.message;
   } catch (error) {
     console.error("일기 작성 오류 : ", error);
@@ -88,7 +86,6 @@ export const deleteDiary = async (diaryId: number) => {
     const res: AxiosResponse<{ message: string }> = await API.delete(
       `/diary/${diaryId}`
     );
-    console.log(res.data.message);
     return res.data.message;
   } catch (error) {
     console.error("일기 삭제 오류 : ", error);
@@ -101,7 +98,6 @@ export const likeDiary = async (diaryId: number) => {
     const res: AxiosResponse<{ message: string }> = await API.post(
       `/diary/like/${diaryId}`
     );
-    console.log(res.data.message);
     return res.data;
   } catch (error) {
     console.error("일기 좋아요 오류 : ", error);

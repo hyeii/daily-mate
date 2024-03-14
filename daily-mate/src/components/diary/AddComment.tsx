@@ -22,6 +22,7 @@ const AddComment = ({ diaryId }: props) => {
       content: inputComment,
     };
     addComment(diaryId, comment);
+    window.location.reload();
   };
   return (
     <AddCommentWrapper>
@@ -45,8 +46,8 @@ const AddInput = styled.input`
   border-radius: 15px;
   outline: none;
   padding: 0.5rem;
-  background-color: rgb(233, 233, 233);
-  font-family: "S-CoreDream-3Light";
+  background-color: #ffffff;
+  font-family: "LeeSeoyun";
   flex: 1;
 `;
 

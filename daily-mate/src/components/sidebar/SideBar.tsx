@@ -1,44 +1,28 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { sideBarOpenState } from "../../atoms/sideBarAtom";
-import {
-  isLoginState,
-  userImageURLState,
-  userInfoState,
-} from "../../atoms/authAtom";
+import { userImageURLState, userInfoState } from "../../atoms/authAtom";
 import { logOut } from "../../apis/authApis";
 import { IoSearch, IoNotificationsOutline } from "react-icons/io5";
-import { RxDoubleArrowLeft } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { accountTabState, selectedDateState } from "../../atoms/accountAtom";
 import { format } from "date-fns";
+import useLogOut from "../../hooks/useLogOut";
 
 const SideBar = () => {
   const isOpen = useRecoilValue(sideBarOpenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-  const setIsLogin = useSetRecoilState(isLoginState);
-  const setSidebarOpen = useSetRecoilState(sideBarOpenState);
-  const setImageURL = useSetRecoilState(userImageURLState);
+  const userImageURL = useRecoilValue(userImageURLState);
   const setSelectedDate = useSetRecoilState(selectedDateState);
   const setAccountTab = useSetRecoilState(accountTabState);
   const navigate = useNavigate();
+  const { LogOut } = useLogOut();
+  const S3URL = "https://dailymate.s3.ap-northeast-2.amazonaws.com/";
 
   const handleLogOut = async () => {
     const logOutResult = await logOut();
     if (logOutResult !== null) {
-      setUserInfo({
-        userId: -1,
-        nickname: "",
-        email: "",
-        profile: "",
-        type: "",
-      });
-      setIsLogin(false);
-      setSidebarOpen(false);
-      setImageURL("");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("accessToken");
-      // 인터셉터 초기화
+      LogOut();
       alert("로그아웃 완료");
       navigate("/");
     }
@@ -55,7 +39,9 @@ const SideBar = () => {
   const moveMyPage = () => {
     navigate("/mypage/profile");
   };
-
+  const myTodo = () => {
+    navigate("/todo");
+  };
   const moveNotifications = () => {
     navigate("/notifications");
   };
@@ -68,8 +54,8 @@ const SideBar = () => {
       <SidebarContainer>
         <UserProfileBox>
           <ImageBox
-            src={process.env.PUBLIC_URL + "/defaultImg.png"}
-            alt="default"
+            src={userImageURL ?? process.env.PUBLIC_URL + "/defaultImg.png"}
+            alt="userImage"
           />
           <UserProfileRight>
             <NotificationBtn onClick={moveNotifications} />
@@ -80,7 +66,7 @@ const SideBar = () => {
         <SidebarSearchIcon onClick={moveSearch} />
         <SidebarItems onClick={moveDiary}>다이어리</SidebarItems>
         <SidebarItems onClick={moveAccount}>가계부</SidebarItems>
-        <SidebarItems>할 일</SidebarItems>
+        <SidebarItems onClick={myTodo}>할 일</SidebarItems>
         <SidebarItems onClick={moveMyPage}>마이페이지</SidebarItems>
         <SidebarItems onClick={handleLogOut}>로그아웃</SidebarItems>
       </SidebarContainer>
@@ -109,20 +95,6 @@ const SidebarContainer = styled.div`
   margin: 2rem;
   display: flex;
   flex-direction: column;
-`;
-
-const SidebarBtnBox = styled.div`
-  display: flex;
-  justify-content: end;
-`;
-const SidebarBtn = styled(RxDoubleArrowLeft)`
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  // color: #aaaaaa;
-  cursor: pointer;
-  &: hover {
-    transform: scale(1.1);
-  }
 `;
 
 const ImageBox = styled.img`

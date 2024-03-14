@@ -6,6 +6,8 @@ import { getAccountByDate } from "../../apis/accountApi";
 import BarChart from "./BarChart";
 import styled from "styled-components";
 import { formatDate } from "../common/FormatDate";
+import { useRecoilValue } from "recoil";
+import { sideBarOpenState } from "../../atoms/sideBarAtom";
 
 interface props {
   currentDay: string;
@@ -16,6 +18,7 @@ const AccountDaily = ({ currentDay }: props) => {
     accountByDateResponse[] | null
   >(null);
   const [dailyOutput, setDailyOutput] = useState<number[]>([]);
+  const isOpen = useRecoilValue(sideBarOpenState);
 
   useEffect(() => {
     // currentDay가 바뀔 떄 마다 /account GET요청
@@ -46,8 +49,10 @@ const AccountDaily = ({ currentDay }: props) => {
         <AccountDayBox>{formatDate(currentDay)}의 가계부</AccountDayBox>
       </div>
       <DailytContainer>
-        <Calendar isMini="yes" calendarType="account" />
-        <ChartContainer>
+        <div style={{ flex: "2", display: "flex" }}>
+          <Calendar isMini="yes" calendarType="account" />
+        </div>
+        <ChartContainer isopen={isOpen ? "open" : "close"}>
           <BarChart outputValue={dailyOutput} />
           <CategoryContainer>
             <CategoryItem>
@@ -137,11 +142,16 @@ const AccountDayBox = styled.h2`
 const DailytContainer = styled.div`
   display: flex;
   min-height: 20rem;
+  max-height: 28rem;
 `;
 
-const ChartContainer = styled.div`
+interface SidebarProps {
+  isopen: string;
+}
+
+const ChartContainer = styled.div<SidebarProps>`
   display: grid;
-  grid-template-columns: 30rem;
+
   grid-template-rows: 3fr 1fr;
   grid-gap: 0.2rem;
 
@@ -149,19 +159,25 @@ const ChartContainer = styled.div`
   border-radius: 10px;
   margin-left: 0.5rem;
   padding: 0.3rem 0;
+
+  grid-template-columns: ${({ isopen }) =>
+    isopen === "open" ? "35vw" : "40vw"};
 `;
 
 const CategoryContainer = styled.div`
   display: grid;
+  width: auto;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   grid-row-gap: 0.3rem;
   grid-column-gap: 0.7rem;
-  padding: 0.3rem;
+  padding: 0.5rem;
 `;
 
 const CategoryItem = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 1rem;
+  padding: 0 2rem;
 `;

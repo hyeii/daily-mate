@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { notifyResponse } from "../../types/notificationType";
 import { deleteNofity, getNotify } from "../../apis/notificationApis";
+import NotificationInfo from "./NotificationInfo";
+import styled from "styled-components";
 
 const NotificationPage = () => {
   const [notificationList, setNotificationList] = useState<notifyResponse[]>(
@@ -16,34 +18,25 @@ const NotificationPage = () => {
     fetchData();
   }, []);
 
-  const handleDeleteNotify = (alertId: number) => {
-    const deleteResult = deleteNofity(alertId);
-    if (deleteResult !== null) {
-      // 삭제완료, 새로고침
-    }
-  };
-
   const notifyList = () => {
     return (
       <div>
         {notificationList.map((notify) => (
-          <div key={notify.alertId}>
-            <div>{notify.fromId}</div>
-            <div>{notify.content}</div>
-            <button onClick={() => handleDeleteNotify(notify.alertId)}>
-              X
-            </button>
-          </div>
+          <NotificationInfo notify={notify} key={notify.alertId} />
         ))}
       </div>
     );
   };
   return (
     <div>
-      <h3>알림</h3>
+      <Title>알림</Title>
       <div>{notifyList()}</div>
     </div>
   );
 };
 
 export default NotificationPage;
+
+const Title = styled.h3`
+  font-size: 1.2rem;
+`;

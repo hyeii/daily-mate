@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   getInfoResponse,
   myInfoResponse,
@@ -7,7 +7,7 @@ import {
   updatePasswordInput,
   userResponse,
 } from "../types/authType";
-import { API, foreAPI } from "./api";
+import { API, diaryAPI, foreAPI } from "./api";
 
 export const checkNickname = async (nickname: string) => {
   try {
@@ -62,7 +62,6 @@ export const useSignIn = () => {
         }
       );
       const signInResult = res.data;
-      console.log(res.data);
       window.localStorage.setItem("accessToken", signInResult.accessToken);
       window.localStorage.setItem("refreshToken", signInResult.refreshToken);
       return signInResult;
@@ -87,7 +86,6 @@ export const getReissueToken = async () => {
         headers,
       }
     );
-    console.log("토큰 재발급 데이터 : ", res.data);
     return res;
   } catch (error) {
     console.error("토큰 재발급 오류 : ", error);
@@ -122,7 +120,6 @@ export const updateUserInfo = async (
     try {
       const re_res: AxiosResponse<myInfoResponse> = await API.get("/user");
       const result = re_res.data;
-      console.log(result);
       return result;
     } catch (error) {
       console.error("내 정보 조회 오류 : ", error);
@@ -143,10 +140,8 @@ export const updateUserPassword = async (
       "/user/password",
       passwordInput
     );
-    const result = res.data;
-    console.log(result);
     alert("비밀번호가 변경되었습니다");
-    return result;
+    return res.data;
   } catch (error) {
     console.error("비밀번호 변경 오류 : ", error);
     alert("비밀번호를 다시 확인해주세요");
@@ -160,6 +155,62 @@ export const getUserByUserId = async (userId: number) => {
     return res.data;
   } catch (error) {
     console.error("userId로 정보 조회 오류 : ", error);
+    return null;
+  }
+};
+
+export const socialLogIn = async (token: string) => {
+  try {
+    const socialAPI = axios.create({
+      baseURL: process.env.REACT_APP_URL,
+      headers: {
+        Authorization: token,
+      },
+    });
+    const res = await socialAPI.get<userResponse>("/oauth/google/login-info");
+
+    return res.data;
+  } catch (error) {
+    console.error("구글 로그인 에러 : ", error);
+    return null;
+  }
+};
+
+export const deleteUser = async () => {
+  try {
+    const res = await API.delete("/user");
+    return res.data;
+  } catch (error) {
+    console.error("회원 탈퇴 오류 : ", error);
+    return null;
+  }
+};
+
+export const updateImage = async (formData: FormData) => {
+  try {
+    const res = await diaryAPI.post("/user/image", formData);
+    console.log(res.data);
+    try {
+      const re_res: AxiosResponse<myInfoResponse> = await API.get("/user");
+      const result = re_res.data;
+
+      return result;
+    } catch (error) {
+      console.error("내 정보 조회 오류 : ", error);
+      return null;
+    }
+  } catch (error) {
+    console.error("이미지 변경 오류 : ", error);
+    return null;
+  }
+};
+
+export const deleteImage = async () => {
+  try {
+    const res = await API.delete("user/image");
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
     return null;
   }
 };

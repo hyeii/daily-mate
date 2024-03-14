@@ -42,7 +42,7 @@ const AccountHistory = ({ accountList }: props) => {
 
   return (
     <div>
-      <h3>거래내역</h3>
+      <Title>거래내역</Title>
       <TableContainer>
         <Table>
           <thead>
@@ -60,11 +60,11 @@ const AccountHistory = ({ accountList }: props) => {
                   onMouseEnter={() => setOpenIcon(item.accountId)}
                   onMouseLeave={() => setOpenIcon(0)}
                 >
-                  <TableCell>{item.category}</TableCell>
+                  <TableCell>{item.category ?? `수입`}</TableCell>
                   <TableCell>{item.content}</TableCell>
                   <TableCell>
+                    {item.amount.toLocaleString()}
                     <AmountCell>
-                      <div>{item.amount.toLocaleString()}</div>
                       <IconStyles
                         style={{ opacity: openIcon === item.accountId ? 1 : 0 }}
                       >
@@ -86,8 +86,15 @@ const AccountHistory = ({ accountList }: props) => {
 
 export default AccountHistory;
 
+const Title = styled.h3`
+  font-size: 1.3rem;
+`;
+
 const IconStyles = styled.div`
   opacity: 0;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 
   &:hover {
     opacity: 1;
@@ -96,18 +103,18 @@ const IconStyles = styled.div`
 `;
 
 const TableContainer = styled.div`
-  width: 80vw;
   overflow: auto;
 `;
 
 const Table = styled.table`
-  width: auto;
+  width: -webkit-fill-available;
   border-collapse: collapse;
+  font-size: 1.2rem;
 `;
 
 const TableHeaderCell = styled.th`
-  background-color: #f2f2f2;
-  border: 1px solid #ccc;
+  background-color: #ffffff;
+  border: 2px solid #ffffff;
   padding: 8px;
 
   &:nth-child(1) {
@@ -122,14 +129,16 @@ const TableHeaderCell = styled.th`
 `;
 
 const TableCell = styled.td`
-  border: 1px solid #ccc;
+  border: 2px solid #ffffff;
   padding: 8px;
   text-align: center;
 `;
 
 const AmountCell = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  grid-gap: 0.7rem;
-  text-align: end;
+  // display: grid;
+  // grid-template-columns: 3fr 1fr;
+  // grid-gap: 0.7rem;
+  // text-align: end;
+
+  position: relative;
 `;

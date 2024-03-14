@@ -35,7 +35,9 @@ const DiaryDailyPage = () => {
   const deleteDiaryNow = () => {
     if (diaryDetail && deleteDiary(diaryDetail.diaryId) !== null) {
       alert("일기가 삭제되었습니다.");
-      navigate(`/diary/monthly/${userInfo.userId}`);
+      setTimeout(() => {
+        navigate(`/diary/monthly/${userInfo.userId}`);
+      }, 1000);
     }
   };
 
@@ -116,13 +118,19 @@ const DiaryDailyPage = () => {
                 <div style={{ opacity: "0" }}>숨김</div>
               )}
               {diaryDetail.isLike ? (
-                <FullHeart
-                  onClick={() => handleLikeDiary(diaryDetail.diaryId)}
-                />
+                <div>
+                  <FullHeart
+                    onClick={() => handleLikeDiary(diaryDetail.diaryId)}
+                  />
+                  {diaryDetail.likeNum}
+                </div>
               ) : (
-                <OutLineHeart
-                  onClick={() => handleLikeDiary(diaryDetail.diaryId)}
-                />
+                <div>
+                  <OutLineHeart
+                    onClick={() => handleLikeDiary(diaryDetail.diaryId)}
+                  />
+                  {diaryDetail.likeNum}
+                </div>
               )}
             </DiaryIconBox>
           </DiaryBottom>
