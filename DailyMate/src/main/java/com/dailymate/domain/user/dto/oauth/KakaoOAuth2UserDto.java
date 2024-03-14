@@ -4,8 +4,14 @@ import java.util.Map;
 
 public class KakaoOAuth2UserDto extends OAuth2UserDto {
 
+    private Map<String, Object> account;
+    private Map<String, Object> profile;
+
     public KakaoOAuth2UserDto(Map<String, Object> attributes) {
         super(attributes);
+
+        account = (Map<String, Object>) attributes.get("kakao_account");
+        profile = (Map<String, Object>) account.get("profile");
     }
 
     @Override
@@ -15,22 +21,16 @@ public class KakaoOAuth2UserDto extends OAuth2UserDto {
 
     @Override
     public String getEmail() {
-        return String.valueOf(attributes.get("email"));
+        return String.valueOf(account.get("email"));
     }
 
     @Override
     public String getNickname() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) account.get("profile");
-
         return profile == null ? null : (String) profile.get("nickname");
     }
 
     @Override
     public String getImage() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
-        Map<String, Object> profile = (Map<String, Object>) account.get("profile");
-
         return profile == null ? null : String.valueOf(profile.get("thumbnail_image_url"));
     }
 }

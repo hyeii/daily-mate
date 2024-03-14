@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
-public class GoogleController {
+public class OAuthController {
 
     private final String ACCESS_TOKEN = "authorization";
     private final UserService userService;
@@ -26,11 +26,20 @@ public class GoogleController {
     }
 
     @Operation(
-            summary = "구글 로그인 성공 후 ACCESS_TOKEN 반환",
-            description = "구글 로그인 성공 후 프론트에 쿼리스트링으로 ACCESS_TOKEN을 반환합니다."
+            summary = "카카오 로그인으로 리다이렉트",
+            description = "프론트에서 버튼을 누르면 카카오 로그인 창으로 리다이렉트됩니다."
     )
-    @GetMapping("/google/success")
-    public ResponseEntity<?> googleLogin(@RequestParam("accessToken") String accessToken) {
+    @GetMapping("/kakao")
+    public RedirectView redirectToKakao() {
+        return new RedirectView(("/oauth2/authorization/kakao"));
+    }
+
+    @Operation(
+            summary = "구글/카카오 로그인 성공 후 ACCESS_TOKEN 반환",
+            description = "구글/카카오 로그인 성공 후 프론트에 쿼리스트링으로 ACCESS_TOKEN을 반환합니다."
+    )
+    @GetMapping("/success")
+    public ResponseEntity<?> oauthLogin(@RequestParam("accessToken") String accessToken) {
         return ResponseEntity.ok().build();
     }
 
@@ -38,8 +47,8 @@ public class GoogleController {
             summary = "토큰을 이용해 소셜 로그인 정보 추출",
             description = "프론트에서 토큰을 사용하여 LoginResDto를 반환받습니다."
     )
-    @GetMapping("/google/login-info")
-    public ResponseEntity<LogInResDto> getGoogleLoginInfo(@RequestHeader(ACCESS_TOKEN) String token) {
+    @GetMapping("/login-info")
+    public ResponseEntity<LogInResDto> getOauthLoginInfo(@RequestHeader(ACCESS_TOKEN) String token) {
         return ResponseEntity.ok(userService.getGoogleLoginInfo(token));
     }
 
