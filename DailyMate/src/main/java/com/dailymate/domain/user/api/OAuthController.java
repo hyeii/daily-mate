@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
-public class GoogleController {
+public class OAuthController {
 
     private final String ACCESS_TOKEN = "authorization";
     private final UserService userService;
