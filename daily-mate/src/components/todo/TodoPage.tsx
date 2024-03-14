@@ -7,8 +7,16 @@ import { EnumNumberMember } from "@babel/types";
 import TodoAddModal from "./TodoAddModal";
 import { async } from "q";
 import styled from "styled-components";
+import {
+  getTodoList,
+  toggleTodo,
+  deleteTodo,
+  postponeTodo,
+  updateTodo,
+  addTodo,
+} from "../../apis/todoApi";
 
-interface Todo {
+export interface Todo {
   todoId: number;
   userId: number;
   content: string;
@@ -48,22 +56,27 @@ const TodoPage = () => {
   const accessToken = window.localStorage.getItem("accessToken");
 
   const fetchTodoList = async (date: string) => {
-    try {
-      const response = await axios.get("http://localhost:8080/todo/all", {
-        params: {
-          date: date,
-        },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const sortedTodoList = response.data.sort(
-        (a: Todo, b: Todo) => a.todoOrder - b.todoOrder
-      );
+    const sortedTodoList: Todo[] | null = await getTodoList(date);
+    if (sortedTodoList != null) {
       setTodoList(sortedTodoList);
-    } catch (error) {
-      console.error("Error fetching todo list:", error);
     }
+
+    // try {
+    //   const response = await axios.get("http://localhost:8080/todo/all", {
+    //     params: {
+    //       date: date,
+    //     },
+    //     headers: {
+    //       Authorization: `Bearer ${accessToken}`,
+    //     },
+    //   });
+    //   const sortedTodoList = response.data.sort(
+    //     (a: Todo, b: Todo) => a.todoOrder - b.todoOrder
+    //   );
+    //   setTodoList(sortedTodoList);
+    // } catch (error) {
+    //   console.error("Error fetching todo list:", error);
+    // }
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,62 +84,83 @@ const TodoPage = () => {
   };
 
   const handleToggleTodo = async (todoId: number) => {
-    try {
-      const response = await axios.patch(
-        `http://localhost:8080/todo/success/${todoId}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      // 서버에서 응답이 성공하면 해당 todo의 done 상태를 토글
+    const result = await toggleTodo(todoId);
+    if (result) {
       setTodoList((prevTodoList) =>
         prevTodoList.map((todo) =>
           todo.todoId === todoId ? { ...todo, done: !todo.done } : todo
         )
       );
-    } catch (error) {
-      console.error("Error toggling todo:", error);
     }
+
+    // try {
+    //   const response = await axios.patch(
+    //     `http://localhost:8080/todo/success/${todoId}`,
+    //     null,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     }
+    //   );
+    //   // 서버에서 응답이 성공하면 해당 todo의 done 상태를 토글
+    //   setTodoList((prevTodoList) =>
+    //     prevTodoList.map((todo) =>
+    //       todo.todoId === todoId ? { ...todo, done: !todo.done } : todo
+    //     )
+    //   );
+    // } catch (error) {
+    //   console.error("Error toggling todo:", error);
+    // }
   };
 
   const handleDeleteTodo = async (todoId: number) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:8080/todo/${todoId}`, // 엔드포인트 URL
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // 헤더 설정
-          },
-        }
-      );
+    const result = await deleteTodo(todoId);
+    if (result) {
       setTodoList((prevTodoList) =>
         prevTodoList.filter((todo) => todo.todoId !== todoId)
-      ); // 삭제된 항목을 todoList에서 제거
-    } catch (error) {
-      console.error("Error deleting todo:", error);
+      );
     }
+    // try {
+    //   const response = await axios.delete(
+    //     `http://localhost:8080/todo/${todoId}`, // 엔드포인트 URL
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`, // 헤더 설정
+    //       },
+    //     }
+    //   );
+    //   setTodoList((prevTodoList) =>
+    //     prevTodoList.filter((todo) => todo.todoId !== todoId)
+    //   ); // 삭제된 항목을 todoList에서 제거
+    // } catch (error) {
+    //   console.error("Error deleting todo:", error);
+    // }
   };
 
   const handlePostponeTodo = async (todoId: number) => {
-    try {
-      const response = await axios.patch(
-        `http://localhost:8080/todo/postpone/${todoId}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+    const result = await postponeTodo(todoId);
+    if (result) {
       setTodoList((prevTodoList) =>
         prevTodoList.filter((todo) => todo.todoId !== todoId)
       );
-    } catch (error) {
-      console.error("Error toggling todo:", error);
     }
+    // try {
+    //   const response = await axios.patch(
+    //     `http://localhost:8080/todo/postpone/${todoId}`,
+    //     null,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     }
+    //   );
+    //   setTodoList((prevTodoList) =>
+    //     prevTodoList.filter((todo) => todo.todoId !== todoId)
+    //   );
+    // } catch (error) {
+    //   console.error("Error toggling todo:", error);
+    // }
   };
 
   const handleUpdateTodo = async (
@@ -134,17 +168,8 @@ const TodoPage = () => {
     updatedContent: string,
     updatedDate: string
   ) => {
-    try {
-      const response = await axios.patch(
-        `http://localhost:8080/todo/${todoId}`,
-        { content: updatedContent, date: updatedDate }, // 수정된 내용과 날짜를 요청 본문에 포함
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      // 서버에서 응답이 성공하면 해당 todo를 업데이트
+    const result = await updateTodo(todoId, updatedContent, updatedDate);
+    if (result) {
       setTodoList((prevTodoList) =>
         prevTodoList.map((todo) =>
           todo.todoId === todoId
@@ -152,9 +177,28 @@ const TodoPage = () => {
             : todo
         )
       );
-    } catch (error) {
-      console.error("Error updating todo:", error);
     }
+    // try {
+    //   const response = await axios.patch(
+    //     `http://localhost:8080/todo/${todoId}`,
+    //     { content: updatedContent, date: updatedDate }, // 수정된 내용과 날짜를 요청 본문에 포함
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     }
+    //   );
+    //   // 서버에서 응답이 성공하면 해당 todo를 업데이트
+    //   setTodoList((prevTodoList) =>
+    //     prevTodoList.map((todo) =>
+    //       todo.todoId === todoId
+    //         ? { ...todo, content: updatedContent, date: updatedDate }
+    //         : todo
+    //     )
+    //   );
+    // } catch (error) {
+    //   console.error("Error updating todo:", error);
+    // }
   };
 
   const handlePreviousDay = () => {
@@ -178,29 +222,34 @@ const TodoPage = () => {
     repeat: number,
     date: String
   ) => {
-    console.log(repeat);
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/todo", // 등록 요청을 보낼 엔드포인트 URL
-        {
-          content: content, // 할 일 내용
-          repeatition: repeat, // 반복 설정
-          date: date,
-          // date: selectedDate, // 선택된 날짜
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // 헤더 설정
-          },
-        }
-      );
-      // 등록이 성공하면 서버에서 반환된 데이터를 처리할 수 있습니다.
-      console.log("Todo 등록 성공:", response.data);
+    const result = await addTodo(content, repeat, date);
+    if (result) {
       setIsModalOpen(false); // 모달 닫기
       fetchTodoList(selectedDate); // 등록 후 할 일 목록 다시 불러오기
-    } catch (error) {
-      console.error("Todo 등록 에러:", error);
     }
+    // console.log(repeat);
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:8080/todo", // 등록 요청을 보낼 엔드포인트 URL
+    //     {
+    //       content: content, // 할 일 내용
+    //       repeatition: repeat, // 반복 설정
+    //       date: date,
+    //       // date: selectedDate, // 선택된 날짜
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`, // 헤더 설정
+    //       },
+    //     }
+    //   );
+    //   // 등록이 성공하면 서버에서 반환된 데이터를 처리할 수 있습니다.
+    //   console.log("Todo 등록 성공:", response.data);
+    //   setIsModalOpen(false); // 모달 닫기
+    //   fetchTodoList(selectedDate); // 등록 후 할 일 목록 다시 불러오기
+    // } catch (error) {
+    //   console.error("Todo 등록 에러:", error);
+    // }
   };
 
   const openModal = () => {

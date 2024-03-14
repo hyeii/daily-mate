@@ -7,6 +7,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import axios from "axios";
+import { changeOrder } from "../../apis/todoApi";
 
 interface Todo {
   todoId: number;
@@ -43,20 +44,24 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
   const handleChangeOrder = async (
     reqDto: { todoId: number; todoOrder: number }[]
   ) => {
-    try {
-      const response = await axios.patch(
-        "http://localhost:8080/todo/changeOrder",
-        reqDto,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log("할일 순서 변경 성공:", response.data);
-    } catch (error) {
-      console.error("할일 순서 변경 실패:", error);
+    const result = await changeOrder(reqDto);
+    if (result) {
+      console.log("할일 순서 변경 성공");
     }
+    // try {
+    //   const response = await axios.patch(
+    //     "http://localhost:8080/todo/changeOrder",
+    //     reqDto,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     }
+    //   );
+    //   console.log("할일 순서 변경 성공:", response.data);
+    // } catch (error) {
+    //   console.error("할일 순서 변경 실패:", error);
+    // }
   };
 
   const handleToggle = (todoId: number) => {
