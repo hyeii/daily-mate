@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="add : 수정, 삭제, 하루미루기 버튼 생성">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/src/components/todo/DailyTodoList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/src/components/todo/DailyTodoList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoAddModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoAddModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../daily-mate/src/components/todo/TodoPage.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="0bfc8877-53ba-4385-b740-b97283e9fa69" name="Changes" comment="feat : 할일 순서 바꾸기 구현 완료" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,16 +56,16 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="back-develop" />
+        <entry key="$PROJECT_DIR$/.." value="front-develop-hw" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
   }
-}]]></component>
+}</component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="5" />
     <option name="recentBranches">
@@ -84,11 +77,11 @@
                 <list>
                   <RecentBranch>
                     <option name="branchName" value="front-develop-hw" />
-                    <option name="lastUsedInstant" value="1708873030" />
+                    <option name="lastUsedInstant" value="1710344152" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="back-develop-hw" />
-                    <option name="lastUsedInstant" value="1706514922" />
+                    <option name="lastUsedInstant" value="1710341243" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="back-develop" />
@@ -150,7 +143,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Spring Boot.DailyMateApplication (1)">
+  <component name="RunManager" selected="Spring Boot.DailyMateApplication">
     <configuration name="DailyMate [bootRun]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -208,6 +201,7 @@
       <workItem from="1707796548664" duration="26366000" />
       <workItem from="1708878830492" duration="27000" />
       <workItem from="1709129930614" duration="383000" />
+      <workItem from="1710415448355" duration="1197000" />
     </task>
     <task id="LOCAL-00001" summary="feat todo - 할일 추가/수정/삭제 메서드 추가(미완성)">
       <created>1706523322132</created>
@@ -272,7 +266,14 @@
       <option name="project" value="LOCAL" />
       <updated>1709130302478</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat : 할일 순서 바꾸기 구현 완료">
+      <created>1710342078742</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1710342078742</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +313,8 @@
     <MESSAGE value="modify : 할일 완료 컨트롤러 수정" />
     <MESSAGE value="modify : repeat -&gt; repeatition 변수명 변경" />
     <MESSAGE value="add : 수정, 삭제, 하루미루기 버튼 생성" />
-    <option name="LAST_COMMIT_MESSAGE" value="add : 수정, 삭제, 하루미루기 버튼 생성" />
+    <MESSAGE value="feat : 할일 순서 바꾸기 구현 완료" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat : 할일 순서 바꾸기 구현 완료" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
