@@ -1,10 +1,9 @@
 package com.dailymate.domain.todo.service;
 
 import com.dailymate.domain.todo.domain.Todo;
-import com.dailymate.domain.todo.dto.AddTodoReqDto;
-import com.dailymate.domain.todo.dto.TodoReqDto;
-import com.dailymate.domain.todo.dto.TodoResDto;
-import com.dailymate.domain.todo.dto.UpdateTodoReqDto;
+
+import com.dailymate.domain.todo.dto.*;
+
 
 import java.util.List;
 
@@ -23,4 +22,6 @@ public interface TodoService {
 	Integer getSuccessRate(String token, String date);
 
 	void checkTodo(Long todoId, String token);
+
+	List<ChangeOrderResDto> changeOrder(List<ChangeOrderReqDto> changeOrderReqDto, String token);
 }
