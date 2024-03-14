@@ -2,10 +2,7 @@ package com.dailymate.domain.todo.service;
 
 import com.dailymate.domain.todo.dao.TodoRepository;
 import com.dailymate.domain.todo.domain.Todo;
-import com.dailymate.domain.todo.dto.AddTodoReqDto;
-import com.dailymate.domain.todo.dto.TodoReqDto;
-import com.dailymate.domain.todo.dto.TodoResDto;
-import com.dailymate.domain.todo.dto.UpdateTodoReqDto;
+import com.dailymate.domain.todo.dto.*;
 import com.dailymate.domain.todo.exception.TodoExceptionMessage;
 import com.dailymate.domain.todo.exception.TodoForbiddenException;
 import com.dailymate.domain.todo.exception.TodoNotFoundException;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -250,5 +248,48 @@ public class TodoServiceImpl implements TodoService {
 
 		log.info("[할일 완료 체크] 할일 완료. todoId : {}", todoId);
 	}
+
+	@Override
+	public List<ChangeOrderResDto> changeOrder(List<ChangeOrderReqDto> changeOrderReqDto, String token) {
+		Long userId = jwtTokenProvider.getUserId(token);
+		log.info("[할일 순서 변경] 순서 변경 요청. userId : {}", userId);
+
+		List<ChangeOrderResDto> updatedTodoList = new ArrayList<>();
+
+		for (ChangeOrderReqDto dto : changeOrderReqDto) {
+			Long todoId = dto.getTodoId();
+			Integer todoOrder = dto.getTodoOrder();
+
+			// 해당 ID의 할일을 조회
+			Todo todo = todoRepository.findById(todoId)
+					.orElseThrow(() -> {
+						log.error("[할일 순서 변경] 할일을 찾을 수 없습니다. todoId : {}", todoId);
+						return new TodoNotFoundException("할일을 찾을 수 없습니다.");
+					});
+
+			// 로그인한 사용자의 할일인지 확인
+			if (!todo.getUserId().equals(userId)) {
+				log.error("[할일 순서 변경] 권한이 없는 할일입니다. todoId : {}", todoId);
+				throw new TodoForbiddenException("권한이 없는 할일입니다.");
+			}
+
+			// 순서를 변경하고 저장
+			todo.changeOrder(todoOrder);
+			Todo updatedTodo = todoRepository.save(todo);
+
+			// 변경된 Todo의 정보를 ChangeOrderResDto로 매핑하여 목록에 추가
+			ChangeOrderResDto updatedTodoDto = new ChangeOrderResDto();
+			updatedTodoDto.setTodoId(updatedTodo.getTodoId());
+			updatedTodoDto.setTodoOrder(updatedTodo.getTodoOrder());
+			updatedTodoList.add(updatedTodoDto);
+
+			log.info("[할일 순서 변경] 할일 순서 변경 완료. todoId : {}, order : {}", todoId, todoOrder);
+		}
+
+		log.info("[할일 순서 변경] 모든 할일의 순서 변경 완료");
+
+		return updatedTodoList;
+	}
+
 
 }

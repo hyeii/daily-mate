@@ -44,4 +44,8 @@ public class Todo extends BaseTime {
 	public void toggleDone(){
 		this.done = !this.done;
 	}
+
+	public void changeOrder(Integer todoOrder){
+		this.todoOrder = todoOrder == null ? this.todoOrder : todoOrder;
+	}
 }
