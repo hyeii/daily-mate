@@ -10,8 +10,6 @@ import {
   selectedDateState,
 } from "../../atoms/accountAtom";
 import AddAccountModal from "./AddAccountModal";
-import { useState } from "react";
-import styled from "styled-components";
 import { TabContainer, TabText } from "../common/CommonStyledComponents";
 
 const AccountPage = () => {
