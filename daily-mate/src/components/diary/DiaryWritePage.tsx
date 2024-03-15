@@ -30,6 +30,7 @@ const DiaryWritePage = () => {
   const [imagePreview, setImagePreview] = useState("");
 
   const [openDatePickModal, setOpenDatePickModal] = useState<boolean>(false);
+  const [inputLength, setInputLength] = useState<number>(0);
 
   const handleOpenDatePickModal = () => {
     console.log(openDatePickModal);
@@ -38,6 +39,7 @@ const DiaryWritePage = () => {
 
   const handleTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setInputTitle(event.target.value);
+    setInputLength(event.target.value.length);
   };
 
   const handleContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -72,6 +74,11 @@ const DiaryWritePage = () => {
 
     if (inputTitle === "") {
       alert("제목을 작성해주세요");
+      return;
+    }
+
+    if (inputLength > 105) {
+      alert("제목은 105자 이하여야 합니다.");
       return;
     }
 
@@ -119,8 +126,16 @@ const DiaryWritePage = () => {
       <RelativeWrapper>
         <LeftWrapper>
           <TitleInputBox>
-            <TitleInput placeholder="제목" type="text" onChange={handleTitle} />
+            <TitleInput
+              placeholder="제목"
+              type="text"
+              maxLength={105}
+              onChange={handleTitle}
+            />
           </TitleInputBox>
+          <TitleLengthBox>
+            <TitleLength>{inputLength} / 105</TitleLength>
+          </TitleLengthBox>
           <ContentInputbox>
             <ContentInput
               cols={10}
@@ -233,7 +248,8 @@ const WriteDateBox = styled.div`
 const TitleInputBox = styled.div`
   width: auto;
   display: flex;
-  margin: 1rem 0;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 const TitleInput = styled.input`
@@ -403,4 +419,15 @@ const PreviewImg = styled.img`
   @media screen and (max-width: 1299px) {
     max-height: 350px;
   }
+`;
+
+const TitleLengthBox = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1rem;
+`;
+
+const TitleLength = styled.p`
+  margin: 0;
+  padding: 0;
 `;

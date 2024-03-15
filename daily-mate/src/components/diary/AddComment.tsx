@@ -10,12 +10,19 @@ interface props {
 
 const AddComment = ({ diaryId }: props) => {
   const [inputComment, setInputComment] = useState<string>("");
+  const [inputLength, setInputLength] = useState<number>(0);
   const handleComment = (event: ChangeEvent<HTMLInputElement>) => {
     setInputComment(event.target.value);
+    setInputLength(event.target.value.length);
   };
   const submitComment = () => {
     if (inputComment === "") {
       alert("댓글을 입력해주세요");
+      return;
+    }
+
+    if (inputLength > 200) {
+      alert("댓글은 200자 이하로 입력해주세요");
       return;
     }
     const comment: commentBody = {
@@ -25,12 +32,17 @@ const AddComment = ({ diaryId }: props) => {
     window.location.reload();
   };
   return (
-    <AddCommentWrapper>
-      <AddInput type="text" onChange={handleComment} />
-      <ButtonBox>
-        <SubmitButton onClick={submitComment} />
-      </ButtonBox>
-    </AddCommentWrapper>
+    <>
+      <AddCommentWrapper>
+        <AddInput type="text" maxLength={200} onChange={handleComment} />
+        <ButtonBox>
+          <SubmitButton onClick={submitComment} />
+        </ButtonBox>
+      </AddCommentWrapper>
+      <CommentLengthBox>
+        <CommentLength>{inputLength} / 200</CommentLength>
+      </CommentLengthBox>
+    </>
   );
 };
 
@@ -49,6 +61,7 @@ const AddInput = styled.input`
   background-color: #ffffff;
   font-family: "LeeSeoyun";
   flex: 1;
+  font-size: 1.2rem;
 `;
 
 const SubmitButton = styled(IoArrowRedo)`
@@ -60,4 +73,17 @@ const ButtonBox = styled.div`
   display: flex;
   align-items: center;
   margin-left: 0.5rem;
+`;
+
+const CommentLengthBox = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const CommentLength = styled.p`
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
 `;
