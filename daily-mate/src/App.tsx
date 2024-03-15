@@ -68,6 +68,7 @@ function App() {
               path="/oauth/google/success"
               element={<GoogleRedirectPage />}
             />
+            <Route path="/oauth/success" element={<KakaoRedirectPage />} />
           </Routes>
         </MainBox>
       </MainContainer>
