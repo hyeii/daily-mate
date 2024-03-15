@@ -59,10 +59,6 @@ const SignInPage = () => {
   };
 
   const handleGoogle = async () => {
-    const googleURL = "http://localhost:8080/oauth/google";
-    // const googleURL: string = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
-    // window.location.href = googleURL;
-
     try {
       const res = await axios.get<userResponse>(
         "http://localhost:8080/oauth/google"
@@ -106,11 +102,13 @@ const SignInPage = () => {
         <MoveSignBtn onClick={handleSignUp}>이메일로 가입하기</MoveSignBtn>
         <SocialLoginBox>
           <div>
-            <SocialLogin
-              onClick={handleKakao}
-              src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
-              alt="kakaoLogin"
-            />
+            <a href={process.env.REACT_APP_URL + "/oauth/kakao"}>
+              <SocialLogin
+                onClick={handleKakao}
+                src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
+                alt="kakaoLogin"
+              />
+            </a>
           </div>
           <div>
             <a href={process.env.REACT_APP_URL + "/oauth/google"}>
