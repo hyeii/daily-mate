@@ -100,4 +100,13 @@ public class TodoController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(MessageDto.message("TOGGLE SUCCESS"));
 	}
+
+	@Operation(
+			summary = "할일 순서 변경",
+			description = "로그인 사용자의 할일 순서를 변경합니다."
+	)
+	@PatchMapping("/changeOrder")
+	public ResponseEntity<List<ChangeOrderResDto>> changeOrder(@RequestBody List<ChangeOrderReqDto> reqDto, @RequestHeader(ACCESS_TOKEN) String token){
+		return ResponseEntity.ok(	todoService.changeOrder(reqDto, token));
+	}
 }
