@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
     public void addComment(String accessToken, CommentReqDto commentReqDto, Long diaryId) {
 
         // 입력값 검증
-        if(!StringUtils.hasText(commentReqDto.getContent())) {
+        if(!StringUtils.hasText(commentReqDto.getContent()) || commentReqDto.getContent().length() > 200) {
             throw new CommentBadRequestException("[ADD_COMMENT] " + CommentExceptionMessage.COMMENT_BAD_REQUEST.getMsg());
         }
 
@@ -101,7 +101,7 @@ public class CommentServiceImpl implements CommentService {
     public void updateComment(String accessToken, CommentReqDto commentReqDto, Long commentId) {
 
         // 입력값 확인
-        if(accessToken == null || !StringUtils.hasText(commentReqDto.getContent())) {
+        if(accessToken == null || !StringUtils.hasText(commentReqDto.getContent()) || commentReqDto.getContent().length() > 200) {
             throw new CommentBadRequestException("[UPDATE_COMMENT] " + CommentExceptionMessage.COMMENT_BAD_REQUEST.getMsg());
         }
 

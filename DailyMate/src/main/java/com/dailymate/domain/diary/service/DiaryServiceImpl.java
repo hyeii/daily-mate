@@ -60,7 +60,7 @@ public class DiaryServiceImpl implements DiaryService {
     public void addDiary(String accessToken, DiaryReqDto diaryReqDto, MultipartFile image) {
 
         // 제목 입력값 검증
-        if(!StringUtils.hasText(diaryReqDto.getTitle())) {
+        if(!StringUtils.hasText(diaryReqDto.getTitle()) || diaryReqDto.getTitle().length() > 105) {
             throw new DiaryBadRequestException("[ADD_DIARY] " + DiaryExceptionMessage.DIARY_BAD_REQUEST.getMsg());
         }
 
@@ -93,6 +93,11 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     @Transactional
     public void updateDiary(String accessToken, Long diaryId, DiaryReqDto diaryReqDto, MultipartFile image) {
+
+        // 제목 입력값 검증
+        if(!StringUtils.hasText(diaryReqDto.getTitle()) || diaryReqDto.getTitle().length() > 105) {
+            throw new DiaryBadRequestException("[UPDATE_DIARY] " + DiaryExceptionMessage.DIARY_BAD_REQUEST.getMsg());
+        }
 
         // 일기 존재하는 지 확인
         Diary diary = diaryRepository.findById(diaryId)

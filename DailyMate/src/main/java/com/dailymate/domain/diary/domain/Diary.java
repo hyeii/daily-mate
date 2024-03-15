@@ -37,7 +37,7 @@ public class Diary extends BaseTime {
     private Users users;
 
     @NotNull
-    @Column
+    @Column(length = 105)
     private String title;
 
     @Column(columnDefinition = "TEXT")
