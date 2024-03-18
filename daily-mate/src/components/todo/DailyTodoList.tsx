@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import {
   DragDropContext,
@@ -39,7 +39,27 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
   onPostponeTodo,
   setTodoList,
 }) => {
+  const dropdownRef = useRef<HTMLDivElement>(null); // 드롭다운 요소의 참조
+
   const accessToken = window.localStorage.getItem("accessToken");
+
+  // 드롭다운 외부 클릭 시 드롭다운 접기
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setExpandedTodoId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   const handleChangeOrder = async (
     reqDto: { todoId: number; todoOrder: number }[]
@@ -48,20 +68,6 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
     if (result) {
       console.log("할일 순서 변경 성공");
     }
-    // try {
-    //   const response = await axios.patch(
-    //     "http://localhost:8080/todo/changeOrder",
-    //     reqDto,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${accessToken}`,
-    //       },
-    //     }
-    //   );
-    //   console.log("할일 순서 변경 성공:", response.data);
-    // } catch (error) {
-    //   console.error("할일 순서 변경 실패:", error);
-    // }
   };
 
   const handleToggle = (todoId: number) => {
@@ -108,27 +114,6 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editedContent, setEditedContent] = useState<string>("");
   const [editedDate, setEditedDate] = useState<string>("");
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const animation = requestAnimationFrame(() => setEnabled(true));
-
-    return () => {
-      cancelAnimationFrame(animation);
-      setEnabled(false);
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   const sortedList = [...todoList].sort((a, b) => a.todoOrder - b.todoOrder);
-  //   setTodoList(sortedList);
-  //   console.log(sortedList);
-  //   console.log("여기다 여기다 여기다");
-  // }, []);
-
-  if (!enabled) {
-    return null;
-  }
 
   const toggleExpandedTodo = (todoId: number) => {
     if (expandedTodoId === todoId) {
@@ -183,7 +168,7 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
                                 {todo.content}
                               </span>
                             </div>
-                            <DropdownWrapper>
+                            <DropdownWrapper ref={dropdownRef}>
                               <MoreButton
                                 onClick={() => toggleExpandedTodo(todo.todoId)}
                               >
