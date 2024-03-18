@@ -159,7 +159,7 @@ export const getUserByUserId = async (userId: number) => {
   }
 };
 
-export const socialLogIn = async (token: string) => {
+export const googleLogIn = async (token: string) => {
   try {
     const socialAPI = axios.create({
       baseURL: process.env.REACT_APP_URL,
@@ -167,11 +167,28 @@ export const socialLogIn = async (token: string) => {
         Authorization: token,
       },
     });
-    const res = await socialAPI.get<userResponse>("/oauth/google/login-info");
+    const res = await socialAPI.get<userResponse>("/oauth/login-info");
 
     return res.data;
   } catch (error) {
     console.error("구글 로그인 에러 : ", error);
+    return null;
+  }
+};
+
+export const kakaoLogIn = async (token: string) => {
+  try {
+    const socialAPI = axios.create({
+      baseURL: process.env.REACT_APP_URL,
+      headers: {
+        Authorization: token,
+      },
+    });
+    const res = await socialAPI.get<userResponse>("/oauth/login-info");
+
+    return res.data;
+  } catch (error) {
+    console.error("카카오 로그인 에러 : ", error);
     return null;
   }
 };

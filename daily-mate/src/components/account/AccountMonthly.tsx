@@ -17,13 +17,13 @@ const AccountMonthly = () => {
   const currentDate = format(currentMonth, "M");
   const formatDate = format(currentMonth, "yyyy-MM");
   const [outputByMonth, setOutputByMonth] = useState<CategoryByMonthMap>({
-    식비: -100000,
-    카페: -200000,
-    생활: -159800,
-    교통: -80000,
-    기타: -130000,
+    식비: 0,
+    카페: 0,
+    생활: 0,
+    교통: 0,
+    기타: 0,
   });
-  const [inOutByMonth, setInOutByMonth] = useState<number[]>([50000, 30000]);
+  const [inOutByMonth, setInOutByMonth] = useState<number[]>([0, 0]);
 
   const prevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));

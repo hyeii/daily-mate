@@ -1,9 +1,8 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkEmail, checkNickname, signUp } from "../../apis/authApis";
-import { signUpRequest, userResponse } from "../../types/authType";
+import { signUpRequest } from "../../types/authType";
 import styled from "styled-components";
-import axios from "axios";
 import {
   Container,
   SignBtn,

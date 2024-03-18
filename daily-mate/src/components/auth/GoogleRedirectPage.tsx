@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { socialLogIn } from "../../apis/authApis";
+import { googleLogIn } from "../../apis/authApis";
 import useLogin from "../../hooks/useLogIn";
 
 const GoogleRedirectPage = () => {
@@ -11,7 +11,7 @@ const GoogleRedirectPage = () => {
   useEffect(() => {
     const fetchLogin = async () => {
       if (token) {
-        const socialResponse = await socialLogIn(token);
+        const socialResponse = await googleLogIn(token);
         if (socialResponse) {
           if (!localStorage.getItem("accessToken")) {
             alert(`${socialResponse.nickName}님 어서오세요!`);

@@ -1,6 +1,5 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { userResponse } from "../../types/authType";
 import { useSignIn } from "../../apis/authApis";
 import styled from "styled-components";
 import {
@@ -8,7 +7,6 @@ import {
   SignBtn,
   SignWrapper,
 } from "../common/CommonStyledComponents";
-import axios from "axios";
 import useLogin from "../../hooks/useLogIn";
 
 const SignInPage = () => {
@@ -53,28 +51,6 @@ const SignInPage = () => {
     navigate("/signup");
   };
 
-  const handleKakao = () => {
-    const kakaoURL: string = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
-    window.location.href = kakaoURL;
-  };
-
-  const handleGoogle = async () => {
-    const googleURL = "http://localhost:8080/oauth/google";
-    // const googleURL: string = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=email profile`;
-    // window.location.href = googleURL;
-
-    try {
-      const res = await axios.get<userResponse>(
-        "http://localhost:8080/oauth/google"
-      );
-      console.log(res.data);
-
-      navigate("/account");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <SignWrapper>
       <h3>로그인</h3>
@@ -106,11 +82,12 @@ const SignInPage = () => {
         <MoveSignBtn onClick={handleSignUp}>이메일로 가입하기</MoveSignBtn>
         <SocialLoginBox>
           <div>
-            <SocialLogin
-              onClick={handleKakao}
-              src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
-              alt="kakaoLogin"
-            />
+            <a href={process.env.REACT_APP_URL + "/oauth/kakao"}>
+              <SocialLogin
+                src={process.env.PUBLIC_URL + "/kakao_login_large_narrow.png"}
+                alt="kakaoLogin"
+              />
+            </a>
           </div>
           <div>
             <a href={process.env.REACT_APP_URL + "/oauth/google"}>
