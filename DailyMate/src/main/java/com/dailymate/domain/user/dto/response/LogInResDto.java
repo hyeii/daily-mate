@@ -21,5 +21,6 @@ public class LogInResDto {
     private String image;
     private String profile;
     private String type;
+    private String providerId;
 
 }
