@@ -17,7 +17,7 @@ public interface UserService {
 
     LogInResDto logIn(LogInReqDto reqDto);
 
-    LogInResDto getGoogleLoginInfo(String token); // 구글 로긘용
+    LogInResDto getOAuthLoginInfo(String token); // oauth2 로긘용
 
     JwtTokenDto reissueToken(String accessToken, String refreshToken);
 
