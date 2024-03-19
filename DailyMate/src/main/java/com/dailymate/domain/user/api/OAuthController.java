@@ -52,4 +52,13 @@ public class OAuthController {
         return ResponseEntity.ok(userService.getOAuthLoginInfo(token));
     }
 
+    @Operation(
+            summary = "카카오 계정과 함께 로그아웃",
+            description = "카카오 계정이 자동 로그인되지 않도록 함께 로그아웃 처리합니다."
+    )
+    @GetMapping("/kakao/logout")
+    public RedirectView redirectToKakaoLogout() {
+        return new RedirectView("https://kauth.kakao.com/oauth/logout?client_id=ade8054042579d60e4054ba7e9004c7b&logout_redirect_uri=http://localhost:8080/user/logout");
+    }
+
 }
