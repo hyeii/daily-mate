@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LogInResDto getGoogleLoginInfo(String token) {
+    public LogInResDto getOAuthLoginInfo(String token) {
         Long userId = jwtTokenProvider.getUserId(token);
         String email = jwtTokenProvider.getUserEmail(token);
 
@@ -338,6 +338,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void logout(String token) {
+        if(token == null) {
+            log.error("[로그아웃] 로그아웃 상태입니다.");
+            throw new TokenException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
+        }
+
         String email = getLoginUserEmail(token);
         log.info("[로그아웃] 로그아웃 요청 : {}", email);
 

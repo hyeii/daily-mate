@@ -49,7 +49,7 @@ public class OAuthController {
     )
     @GetMapping("/login-info")
     public ResponseEntity<LogInResDto> getOauthLoginInfo(@RequestHeader(ACCESS_TOKEN) String token) {
-        return ResponseEntity.ok(userService.getGoogleLoginInfo(token));
+        return ResponseEntity.ok(userService.getOAuthLoginInfo(token));
     }
 
 }
