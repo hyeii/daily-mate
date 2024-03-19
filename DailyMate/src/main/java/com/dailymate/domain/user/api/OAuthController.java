@@ -31,7 +31,7 @@ public class OAuthController {
     )
     @GetMapping("/kakao")
     public RedirectView redirectToKakao() {
-        return new RedirectView(("/oauth2/authorization/kakao"));
+        return new RedirectView("/oauth2/authorization/kakao");
     }
 
     @Operation(
