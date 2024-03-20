@@ -231,3 +231,15 @@ export const deleteImage = async () => {
     return null;
   }
 };
+
+export const checkPassword = async (password: string) => {
+  try {
+    const res = await API.post("user/password", {
+      password: password,
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    return null;
+  }
+};
