@@ -18,6 +18,7 @@ const useLogin = () => {
       email: signInResponse.email,
       profile: signInResponse.profile,
       type: signInResponse.type,
+      providerId: signInResponse.providerId,
     };
     window.localStorage.setItem("accessToken", signInResponse.accessToken);
     window.localStorage.setItem("refreshToken", signInResponse.refreshToken);
