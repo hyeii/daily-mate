@@ -58,7 +58,7 @@ public class OAuthController {
     )
     @GetMapping("/kakao/logout")
     public RedirectView redirectToKakaoLogout() {
-        return new RedirectView("https://kauth.kakao.com/oauth/logout?client_id=ade8054042579d60e4054ba7e9004c7b&logout_redirect_uri=http://localhost:8080/user/logout");
+        return new RedirectView("https://kauth.kakao.com/oauth/logout?client_id=ade8054042579d60e4054ba7e9004c7b&logout_redirect_uri=http://localhost:3000/kakao/logout");
     }
 
 }
