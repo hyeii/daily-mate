@@ -8,6 +8,7 @@ import {
   DiaryWritePage,
   FriendsListPage,
   GoogleRedirectPage,
+  KakaoLogOutRedirectPage,
   KakaoRedirectPage,
   MainPage,
   NotificationPage,
@@ -69,6 +70,7 @@ function App() {
               element={<GoogleRedirectPage />}
             />
             <Route path="/oauth/success" element={<KakaoRedirectPage />} />
+            <Route path="/kakao/logout" element={<KakaoLogOutRedirectPage />} />
           </Routes>
         </MainBox>
       </MainContainer>

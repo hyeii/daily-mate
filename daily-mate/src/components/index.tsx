@@ -15,6 +15,7 @@ import SideBar from "./sidebar/SideBar";
 import AccountPage from "./account/AccountPage";
 import KakaoRedirectPage from "./auth/KakaoRedirectPage";
 import GoogleRedirectPage from "./auth/GoogleRedirectPage";
+import KakaoLogOutRedirectPage from "./auth/KakaoLogOutRedirectPage";
 export {
   SignInPage,
   SignUpPage,
@@ -33,4 +34,5 @@ export {
   TodoPage,
   KakaoRedirectPage,
   GoogleRedirectPage,
+  KakaoLogOutRedirectPage,
 };

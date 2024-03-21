@@ -17,9 +17,9 @@ const SideBar = () => {
   const setAccountTab = useSetRecoilState(accountTabState);
   const navigate = useNavigate();
   const { LogOut } = useLogOut();
-  const S3URL = "https://dailymate.s3.ap-northeast-2.amazonaws.com/";
 
   const handleLogOut = async () => {
+    console.log("너나오면안돼");
     const logOutResult = await logOut();
     if (logOutResult !== null) {
       LogOut();
@@ -68,7 +68,16 @@ const SideBar = () => {
         <SidebarItems onClick={moveAccount}>가계부</SidebarItems>
         <SidebarItems onClick={myTodo}>할 일</SidebarItems>
         <SidebarItems onClick={moveMyPage}>마이페이지</SidebarItems>
-        <SidebarItems onClick={handleLogOut}>로그아웃</SidebarItems>
+        {userInfo.providerId === "kakao" ? (
+          <a
+            href={process.env.REACT_APP_URL + "/oauth/kakao/logout"}
+            style={{ textDecoration: "none", color: "#000000" }}
+          >
+            <SidebarItems>로그아웃</SidebarItems>
+          </a>
+        ) : (
+          <SidebarItems onClick={handleLogOut}>로그아웃</SidebarItems>
+        )}
       </SidebarContainer>
     </SidebarWrapper>
   );
