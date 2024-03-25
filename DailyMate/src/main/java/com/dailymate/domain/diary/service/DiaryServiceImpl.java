@@ -327,6 +327,11 @@ public class DiaryServiceImpl implements DiaryService {
         // 조회 권한 확인
         Friend isFriend = friendRepository.findMyFriendToEntity(user.getUserId(), friendId);
 
+        log.info("사용자 조회 : " + user.getNickname());
+        log.info("친구 조회 : " + friend.getNickname());
+        log.info("친구 관계 : " + isFriend);
+
+
         List<DiaryMonthlyResDto> diaries;
         if(isFriend != null){
             diaries = diaryRepository.findByUsersAndYearMonthAAndOpenTypeNot(friend, date, OpenType.getOpenType("비공개"));
