@@ -530,6 +530,9 @@ https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
 <br>
 <br>
 
+## 시연 영상
+https://youtu.be/Lcp6Czl6ZGY
+
 ## 🖥 서비스 화면
 ### 메인화면
 
