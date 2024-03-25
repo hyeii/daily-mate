@@ -56,7 +56,7 @@
 
 ### front
 
-![Flutter](https://img.shields.io/badge/flutter-skyblue?style=for-the-badge&logo=flutter) ![Dart](https://img.shields.io/badge/dart-blue?style=for-the-badge&logo=dart) ![Firebase](https://img.shields.io/badge/firebase-yellow?style=for-the-badge&logo=firebase)
+![React](https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![Firebase](https://img.shields.io/badge/recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white) ![Styled-components](https://img.shields.io/badge/styledcomponents-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white)
 
 ### back
 
