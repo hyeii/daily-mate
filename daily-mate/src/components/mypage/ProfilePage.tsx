@@ -3,7 +3,7 @@ import { userInfoState } from "../../atoms/authAtom";
 import ProfileImage from "./ProfileImage";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { deleteUser } from "../../apis/authApis";
+import { checkPassword, deleteUser } from "../../apis/authApis";
 import useLogOut from "../../hooks/useLogOut";
 import { useEffect, useState } from "react";
 import { getFriendList } from "../../apis/friendApi";
@@ -42,8 +42,23 @@ const ProfilePage = () => {
       window.confirm("데일리메이트에서 탈퇴하시겠습니까?") &&
       window.confirm("회원 탈퇴를 진행합니다")
     ) {
-      const deleteResponse = await deleteUser();
-      if (deleteResponse) {
+      if (userInfo.type !== "SOCIAL") {
+        const password = prompt("비밀번호를 입력해주세요");
+        if (password) {
+          const checkResult = await checkPassword(password);
+          if (checkResult === true) {
+            const deleteResponse = await deleteUser();
+            if (deleteResponse) {
+              LogOut();
+              alert("탈퇴가 완료되었습니다.");
+              navigate("/");
+            }
+          }
+        } else {
+          alert("비밀번호를 확인해주세요");
+          return;
+        }
+      } else {
         LogOut();
         alert("탈퇴가 완료되었습니다.");
         navigate("/");
@@ -76,9 +91,11 @@ const ProfilePage = () => {
           </ProfileBottomContainer>
           <EtcContainer>
             <EtcHandler onClick={updateInfoHandler}>회원 정보 수정</EtcHandler>
-            <EtcHandler onClick={updatePasswordHandler}>
-              비밀번호 변경
-            </EtcHandler>
+            {userInfo.type !== "SOCIAL" ? (
+              <EtcHandler onClick={updatePasswordHandler}>
+                비밀번호 변경
+              </EtcHandler>
+            ) : null}
             <EtcHandler onClick={deleteUserHandler}>회원 탈퇴</EtcHandler>
           </EtcContainer>
         </InfoContainer>

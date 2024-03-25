@@ -4,6 +4,7 @@ export interface userInfo {
   email: string;
   profile: string;
   type: string;
+  providerId: string;
 }
 
 // 로그인 ResponseData
@@ -16,6 +17,7 @@ export interface userResponse {
   image: string;
   profile: string;
   type: string;
+  providerId: string;
 }
 
 // 내 정보 조회 ResponseData

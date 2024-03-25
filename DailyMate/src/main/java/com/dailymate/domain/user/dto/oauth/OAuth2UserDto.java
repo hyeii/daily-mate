@@ -26,7 +26,7 @@ public abstract class OAuth2UserDto {
 
     protected Map<String, Object> attributes;
 
-    public abstract String getId(); // 식별값 추출(구글 - sub, 카카오 - id)
+    public abstract String getProviderId(); // 식별값 추출(구글 - sub, 카카오 - id)
 
     public abstract String getEmail();
     public abstract String getNickname();

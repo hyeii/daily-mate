@@ -19,6 +19,7 @@ const useLogOut = () => {
       email: "",
       profile: "",
       type: "",
+      providerId: "",
     });
     setIsLogged(false);
     setSidebarOpen(false);

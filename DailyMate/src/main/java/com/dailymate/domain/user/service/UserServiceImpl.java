@@ -151,18 +151,19 @@ public class UserServiceImpl implements UserService {
                 .image(user.getImage())
                 .profile(user.getProfile())
                 .type(user.getType().getRole())
+                .providerId(user.getProviderId())
                 .build();
     }
 
     @Override
-    public LogInResDto getGoogleLoginInfo(String token) {
+    public LogInResDto getOAuthLoginInfo(String token) {
         Long userId = jwtTokenProvider.getUserId(token);
         String email = jwtTokenProvider.getUserEmail(token);
 
-        Users googleUser = getLoginUser(userId);
+        Users oauthUser = getLoginUser(userId);
         String refreshToken = refreshTokenRedisRepository.findById(email)
                 .orElseThrow(() -> {
-                    log.error("[구글 로그인 정보] 리프레쉬 토큰이 존재하지 않습니다.");
+                    log.error("[소셜 로그인 정보] 리프레쉬 토큰이 존재하지 않습니다.");
                     return new TokenException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
                 }).getRefreshToken();
 
@@ -171,10 +172,11 @@ public class UserServiceImpl implements UserService {
                 .refreshToken(refreshToken)
                 .userId(userId)
                 .email(email)
-                .nickName(googleUser.getNickname())
-                .image(googleUser.getImage())
-                .profile(googleUser.getProfile())
-                .type(googleUser.getType().getRole())
+                .nickName(oauthUser.getNickname())
+                .image(oauthUser.getImage())
+                .profile(oauthUser.getProfile())
+                .type(oauthUser.getType().getRole())
+                .providerId(oauthUser.getProviderId())
                 .build();
     }
 
@@ -338,6 +340,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void logout(String token) {
+        if(token == null) {
+            log.error("[로그아웃] 로그아웃 상태입니다.");
+            throw new TokenException(TokenExceptionMessage.TOKEN_NOT_FOUND.getValue());
+        }
+
         String email = getLoginUserEmail(token);
         log.info("[로그아웃] 로그아웃 요청 : {}", email);
 

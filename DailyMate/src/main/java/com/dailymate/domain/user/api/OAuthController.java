@@ -31,7 +31,7 @@ public class OAuthController {
     )
     @GetMapping("/kakao")
     public RedirectView redirectToKakao() {
-        return new RedirectView(("/oauth2/authorization/kakao"));
+        return new RedirectView("/oauth2/authorization/kakao");
     }
 
     @Operation(
@@ -49,7 +49,16 @@ public class OAuthController {
     )
     @GetMapping("/login-info")
     public ResponseEntity<LogInResDto> getOauthLoginInfo(@RequestHeader(ACCESS_TOKEN) String token) {
-        return ResponseEntity.ok(userService.getGoogleLoginInfo(token));
+        return ResponseEntity.ok(userService.getOAuthLoginInfo(token));
+    }
+
+    @Operation(
+            summary = "카카오 계정과 함께 로그아웃",
+            description = "카카오 계정이 자동 로그인되지 않도록 함께 로그아웃 처리합니다."
+    )
+    @GetMapping("/kakao/logout")
+    public RedirectView redirectToKakaoLogout() {
+        return new RedirectView("https://kauth.kakao.com/oauth/logout?client_id=ade8054042579d60e4054ba7e9004c7b&logout_redirect_uri=http://localhost:3000/kakao/logout");
     }
 
 }

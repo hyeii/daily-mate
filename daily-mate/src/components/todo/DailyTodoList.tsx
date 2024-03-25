@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   DragDropContext,
@@ -39,28 +39,6 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
   onPostponeTodo,
   setTodoList,
 }) => {
-  const dropdownRef = useRef<HTMLDivElement>(null); // 드롭다운 요소의 참조
-
-  const accessToken = window.localStorage.getItem("accessToken");
-
-  // 드롭다운 외부 클릭 시 드롭다운 접기
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setExpandedTodoId(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
-
   const handleChangeOrder = async (
     reqDto: { todoId: number; todoOrder: number }[]
   ) => {
@@ -129,6 +107,24 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
     setEditedDate(date);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // 클릭된 요소가 Dropdown 내부에 있는지 확인
+      const dropdownContent = document.querySelector(".dropdown-content");
+      if (dropdownContent && !dropdownContent.contains(event.target as Node)) {
+        // Dropdown이 열려 있는지 확인
+        if (expandedTodoId !== null) {
+          setExpandedTodoId(null); // Dropdown 닫기
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [expandedTodoId]); // expandedTodoId 상태가 변경될 때마다 useEffect 재실행
+
   return (
     <div>
       <ul>
@@ -168,13 +164,14 @@ const DailyTodoList: React.FC<DailyTodoListProps> = ({
                                 {todo.content}
                               </span>
                             </div>
-                            <DropdownWrapper ref={dropdownRef}>
+                            <DropdownWrapper>
                               <MoreButton
                                 onClick={() => toggleExpandedTodo(todo.todoId)}
                               >
                                 ···
                               </MoreButton>
                               <DropdownContent
+                                className="dropdown-content"
                                 $show={expandedTodoId === todo.todoId}
                               >
                                 {editingTodoId === todo.todoId ? (

@@ -30,6 +30,7 @@ export const userInfoState = atom<userInfo>({
     email: "",
     profile: "",
     type: "",
+    providerId: "",
   },
   effects_UNSTABLE: [persistAtom],
 });
