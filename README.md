@@ -10,7 +10,6 @@
 | 조윤영                    | Backend(Leader) | 백엔드 리더 / Spring Security & OAuth2 구현, 친구 구현 |
 
 <br>
-<br>
 
 ## 📅 프로젝트 기간
 
@@ -26,18 +25,14 @@
 
 <br>
 
-<br>
 
 ## 💡 프로젝트 컨셉 및 주요 기능
 일기, 할일, 가계부 관리 서비스  
 <br>  
 
 
-<br>
-
 ### 예상 사용자
 다이어리, 할일, 가계부를 동시에 관리하면서 친구와 공유하고 싶은 효율중심의 MZ 세대  
-
 
 <br>
 
@@ -49,7 +44,6 @@
 친구 : 친구끼리 다이어리를 공유하거나 댓글 또는 좋아요 기능을 사용할 수 있습니다.  
 알림 : 친구 또는 다이어리와 관련한 알림 기능이 있습니다.  
 
-<br>
 <br>
 
 ## 🛠️ 기술스택
@@ -68,14 +62,12 @@
 
 
 <br>
-<br>
 
 ## 🗃️ ERD
 
 ![image](https://github.com/DailyMate/DailyMate/assets/94058311/365976a4-9bd5-4df5-b35c-b01c8c93065e)
 
 
-<br>
 
 <br>
 
@@ -87,18 +79,15 @@ https://www.figma.com/proto/UzIJeOAicadn2hDrEg2nBl/Daily-Mate?type=design&node-i
 
 <br>
 
-<br>
-
 ## Convention
-https://www.notion.so/fa69a91047394e518eaf3b6e9607f545
-<br>
+https://www.notion.so/fa69a91047394e518eaf3b6e9607f545  
+
 <br>
 
 ## 🗳️ API 명세서
 
 [API 명세서 보러가기 (∩^o^)⊃━☆](https://www.notion.so/API-7ea51d4cc529432499cde1fa8621dc21)
 
-<br>
 <br>
 
 ## 시연 영상
@@ -237,10 +226,6 @@ https://youtu.be/Lcp6Czl6ZGY
 
 ![사용자검색7-친구승인또는거절](https://github.com/DailyMate/DailyMate/assets/94058311/1e2273fb-b3e8-4017-a483-0fdbdf29b988)
 5. 친구 승인 또는 거절을 할 수 있습니다.  
-
-<br>
-
-
 
 <br>
 <br>
