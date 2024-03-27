@@ -156,7 +156,7 @@ https://youtu.be/Lcp6Czl6ZGY
 
 친구의 다이어리도 구경할 수 있습니다.  
 ![친구다여리놀러가기1](https://github.com/DailyMate/DailyMate/assets/94058311/5d38ea97-c277-442b-8f06-ff10f0c57e5f)
-1. 친구 목록에서 "다이어리 놀러가기"를 선택합니다.
+1. 친구 목록 또는 사용자 검색에서 "다이어리 놀러가기"를 선택합니다.
 
 ![친구다여리놀러가기2](https://github.com/DailyMate/DailyMate/assets/94058311/0c97c510-1f87-4753-b29e-17efb29f377c)
 2. 친구 다이어리를 구경할 수 있습니다.  
