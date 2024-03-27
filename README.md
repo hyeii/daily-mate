@@ -104,12 +104,12 @@ https://youtu.be/Lcp6Czl6ZGY
 <br>
 
 ## 🖥 서비스 화면
-### 메인화면
+### 메인
 ![메인화면](https://github.com/DailyMate/DailyMate/assets/94058311/7b8350b8-bcad-42cd-a36c-7a70da860b5a)
 1. 데일리메이트 서비스의 메인 화면입니다. "시작하기"를 눌러 시작해보세요.
 <br>
 
-### 로그인 화면
+### 로그인 
 ![로그인화면 1](https://github.com/DailyMate/DailyMate/assets/94058311/bcb5b6f4-cfce-465d-bd66-822a9d142f38)
 1. 로그인 메인 화면입니다.
  
@@ -121,12 +121,12 @@ https://youtu.be/Lcp6Czl6ZGY
 4. 소셜 로그인 시 비회원일 경우 자동으로 회원가입 처리가 됩니다.  
 <br>
 
-### 회원가입 화면
+### 회원가입 
 ![회원가입화면 1](https://github.com/DailyMate/DailyMate/assets/94058311/b4254911-6d1e-4ca8-adfd-3164913fc97b)
 1. 닉네임 중복확인, 이메일 중복확인, 비밀번호 정규식 확인, 비밀번호 일치 확인 후 회원가입을 할 수 있습니다.  
 <br>
 
-### 마이페이지 화면
+### 마이페이지 
 ![마이페이지 1](https://github.com/DailyMate/DailyMate/assets/94058311/607b1c7f-418a-4bc9-bb33-f56cdb9a22eb)
 1. 내 정보를 조회하여 이미지, 프로필, 이메일, 로그인 타입, 친구 등을 확인할 수 있습니다.
 
@@ -135,7 +135,7 @@ https://youtu.be/Lcp6Czl6ZGY
 2. "내 정보 수정"을 통해 닉네임 또는 프로필을 변경할 수 있으며 이미지도 변경 가능합니다.  
 <br>
 
-### 다이어리 메인
+### 다이어리 
 ![다이어리 메인화면](https://github.com/DailyMate/DailyMate/assets/94058311/4c2e75ad-1e04-4e4e-be14-5a687db4e3f7)
 1. 다이어리 메인 화면입니다. 달력 형식을 이용하여 편리하게 다이어리 목록을 조회할 수 있습니다.
 
@@ -173,7 +173,7 @@ https://youtu.be/Lcp6Czl6ZGY
 5. 댓글 또는 좋아요와 관련된 활동은 친구의 알림에 실시간으로 반영됩니다.  
 <br>
 
-### 가계부 메인
+### 가계부 
 ![가계부메인화면](https://github.com/DailyMate/DailyMate/assets/94058311/b3ded2ab-d3de-4649-99c3-46b486992cfc)
 1. 가게부 메인 화면입니다. 다이어리와 동일한 달력 형식을 사용하여 손쉽게 관리할 수 있습니다.  
 
@@ -191,7 +191,7 @@ https://youtu.be/Lcp6Czl6ZGY
 
 <br>
 
-### 투두리스트 메인
+### 투두리스트 
 ![할일 메인](https://github.com/DailyMate/DailyMate/assets/94058311/8c363fba-57a6-4328-bf37-e39222db35d2)
 1. 투두리스트 메인 화면입니다. 달력 형태로 쉽게 스케줄을 관리할 수 있습니다.  
 2. 달성도를 색으로 분리하여 월단위 목표 관리에 용이합니다.  
@@ -218,8 +218,7 @@ https://youtu.be/Lcp6Czl6ZGY
 8. 드래그 앤 드랍 기능을 통해 중요도를 변경할 수 있습니다.  
 <br>
 
-
-### 친구 화면
+### 친구관리
 ![사용자검색 1](https://github.com/DailyMate/DailyMate/assets/94058311/ad9d48a0-bbe9-4b90-94b5-79d95248fe96)
 ![사용자검색 2](https://github.com/DailyMate/DailyMate/assets/94058311/68de2886-f575-4082-904c-8a08b1c5f61d)
 1. 사용자 검색을 통 해당 닉네임이 포함된 사용자들 목록을 조회할 수 있습니다.
