@@ -221,7 +221,7 @@ https://youtu.be/Lcp6Czl6ZGY
 ### 친구관리
 ![사용자검색 1](https://github.com/DailyMate/DailyMate/assets/94058311/ad9d48a0-bbe9-4b90-94b5-79d95248fe96)
 ![사용자검색 2](https://github.com/DailyMate/DailyMate/assets/94058311/68de2886-f575-4082-904c-8a08b1c5f61d)
-1. 사용자 검색을 통 해당 닉네임이 포함된 사용자들 목록을 조회할 수 있습니다.
+1. 사용자 검색을 통해 해당 닉네임이 포함된 사용자 목록을 조회할 수 있습니다.
 
 ![사용자검색3-친구신청1](https://github.com/DailyMate/DailyMate/assets/94058311/d8771a76-a1c9-448c-a933-d13e3e3b5857)
 ![사용자검색4-친구신청2](https://github.com/DailyMate/DailyMate/assets/94058311/fded109e-158a-4897-9372-279ab6458dfe)
