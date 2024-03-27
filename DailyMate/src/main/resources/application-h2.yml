@@ -1,0 +1,42 @@
+spring:
+  web:
+    resources:
+      static-locations: classpath:/dist/
+      add-mappings: "false"
+
+# https://herojoon-dev.tistory.com/135  JPA 설정 참고
+  # JPA 설정
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create        # DB 초기화 전략 (none, create, create-drop, update, validate)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true      # 쿼리 로그 포맷 (정렬)
+        show_sql: true        # 쿼리 로그 출력
+    defer-datasource-initialization: true     # data.sql용으로 추가 - Hibernate가 초기화 된 후 실행되도록 설정
+
+  sql:
+    init:
+      mode: always  # data.sql용으로 추가 - 모든 DB에 sql 스크립트를 동작시킨다.
+
+  # h2 관련 - https://congsong.tistory.com/46
+  datasource:
+    url: jdbc:h2:mem:testdb   # H2 DB 연결 주소 (In-Memory Mode) url에 mem이 붙으면 인메모리 방식으로 작동
+    #url: 'jdbc:h2:~/test'    # H2 DB 연결 주소 (Embedded Mode)
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # H2 Console 설정
+  h2:
+    console: # H2 DB를 웹에서 관리할 수 있는 기능
+      enabled: true           # H2 Console 사용 여부
+
+  logging.level:
+    org.hibernate:
+      type.descriptor.sql: trace # sql의 데이터까지 다 보이게 // query의 ?에 어떤 값이 들어가는지 추적할 수 있는 설정. TRACE Log에 값을 보여줌
+
+cors:
+  front_url: "*"
