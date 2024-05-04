@@ -26,7 +26,7 @@ import { sideBarOpenState } from "./atoms/sideBarAtom";
 import { RxDoubleArrowRight } from "react-icons/rx";
 import styled from "styled-components";
 import { isLoginState } from "./atoms/authAtom";
-
+// test
 function App() {
   const [isOpen, setIsOpen] = useRecoilState(sideBarOpenState);
   const isLogin = useRecoilValue(isLoginState);
